@@ -15,12 +15,9 @@ interface Ram (
     
 endinterface
 
-interface PipeLine (
+interface PipeLineData (
   input  logic clk,
-  input  logic rst,
-  input  logic validin,
-  input  logic allownin,
-  output logic valid
+  input  logic rst
 );
   /* data */
   logic [`W_DATA] pc;
@@ -44,6 +41,7 @@ interface PipeLine (
   logic [`W_DATA] comp_pc; // 有条件跳转pc
   /* exe */
   logic [`W_ALU_OP] alu_op;
+  logic sel_alu_in2;
   logic [`W_SEL_ALU_IN2] sel_alu_in2;
   /* mem */
   logic [`W_DATA  ] ram_data;
@@ -51,15 +49,16 @@ interface PipeLine (
   logic [`W_RAM_BE] ram_be;
   logic             ram_oe;
   logic             ram_we;
+  logic [`W_ST] store;
+  logic [`W_LD] load;
   /* wb */
   logic sel_wb_data;
+  /* unsigned */
+  logic uflag;
 
   modport IF (
     input  clk,
     input  rst,
-    input  validin,
-    input  allownin,
-    output valid,
     /* data */
     output pc,
     output inst
@@ -68,9 +67,6 @@ interface PipeLine (
   modport ID (
     input  clk,
     input  rst,
-    input  validin,
-    input  allownin,
-    output valid,
     /* data */
     input  pc,
     input  inst,
@@ -81,21 +77,25 @@ interface PipeLine (
     output rf_waddr,
     output rf_raddr1,
     output rf_raddr2,
-    output rf_we;
-    output rf_oe1;
-    output rf_oe2;
+    output rf_we,
+    output rf_oe1,
+    output rf_oe2,
     output sel_next_pc,
     output b_bl_pc,
     output jump_pc,
-    output branch_pc
+    output branch_pc,
+    output alu_op,
+    output sel_alu_in1,
+    output sel_alu_in2,
+    output store,
+    output load,
+    output sel_wb_data,
+    output uflag
   );
 
   modport EXE (
     input  clk,
     input  rst,
-    input  validin,
-    input  allownin,
-    output valid,
     /* data */
     input  pc,
     input  inst,
@@ -103,6 +103,12 @@ interface PipeLine (
     input  rf_rdata1,
     input  rf_rdata2,
     input  rf_waddr,
+    input  rf_we,
+    input  alu_op,
+    input  sel_alu_in1,
+    input  sel_alu_in2,
+    input  sel_wb_data,
+    input  uflag,
     output alu_result
     output ram_addr,
     output ram_be,
@@ -113,9 +119,6 @@ interface PipeLine (
   modport MEM (
     input  clk,
     input  rst,
-    input  validin,
-    input  allownin,
-    output valid,
     /* data */
     input  pc,
     input  inst,
@@ -123,24 +126,27 @@ interface PipeLine (
     input  rf_rdata1,
     input  rf_rdata2,
     input  rf_waddr,
+    input  rf_we,
     input  alu_result,
+    input  sel_wb_data,
     output ram_data,
     input  ram_addr,
     input  ram_be,
+    input  ram_oe,
+    input  ram_we
   );
 
   modport WB (
     input  clk,
     input  rst,
-    input  validin,
-    input  allownin,
-    output valid,
     /* data */
     input  pc,
     input  inst,
     output rf_wdata,
     input  rf_waddr,
+    input  rf_we,
     input  alu_result,
+    input  sel_wb_data,
     input  ram_data,
     input  ram_addr,
     input  ram_be

@@ -1,6 +1,8 @@
+`include "define.sv"
 module IF (
-  PipeLine.IF U_IF,
-  PipeLine.ID U_ID,
+  PipeLineData.IF U_IF,
+  PipeLineData.ID U_ID,
+  PipeLineCtrl U_Pipe,
   Ram U_RAM
 );
 
@@ -26,13 +28,13 @@ module IF (
   /* 流水线寄存器 */
   always_ff @(posedge U_IF.clk) begin
     if (U_IF.rst == `V_TRUE) begin
-      U_IF.valid <= `V_FALSE;
-      U_IF.pc    <= `R_PC;
+      U_Pipe.valid_if <= `V_FALSE;
+      U_IF.pc         <= `R_PC;
     end
-    else if (U_IF.allownin == `V_TRUE) begin
-      U_IF.valid <= U_IF.validin;
+    else if (U_Pipe.allownin_if == `V_TRUE) begin
+      U_Pipe.valid_if <= U_Pipe.to_if_valid;
     end
-    if (pc_we == `V_TRUE & U_IF.allownin == `V_TRUE) begin
+    if (pc_we == `V_TRUE && U_Pipe.to_if_valid == `V_TRUE && U_Pipe.allownin_if == `V_TRUE) begin
       U_IF.pc   <= next_pc;
       U_IF.inst <= U_RAM.inst_ram_rdata;
     end

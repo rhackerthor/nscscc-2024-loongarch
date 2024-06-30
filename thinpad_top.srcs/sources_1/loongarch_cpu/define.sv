@@ -36,6 +36,7 @@
 /* id */
 `define W_SEL_IMM 5:0 // 立即数选择信号宽度
 /* exe */
+`define W_ADDER 32:0
 `define W_ALU_OP 10:0
 `define V_ADD   0
 `define V_SUB   1
@@ -85,3 +86,14 @@
 `define V__SI16 6'b001_000
 `define V__SI20 6'b010_000
 `define V__SI26 6'b100_000
+/* store and load */
+`define W_STORE 1:0
+`define W_LOAD 1:0
+`define V_ST_B 0
+`define V_ST_W 1
+`define V__ST_B 2'b01
+`define V__ST_W 2'b10
+`define V_LD_B 0
+`define V_LD_W 1
+`define V__LD_B 2'b01
+`define V__LD_W 2'b10

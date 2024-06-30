@@ -1,17 +1,19 @@
+`include "define.sv"
 module ID (
-  PipeLine.IF U_IF,
-  PipeLine.ID U_ID
+  PipeLineData.IF U_IF,
+  PipeLineData.ID U_ID,
+  PipeLineCtrl U_Pipe
 );
 
   /* 流水线寄存器 */
   always_ff @(posedge U_ID.clk) begin
     if (U_ID.rst == `V_TRUE) begin
-      U_ID.valid <= `V_FALSE;
+      U_Pipe.valid_id <= `V_FALSE;
     end
-    else if (U_IF.allownin == `V_TRUE) begin
-      U_ID.valid <= U_ID.validin;
+    else if (U_Pipe.allownin_id == `V_TRUE) begin
+      U_Pipe.valid_id <= U_Pipe.if_to_id_valid;
     end
-    if (pc_we == `V_TRUE && U_IF.allownin == `V_TRUE) begin
+    if (U_Pipe.if_to_id_valid == `V_TRUE && U_Pipe.allownin_id == `V_TRUE) begin
       U_ID.pc   <= U_IF.pc;
       U_ID.inst <= U_IF.inst;
     end
@@ -80,9 +82,9 @@ module ID (
   assign U_ID.rf_waddr  = U_ID.inst[`W_RF_RD];
   assign U_ID.rf_raddr1 = U_ID.inst[`W_RF_RJ];
   assign U_ID.rf_raddr2 = is_rd == `V_FALSE ? U_ID.inst[`W_RF_RK] : U_ID.inst[`W_RF_RD];
-  assign U_ID.rf_we  = 
-  assign U_ID.rf_oe1 = /* TODO */
-  assign U_ID.rf_oe2 = /* TODO */
+  assign U_ID.rf_we  = &{~inst_b, ~inst_beq, ~inst_bge, ~inst_bne, ~inst_st_b, ~inst_st_w};
+  assign U_ID.rf_oe1 = &{~inst_b, ~inst_bl, ~inst_lu12i_w, ~inst_pcaddu12i};
+  assign U_ID.rf_oe2 = |{inst_add_w, inst_sub_w, inst_and, inst_or, inst_xor, inst_mul_w, inst_st_b, inst_st_w};
   /* 分支跳转相关 */
   assign U_ID.sel_next_pc[`V_SEQ ] = |{sel_next_pc[`V_COMP:`V_B_BL]};
   assign U_ID.sel_next_pc[`V_B_BL] = |{inst_b, inst_bl};
@@ -93,7 +95,7 @@ module ID (
   assign U_ID.b_bl_pc = U_ID.pc + {s_imm_26[29:0], 2'b0};
   assign U_ID.jump_pc = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
   assign U_ID.comp_pc = U_ID.pc + {s_imm_16[29:0], 2'b0};
-  /* exe */
+  /* alu */
   assign U_ID.alu_op[`V_ADD ] = |{inst_add_w, inst_addi_w, inst_bl, inst_jirl, inst_pcaddu12i};
   assign U_ID.alu_op[`V_SUB ] = inst_sub_w;
   assign U_ID.alu_op[`V_AND ] = |{inst_and, inst_andi};
@@ -103,9 +105,24 @@ module ID (
   assign U_ID.alu_op[`V_SLL ] = inst_slli_w;
   assign U_ID.alu_op[`V_SRL ] = inst_srli_w;
   assign U_ID.alu_op[`V_SRA ] = inst_srai_w;
-  assign U_ID.alu_op[`V_SLTU] = inst_srai_w;
-  assign U_ID.alu_op[`V_LUI ] = inst_srai_w;
-    
+  assign U_ID.alu_op[`V_SLTU] = inst_sltui;
+  assign U_ID.alu_op[`V_LUI ] = inst_lu12i_w;
+  /* sel alu in2 */
+  assign U_ID.sel_alu_in1 = |{inst_bl, inst_jirl, inst_pcaddu12i};
+  /* sel alu in2 */
+  assign U_ID.sel_alu_in2[`V_IS_RK  ] = |{inst_add_w, inst_sub_w, inst_and, inst_or, inst_xor, inst_mul};
+  assign U_ID.sel_alu_in2[`V_IS_IMM ] = |{inst_addi_w, inst_andi, inst_ori, inst_slli_w, inst_srli_w, inst_srai_w, inst_sltui, inst_lu12i_w};
+  assign U_ID.sel_alu_in2[`V_IS_FORE] = |{inst_bl, inst_jirl};
+  /* ram */
+  assign U_ID.store[`V_ST_B] = inst_st_b;
+  assign U_ID.store[`V_ST_W] = inst_st_w;
+  assign U_ID.store[`V_LD_B] = inst_ld_b;
+  assign U_ID.store[`V_LD_W] = inst_ld_w;
+  /* sel write back data */
+  assign sel_wb_data = |{inst_ld_b, inst_ld_w};
+  /* unsigned */
+  assign uflag = inst_sltui;
+
 endmodule
 
 module decoder_4_16 (
