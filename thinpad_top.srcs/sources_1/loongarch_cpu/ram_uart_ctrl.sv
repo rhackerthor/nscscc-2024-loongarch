@@ -75,7 +75,7 @@ module RamUartCtrl (
   always @(*) begin
     /* 复位值 */
     if (rst == `V_TRUE) begin
-      base_ram_rdata_r <= `V_ZERO;
+      // base_ram_rdata_r <= `V_ZERO;
       base_ram_wdata_r <= `V_ZERO;
       base_ram_addr_r  <= `V_ZERO;
       base_ram_be_n_r  <= `V_ONE;
@@ -86,7 +86,7 @@ module RamUartCtrl (
     end
     /* 访存阶段访问base ram */
     else if (is_base_ram == `V_TRUE) begin
-      base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : 32'b0;
+      // base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : 32'b0;
       base_ram_wdata_r <= cpu_ext_wdata_i;
       base_ram_addr_r  <= cpu_ext_addr_i[21:2];
       base_ram_be_n_r  <= ~cpu_ext_be_i;
@@ -96,7 +96,7 @@ module RamUartCtrl (
       to_if_valid_o    <= `V_ZERO;
     end
     else begin
-      base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : 32'b0;
+      // base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : 32'b0;
       base_ram_wdata_r <= `V_ZERO;
       base_ram_addr_r  <= cpu_base_addr_i[21:2];
       base_ram_be_n_r  <= `V_ZERO;
@@ -117,7 +117,7 @@ module RamUartCtrl (
   always @(*) begin
     /* 复位值 */
     if (rst == `V_TRUE) begin
-      ext_ram_rdata_r <= `V_ZERO;
+      // ext_ram_rdata_r <= `V_ZERO;
       ext_ram_wdata_r <= `V_ZERO;
       ext_ram_addr_r  <= `V_ZERO;
       ext_ram_be_n_r  <= `V_ONE;
@@ -127,7 +127,7 @@ module RamUartCtrl (
     end
     /* 访存阶段访问ext ram */
     else if (is_ext_ram == `V_TRUE) begin
-      ext_ram_rdata_r <= ~ext_ram_oe_n_r ? ext_ram_data_io : 32'b0;
+      // ext_ram_rdata_r <= ~ext_ram_oe_n_r ? ext_ram_data_io : 32'b0;
       ext_ram_wdata_r <= cpu_ext_wdata_i;
       ext_ram_addr_r  <= cpu_ext_addr_i[21:2];
       ext_ram_be_n_r  <= ~cpu_ext_be_i;
@@ -136,13 +136,24 @@ module RamUartCtrl (
       ext_ram_we_n_r  <= ~cpu_ext_we_i;
     end
     else begin
-      ext_ram_rdata_r <= `V_ZERO;
+      // ext_ram_rdata_r <= `V_ZERO;
       ext_ram_wdata_r <= `V_ZERO;
       ext_ram_addr_r  <= `V_ZERO;
       ext_ram_be_n_r  <= `V_ONE;
       ext_ram_ce_n_r  <= `V_ONE;
       ext_ram_oe_n_r  <= `V_ONE;
       ext_ram_we_n_r  <= `V_ONE;
+    end
+  end
+
+  always_ff @(posedge clk) begin
+    if (rst == `V_TRUE) begin
+      base_ram_rdata_r <= `V_ZERO;
+      ext_ram_rdata_r <= `V_ZERO;
+    end
+    else begin
+      base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : base_ram_rdata_r;
+      ext_ram_rdata_r <= ~ext_ram_oe_n_r ? ext_ram_data_io : ext_ram_rdata_r;
     end
   end
 

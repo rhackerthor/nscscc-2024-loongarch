@@ -26,6 +26,8 @@ interface __PipeLineCtrl (
   logic exe_to_mem_valid;
   logic mem_to_wb_valid;
 
+  logic br_cancle;
+
   assign allowin_if  = !valid_if  | ready_go_if  & allowin_id;
   assign allowin_id  = !valid_id  | ready_go_id  & allowin_exe;
   assign allowin_exe = !valid_exe | ready_go_exe & allowin_mem;
@@ -56,7 +58,7 @@ module PipeLineCtrl (
 
   always_ff @(*) begin
     if (U_ID.rf_oe1 == `V_TRUE) begin
-      if (U_EXE.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_EXE.rf_waddr) begin
+      if (U_Pipe.valid_exe == `V_TRUE && U_EXE.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_EXE.rf_waddr) begin
         if (U_ID.branch == `V_TRUE) begin
           U_ID.rf_rdata1 <= `V_ZERO;
           U_Pipe.ready_go_id <= 1'b0;
@@ -70,11 +72,11 @@ module PipeLineCtrl (
           U_Pipe.ready_go_id <= 1'b1;
         end
       end
-      else if (U_MEM.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_MEM.rf_waddr) begin
+      else if (U_Pipe.valid_mem == `V_TRUE && U_MEM.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_MEM.rf_waddr) begin
         U_ID.rf_rdata1 <= |U_MEM.load == `V_TRUE ? U_MEM.ram_data : U_MEM.alu_result;
         U_Pipe.ready_go_id <= 1'b1;
       end
-      else if (U_WB.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_WB.rf_waddr) begin
+      else if (U_Pipe.valid_wb == `V_TRUE && U_WB.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_WB.rf_waddr) begin
         U_ID.rf_rdata1 <= U_WB.rf_wdata;
         U_Pipe.ready_go_id <= 1'b1;
       end
@@ -92,7 +94,7 @@ module PipeLineCtrl (
   logic [`W_DATA] cnt;
   always_ff @(*) begin
     if (U_ID.rf_oe2 == `V_TRUE) begin
-      if (U_EXE.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_EXE.rf_waddr) begin
+      if (U_Pipe.valid_exe == `V_TRUE && U_EXE.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_EXE.rf_waddr) begin
         if (U_ID.branch == `V_TRUE) begin
           U_ID.rf_rdata2 <= `V_ZERO;
           U_Pipe.ready_go_id <= 1'b0;
@@ -109,14 +111,15 @@ module PipeLineCtrl (
           cnt <= 3;
         end
       end
-      else if (U_MEM.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_MEM.rf_waddr) begin
+      else if (U_Pipe.valid_mem == `V_TRUE && U_MEM.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_MEM.rf_waddr) begin
         U_ID.rf_rdata2 <= |U_MEM.load == `V_TRUE ? U_MEM.ram_data : U_MEM.alu_result;
         U_Pipe.ready_go_id <= 1'b1;
           cnt <= 4;
       end
-      else if (U_WB.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_WB.rf_waddr) begin
+      else if (U_Pipe.valid_wb == `V_TRUE && U_WB.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_WB.rf_waddr) begin
         U_ID.rf_rdata2 <= U_WB.rf_wdata;
         U_Pipe.ready_go_id <= 1'b1;
+          cnt <= 5;
       end
       else begin
         U_ID.rf_rdata2 <= U_ID.pre_rf_rdata2;
@@ -127,6 +130,15 @@ module PipeLineCtrl (
     else begin
       U_ID.rf_rdata2 <= U_ID.pre_rf_rdata2;
       U_Pipe.ready_go_id <= 1'b1;
+    end
+  end
+
+  always_ff @(*) begin
+    if (U_Pipe.id_to_exe_valid == `V_TRUE && |U_ID.sel_next_pc[`V_COMP:`V_B_BL] == `V_TRUE) begin
+      U_Pipe.br_cancle <= `V_TRUE;
+    end
+    else begin
+      U_Pipe.br_cancle <= `V_FALSE;
     end
   end
 

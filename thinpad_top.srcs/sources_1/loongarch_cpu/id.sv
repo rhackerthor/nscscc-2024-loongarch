@@ -10,6 +10,9 @@ module ID (
     if (U_ID.rst == `V_TRUE) begin
       U_Pipe.valid_id <= `V_FALSE;
     end
+    else if (U_Pipe.br_cancle == `V_TRUE) begin
+      U_Pipe.valid_id <= `V_FALSE;
+    end
     else if (U_Pipe.allowin_id == `V_TRUE) begin
       U_Pipe.valid_id <= U_Pipe.if_to_id_valid;
     end
@@ -115,9 +118,9 @@ module ID (
   assign U_ID.rf_raddr2 = is_rd == `V_FALSE ? U_ID.inst[`W_RF_RK] : U_ID.inst[`W_RF_RD];
   assign U_ID.rf_we  = &{~inst_b, ~inst_beq, ~inst_bge, ~inst_bne, ~inst_st_b, ~inst_st_w};
   assign U_ID.rf_oe1 = &{~inst_b, ~inst_bl, ~inst_lu12i_w, ~inst_pcaddu12i};
-  assign U_ID.rf_oe2 = |{inst_add_w, inst_sub_w, inst_and, inst_or, inst_xor, inst_mul_w, inst_st_b, inst_st_w};
+  assign U_ID.rf_oe2 = &{~inst_b, ~inst_bl, ~inst_ld_b, ~inst_ld_w, ~inst_jirl, ~inst_lu12i_w, ~inst_pcaddu12i};
   /* 分支跳转相关 */
-  assign U_ID.sel_next_pc[`V_SEQ ] = |{U_ID.sel_next_pc[`V_COMP:`V_B_BL]};
+  assign U_ID.sel_next_pc[`V_SEQ ] = &{~U_ID.sel_next_pc[`V_COMP:`V_B_BL]};
   assign U_ID.sel_next_pc[`V_B_BL] = |{inst_b, inst_bl};
   assign U_ID.sel_next_pc[`V_JUMP] = inst_jirl;
   assign U_ID.sel_next_pc[`V_COMP] = (inst_beq == `V_TRUE && U_ID.rf_rdata1 == U_ID.rf_rdata2) |

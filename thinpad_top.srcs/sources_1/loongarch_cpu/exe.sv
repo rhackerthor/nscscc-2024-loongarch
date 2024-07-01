@@ -27,6 +27,7 @@ module EXE (
       U_EXE.sel_alu_in2 <= U_ID.sel_alu_in2;
       U_EXE.uflag       <= U_ID.uflag;
       U_EXE.load        <= U_ID.load;
+      U_EXE.store       <= U_ID.store;
       U_EXE.branch      <= U_ID.branch;
     end
   end
@@ -48,10 +49,10 @@ module EXE (
       U_EXE.ram_be <= `V_ONE;
     end
   end
-  assign U_EXE.ram_addr = U_ID.rf_rdata1 + U_ID.imm;
-  assign U_EXE.ram_oe = |U_ID.load;
-  assign U_EXE.ram_we = |U_ID.store;
-  assign U_RAM.data_ram_wdata = |{U_ID.load[`V_LD_B], U_ID.store[`V_ST_B]} ? {4{U_ID.rf_rdata2[7:0]}} : U_ID.rf_rdata2;
+  assign U_EXE.ram_addr       = U_EXE.rf_rdata1 + U_EXE.imm;
+  assign U_EXE.ram_oe         = |U_EXE.load;
+  assign U_EXE.ram_we         = |U_EXE.store;
+  assign U_RAM.data_ram_wdata = |{U_EXE.load[`V_LD_B], U_EXE.store[`V_ST_B]} ? {4{U_EXE.rf_rdata2[7:0]}} : U_EXE.rf_rdata2;
   assign U_RAM.data_ram_addr  = U_EXE.ram_addr;
   assign U_RAM.data_ram_be    = U_EXE.ram_be;
   assign U_RAM.data_ram_ce    = U_EXE.ram_oe | U_EXE.ram_we;

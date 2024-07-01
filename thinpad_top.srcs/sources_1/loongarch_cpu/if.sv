@@ -9,10 +9,10 @@ module IF (
   logic [`W_DATA] next_pc;
   logic           pc_we;
   /* 计算next pc */
-  assign pc_we = ~U_IF.rst;
+  assign pc_we = ~U_IF.rst & U_Pipe.ready_go_id;
   always_ff @(*) begin
     if (U_IF.rst == `V_TRUE) begin
-      next_pc <= 32'h8000_0000;
+      next_pc <= `V_ONE;//32'h8000_0000;
     end
     else case (U_ID.sel_next_pc)
       `V__SEQ : begin next_pc <= U_IF.pc + 32'h0000_0004; end
@@ -36,8 +36,8 @@ module IF (
     end
     if (pc_we == `V_TRUE && U_Pipe.to_if_valid == `V_TRUE && U_Pipe.allowin_if == `V_TRUE) begin
       U_IF.pc   <= next_pc;
-      U_IF.inst <= U_RAM.inst_ram_rdata;
     end
   end
+  assign U_IF.inst = U_RAM.inst_ram_rdata;
 
 endmodule
