@@ -33,8 +33,6 @@
 `define V__B_BL 4'b0010
 `define V__JUMP 4'b0100
 `define V__COMP 4'b1000
-/* id */
-`define W_SEL_IMM 5:0 // 立即数选择信号宽度
 /* exe */
 `define W_ADDER 32:0
 `define W_ALU_OP 10:0

@@ -76,23 +76,23 @@ module thinpad_top(
       else        reset_of_clk <= 1'b0;
   end
 
-  logic [31:0] cpu_base_rdata;
-  logic [31:0] cpu_base_addr;
-  logic        cpu_base_ce;
+  wire [31:0] cpu_base_rdata;
+  wire [31:0] cpu_base_addr;
+  wire        cpu_base_ce;
 
-  logic [31:0] cpu_ext_rdata;
-  logic [31:0] cpu_ext_wdata;
-  logic [31:0] cpu_ext_addr;
-  logic [ 3:0] cpu_ext_be;
-  logic        cpu_ext_ce;
-  logic        cpu_ext_oe;
-  logic        cpu_ext_we;
+  wire [31:0] cpu_ext_rdata;
+  wire [31:0] cpu_ext_wdata;
+  wire [31:0] cpu_ext_addr;
+  wire [ 3:0] cpu_ext_be;
+  wire        cpu_ext_ce;
+  wire        cpu_ext_oe;
+  wire        cpu_ext_we;
 
-  logic        to_if_valid;
+  wire        to_if_valid;
 
   RamUartCtrl RamUartCtrl0 (
     .clk              (clk           ),
-    .rst              (rst           ),
+    .rst              (reset_of_clk  ),
     .cpu_base_rdata_o (cpu_base_rdata),
     .cpu_base_addr_i  (cpu_base_addr ),
     .cpu_base_ce_i    (cpu_base_ce   ),
@@ -122,7 +122,7 @@ module thinpad_top(
 
   LoongCpu LoongCpu (
     .clk              (clk           ),
-    .rst              (rst           ),
+    .rst              (reset_of_clk  ),
     .inst_ram_rdata_i (cpu_base_rdata),
     .inst_ram_addr_o  (cpu_base_addr ),
     .inst_ram_ce_o    (cpu_base_ce   ),

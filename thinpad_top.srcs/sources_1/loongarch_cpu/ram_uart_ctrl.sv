@@ -39,32 +39,31 @@ module RamUartCtrl (
   logic [`W_DATA    ] base_ram_rdata_r;
   logic [`W_DATA    ] base_ram_wdata_r;
   logic [`W_RAM_ADDR] base_ram_addr_r;
-  logic [`W_RAM_BE  ] base_ram_be_n_r,
-  logic               base_ram_ce_n_r,
-  logic               base_ram_oe_n_r,
-  logic               base_ram_we_n_r,
+  logic [`W_RAM_BE  ] base_ram_be_n_r;
+  logic               base_ram_ce_n_r;
+  logic               base_ram_oe_n_r;
+  logic               base_ram_we_n_r;
 
   /* ext 转接线 */
   logic [`W_DATA    ] ext_ram_rdata_r;
   logic [`W_DATA    ] ext_ram_wdata_r;
   logic [`W_RAM_ADDR] ext_ram_addr_r;
-  logic [`W_RAM_BE  ] ext_ram_be_n_r,
-  logic               ext_ram_ce_n_r,
-  logic               ext_ram_oe_n_r,
-  logic               ext_ram_we_n_r,
+  logic [`W_RAM_BE  ] ext_ram_be_n_r;
+  logic               ext_ram_ce_n_r;
+  logic               ext_ram_oe_n_r;
+  logic               ext_ram_we_n_r;
 
   /* uart ctrl */
   logic [`W_DATA] uart_rdata;
+  assign is_uart = `V_FALSE;
 
   /* 判断数据访存范围 */
   logic is_base_ram, is_ext_ram;
   logic is_uart_stat, is_uart_data, is_uart;
-  assign is_base_ram = (`V_BASE_RAM_BEGIN <= cpu_ext_addr_i) & (cpu_ext_addr_i <= `V_BASE_RAM_END);
-  assign is_ext_ram = (`V_EXT_RAM_BEGIN <= cpu_ext_addr_i) & (cpu_ext_addr_i <= `V_EXT_RAM_END);
+  assign is_base_ram = (`V_BASE_RAM_BEGIN <= cpu_ext_addr_i) && (cpu_ext_addr_i <= `V_BASE_RAM_END);
+  assign is_ext_ram = (`V_EXT_RAM_BEGIN <= cpu_ext_addr_i) && (cpu_ext_addr_i <= `V_EXT_RAM_END);
   assign is_uart_stat = cpu_ext_addr_i == `V_UART_STAT;
   assign is_uart_data = cpu_ext_addr_i == `V_UART_DATA;
-  /* 当访存阶段访问base ram时暂停流水线 */
-  assign to_if_valid_o = ~is_base_ram;
 
   /* base ram */
   assign base_ram_data_io = ~base_ram_we_n_o ? base_ram_wdata_r : 32'bzzzz_zzzz;
@@ -73,15 +72,7 @@ module RamUartCtrl (
   assign base_ram_ce_n_o  = base_ram_ce_n_r;
   assign base_ram_oe_n_o  = base_ram_oe_n_r;
   assign base_ram_we_n_o  = base_ram_we_n_r;
-  always_ff @(posedge clk) begin
-    /* 设置默认值 */
-    base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : 32'b0;
-    base_ram_wdata_r <= `V_ZERO;
-    base_ram_addr_r  <= cpu_base_addr_i[21:2];
-    base_ram_be_n_r  <= `V_ZERO;
-    base_ram_ce_n_r  <= `V_ZERO;
-    base_ram_oe_n_r  <= `V_ZERO;
-    base_ram_we_n_r  <= `V_ONE;
+  always @(*) begin
     /* 复位值 */
     if (rst == `V_TRUE) begin
       base_ram_rdata_r <= `V_ZERO;
@@ -91,6 +82,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= `V_ONE;
       base_ram_oe_n_r  <= `V_ONE;
       base_ram_we_n_r  <= `V_ONE;
+      to_if_valid_o    <= `V_ZERO;
     end
     /* 访存阶段访问base ram */
     else if (is_base_ram == `V_TRUE) begin
@@ -101,24 +93,28 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= ~cpu_ext_ce_i;
       base_ram_oe_n_r  <= ~cpu_ext_oe_i;
       base_ram_we_n_r  <= ~cpu_ext_we_i;
+      to_if_valid_o    <= `V_ZERO;
+    end
+    else begin
+      base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : 32'b0;
+      base_ram_wdata_r <= `V_ZERO;
+      base_ram_addr_r  <= cpu_base_addr_i[21:2];
+      base_ram_be_n_r  <= `V_ZERO;
+      base_ram_ce_n_r  <= `V_ZERO;
+      base_ram_oe_n_r  <= `V_ZERO;
+      base_ram_we_n_r  <= `V_ONE;
+      to_if_valid_o    <= `V_ONE;
     end
   end
 
   /* ext ram */
-  assign ext_ram_data_io <= ~ext_ram_we_n_o ? ext_ram_wdata_r : 32'bzzzz_zzzz;
-  assign ext_ram_addr_o  <= ext_ram_addr_r;
-  assign ext_ram_be_n_o  <= ~ext_ram_be_n_r;
-  assign ext_ram_ce_n_o  <= ~ext_ram_ce_n_r;
-  assign ext_ram_oe_n_o  <= ~ext_ram_oe_n_r;
-  assign ext_ram_we_n_o  <= ~ext_ram_we_n_r;
-  always_ff @(posedge clk) begin
-    ext_ram_rdata_r <= `V_ZERO;
-    ext_ram_wdata_r <= `V_ZERO;
-    ext_ram_addr_r  <= `V_ZERO;
-    ext_ram_be_n_r  <= `V_ONE;
-    ext_ram_ce_n_r  <= `V_ONE;
-    ext_ram_oe_n_r  <= `V_ONE;
-    ext_ram_we_n_r  <= `V_ONE;
+  assign ext_ram_data_io = ~ext_ram_we_n_o ? ext_ram_wdata_r : 32'bzzzz_zzzz;
+  assign ext_ram_addr_o  = ext_ram_addr_r;
+  assign ext_ram_be_n_o  = ext_ram_be_n_r;
+  assign ext_ram_ce_n_o  = ext_ram_ce_n_r;
+  assign ext_ram_oe_n_o  = ext_ram_oe_n_r;
+  assign ext_ram_we_n_o  = ext_ram_we_n_r;
+  always @(*) begin
     /* 复位值 */
     if (rst == `V_TRUE) begin
       ext_ram_rdata_r <= `V_ZERO;
@@ -138,6 +134,15 @@ module RamUartCtrl (
       ext_ram_ce_n_r  <= ~cpu_ext_ce_i;
       ext_ram_oe_n_r  <= ~cpu_ext_oe_i;
       ext_ram_we_n_r  <= ~cpu_ext_we_i;
+    end
+    else begin
+      ext_ram_rdata_r <= `V_ZERO;
+      ext_ram_wdata_r <= `V_ZERO;
+      ext_ram_addr_r  <= `V_ZERO;
+      ext_ram_be_n_r  <= `V_ONE;
+      ext_ram_ce_n_r  <= `V_ONE;
+      ext_ram_oe_n_r  <= `V_ONE;
+      ext_ram_we_n_r  <= `V_ONE;
     end
   end
 

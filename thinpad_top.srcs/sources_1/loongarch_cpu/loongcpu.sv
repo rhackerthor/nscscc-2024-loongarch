@@ -23,7 +23,7 @@ module LoongCpu (
   PipeLineData U_EXE(clk, rst);
   PipeLineData U_MEM(clk, rst);
   PipeLineData U_WB(clk, rst);
-  PipeLineCtrl U_Pipe(to_if_valid);
+  __PipeLineCtrl U_Pipe(to_if_valid_i);
   Ram U_RAM(
     .inst_ram_rdata (inst_ram_rdata_i),
     .inst_ram_addr  (inst_ram_addr_o ),
@@ -34,9 +34,17 @@ module LoongCpu (
     .data_ram_be    (data_ram_be_o   ),
     .data_ram_ce    (data_ram_ce_o   ),
     .data_ram_oe    (data_ram_oe_o   ),
-    .data_ram_we    (data_ram_we_o   ),
+    .data_ram_we    (data_ram_we_o   )
   );
 
+  RegFile RegFile0(
+    .clk (clk),
+    .rst (rst),
+    .U_ID (U_ID),
+    .U_WB (U_WB)
+  );
+
+  PipeLineCtrl PipeLineCtrl0(U_IF, U_ID, U_EXE, U_MEM, U_WB, U_Pipe);
   IF IF0(U_IF, U_ID, U_Pipe, U_RAM);
   ID ID0(U_IF, U_ID, U_Pipe);
   EXE EXE0(U_ID, U_EXE, U_Pipe, U_RAM);

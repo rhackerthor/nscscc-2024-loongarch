@@ -12,7 +12,7 @@ interface Ram (
   output logic             data_ram_oe,
   output logic             data_ram_we
 );
-    
+
 endinterface
 
 interface PipeLineData (
@@ -23,11 +23,13 @@ interface PipeLineData (
   logic [`W_DATA] pc;
   logic [`W_DATA] inst;
   /* immediate */
-  logic [`W_DATA  ] imm;
+  logic [`W_DATA] imm;
   /* reg file */
   logic [`W_DATA   ] rf_wdata;
   logic [`W_DATA   ] rf_rdata1;
   logic [`W_DATA   ] rf_rdata2;
+  logic [`W_DATA   ] pre_rf_rdata1;
+  logic [`W_DATA   ] pre_rf_rdata2;
   logic [`W_RF_ADDR] rf_waddr;
   logic [`W_RF_ADDR] rf_raddr1;
   logic [`W_RF_ADDR] rf_raddr2;
@@ -37,22 +39,23 @@ interface PipeLineData (
   /* branch */
   logic [`W_SEL_NEXT_PC] sel_next_pc;
   logic [`W_DATA] b_bl_pc; // B,BL无条件跳转pc
-  logic [`W_DATA] jirl_pc; // JIRL无条件跳转pc
+  logic [`W_DATA] jump_pc; // JIRL无条件跳转pc
   logic [`W_DATA] comp_pc; // 有条件跳转pc
   /* exe */
   logic [`W_ALU_OP] alu_op;
-  logic sel_alu_in2;
+  logic sel_alu_in1;
   logic [`W_SEL_ALU_IN2] sel_alu_in2;
+  logic [`W_DATA] alu_result;
   /* mem */
   logic [`W_DATA  ] ram_data;
   logic [`W_DATA  ] ram_addr;
   logic [`W_RAM_BE] ram_be;
   logic             ram_oe;
   logic             ram_we;
-  logic [`W_ST] store;
-  logic [`W_LD] load;
-  /* wb */
-  logic sel_wb_data;
+  /* d_inst */
+  logic [`W_STORE] store;
+  logic [`W_LOAD ] load;
+  logic branch;
   /* unsigned */
   logic uflag;
 
@@ -70,10 +73,11 @@ interface PipeLineData (
     /* data */
     input  pc,
     input  inst,
-    output d_inst,
     output imm,
-    input  rf_rdata1,
-    input  rf_rdata2,
+    output rf_rdata1,
+    output rf_rdata2,
+    output pre_rf_rdata1,
+    output pre_rf_rdata2,
     output rf_waddr,
     output rf_raddr1,
     output rf_raddr2,
@@ -83,13 +87,13 @@ interface PipeLineData (
     output sel_next_pc,
     output b_bl_pc,
     output jump_pc,
-    output branch_pc,
+    output comp_pc,
     output alu_op,
     output sel_alu_in1,
     output sel_alu_in2,
     output store,
     output load,
-    output sel_wb_data,
+    output branch,
     output uflag
   );
 
@@ -107,9 +111,11 @@ interface PipeLineData (
     input  alu_op,
     input  sel_alu_in1,
     input  sel_alu_in2,
-    input  sel_wb_data,
     input  uflag,
-    output alu_result
+    input  branch,
+    input  store,
+    input  load,
+    output alu_result,
     output ram_addr,
     output ram_be,
     output ram_oe,
@@ -128,7 +134,8 @@ interface PipeLineData (
     input  rf_waddr,
     input  rf_we,
     input  alu_result,
-    input  sel_wb_data,
+    input  branch,
+    input  load,
     output ram_data,
     input  ram_addr,
     input  ram_be,
@@ -145,8 +152,9 @@ interface PipeLineData (
     output rf_wdata,
     input  rf_waddr,
     input  rf_we,
+    input  branch,
+    input  load,
     input  alu_result,
-    input  sel_wb_data,
     input  ram_data,
     input  ram_addr,
     input  ram_be
