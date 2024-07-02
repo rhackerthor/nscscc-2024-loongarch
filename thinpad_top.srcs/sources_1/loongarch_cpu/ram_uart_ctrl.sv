@@ -55,7 +55,6 @@ module RamUartCtrl (
 
   /* uart ctrl */
   logic [`W_DATA] uart_rdata;
-  assign is_uart = `V_FALSE;
 
   /* 判断数据访存范围 */
   logic is_base_ram, is_ext_ram;
@@ -64,6 +63,7 @@ module RamUartCtrl (
   assign is_ext_ram = (`V_EXT_RAM_BEGIN <= cpu_ext_addr_i) && (cpu_ext_addr_i <= `V_EXT_RAM_END);
   assign is_uart_stat = cpu_ext_addr_i == `V_UART_STAT;
   assign is_uart_data = cpu_ext_addr_i == `V_UART_DATA;
+  assign is_uart = `V_FALSE;
 
   /* base ram */
   assign base_ram_data_io = ~base_ram_we_n_o ? base_ram_wdata_r : 32'bzzzz_zzzz;
@@ -100,8 +100,8 @@ module RamUartCtrl (
       base_ram_wdata_r <= `V_ZERO;
       base_ram_addr_r  <= cpu_base_addr_i[21:2];
       base_ram_be_n_r  <= `V_ZERO;
-      base_ram_ce_n_r  <= `V_ZERO;
-      base_ram_oe_n_r  <= `V_ZERO;
+      base_ram_ce_n_r  <= ~cpu_base_ce_i;
+      base_ram_oe_n_r  <= ~cpu_base_ce_i;
       base_ram_we_n_r  <= `V_ONE;
       to_if_valid_o    <= `V_ONE;
     end

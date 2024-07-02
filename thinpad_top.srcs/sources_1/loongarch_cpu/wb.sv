@@ -1,7 +1,7 @@
 `include "define.sv"
 module WB (
-  PipeLineData.MEM U_MEM,
-  PipeLineData.WB U_WB,
+  PipeLineData U_MEM,
+  PipeLineData U_WB,
   __PipeLineCtrl U_Pipe
 );
 

@@ -28,110 +28,83 @@ interface __PipeLineCtrl (
 
   logic br_cancle;
 
-  assign allowin_if  = !valid_if  | ready_go_if  & allowin_id;
-  assign allowin_id  = !valid_id  | ready_go_id  & allowin_exe;
-  assign allowin_exe = !valid_exe | ready_go_exe & allowin_mem;
-  assign allowin_mem = !valid_mem | ready_go_mem;
-  assign allowin_wb  = !valid_wb  | ready_go_wb;
-
-  assign if_to_id_valid   = valid_if  & ready_go_if;
-  assign id_to_exe_valid  = valid_id  & ready_go_id;
-  assign exe_to_mem_valid = valid_exe & ready_go_exe;
-  assign mem_to_wb_valid  = valid_mem & ready_go_mem;
-
-  assign ready_go_if  = 1'b1;
-  // assign ready_go_id  = 1'b1;
-  assign ready_go_exe = 1'b1;
-  assign ready_go_mem = 1'b1;
-  assign ready_go_wb  = 1'b1;
-
 endinterface
 
 module PipeLineCtrl (
-  PipeLineData.IF U_IF,
-  PipeLineData.ID U_ID,
-  PipeLineData.EXE U_EXE,
-  PipeLineData.MEM U_MEM,
-  PipeLineData.WB U_WB,
+  input logic clk,
+  input logic rst,
+  PipeLineData U_IF,
+  PipeLineData U_ID,
+  PipeLineData U_EXE,
+  PipeLineData U_MEM,
+  PipeLineData U_WB,
   __PipeLineCtrl U_Pipe
 );
 
+  assign U_Pipe.allowin_if  = !U_Pipe.valid_if  || (U_Pipe.ready_go_if  && U_Pipe.allowin_id);
+  assign U_Pipe.allowin_id  = !U_Pipe.valid_id  || (U_Pipe.ready_go_id  && U_Pipe.allowin_exe);
+  assign U_Pipe.allowin_exe = !U_Pipe.valid_exe || (U_Pipe.ready_go_exe && U_Pipe.allowin_mem);
+  assign U_Pipe.allowin_mem = !U_Pipe.valid_mem || (U_Pipe.ready_go_mem && U_Pipe.allowin_wb);
+  assign U_Pipe.allowin_wb  = !U_Pipe.valid_wb  || U_Pipe.ready_go_wb;
+
+  assign U_Pipe.if_to_id_valid   = U_Pipe.valid_if  & U_Pipe.ready_go_if;
+  assign U_Pipe.id_to_exe_valid  = U_Pipe.valid_id  & U_Pipe.ready_go_id;
+  assign U_Pipe.exe_to_mem_valid = U_Pipe.valid_exe & U_Pipe.ready_go_exe;
+  assign U_Pipe.mem_to_wb_valid  = U_Pipe.valid_mem & U_Pipe.ready_go_mem;
+
+  assign U_Pipe.ready_go_if  = 1'b1;
+  // assign ready_go_id  = 1'b1;
+  assign U_Pipe.ready_go_exe = 1'b1;
+  assign U_Pipe.ready_go_mem = 1'b1;
+  assign U_Pipe.ready_go_wb  = 1'b1;
+
+  logic ready_go_id1, ready_go_id2;
   always_ff @(*) begin
-    if (U_ID.rf_oe1 == `V_TRUE) begin
-      if (U_Pipe.valid_exe == `V_TRUE && U_EXE.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_EXE.rf_waddr) begin
-        if (U_ID.branch == `V_TRUE) begin
-          U_ID.rf_rdata1 <= `V_ZERO;
-          U_Pipe.ready_go_id <= 1'b0;
-        end
-        else if (|U_EXE.load == `V_TRUE) begin
-          U_ID.rf_rdata1 <= `V_ZERO;
-          U_Pipe.ready_go_id <= 1'b0;
-        end
-        else begin
-          U_ID.rf_rdata1 <= U_EXE.alu_result;
-          U_Pipe.ready_go_id <= 1'b1;
-        end
+    if (rst == `V_TRUE) begin
+      ready_go_id1 <= 1'b1;
+    end
+    else if (U_ID.rf_oe1 == `V_TRUE) begin
+      if (U_Pipe.valid_exe == `V_TRUE && U_EXE.rf_we == `V_TRUE && U_EXE.rf_waddr == U_ID.rf_raddr1) begin
+        ready_go_id1 <= 1'b0;
       end
-      else if (U_Pipe.valid_mem == `V_TRUE && U_MEM.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_MEM.rf_waddr) begin
-        U_ID.rf_rdata1 <= |U_MEM.load == `V_TRUE ? U_MEM.ram_data : U_MEM.alu_result;
-        U_Pipe.ready_go_id <= 1'b1;
+      else if (U_Pipe.valid_mem == `V_TRUE && U_MEM.rf_we == `V_TRUE && U_MEM.rf_waddr == U_ID.rf_raddr1) begin
+        ready_go_id1 <= 1'b0;
       end
-      else if (U_Pipe.valid_wb == `V_TRUE && U_WB.rf_we == `V_TRUE && U_ID.rf_raddr1 == U_WB.rf_waddr) begin
-        U_ID.rf_rdata1 <= U_WB.rf_wdata;
-        U_Pipe.ready_go_id <= 1'b1;
+      else if (U_Pipe.valid_wb == `V_TRUE && U_WB.rf_we == `V_TRUE && U_WB.rf_waddr == U_ID.rf_raddr1) begin
+        ready_go_id1 <= 1'b0;
       end
       else begin
-        U_ID.rf_rdata1 <= U_ID.pre_rf_rdata1;
-        U_Pipe.ready_go_id <= 1'b1;
+        ready_go_id1 <= 1'b1;
       end
     end
     else begin
-      U_ID.rf_rdata1 <= U_ID.pre_rf_rdata1;
-      U_Pipe.ready_go_id <= 1'b1;
+      ready_go_id1 <= 1'b1;
     end
   end
 
-  logic [`W_DATA] cnt;
   always_ff @(*) begin
-    if (U_ID.rf_oe2 == `V_TRUE) begin
-      if (U_Pipe.valid_exe == `V_TRUE && U_EXE.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_EXE.rf_waddr) begin
-        if (U_ID.branch == `V_TRUE) begin
-          U_ID.rf_rdata2 <= `V_ZERO;
-          U_Pipe.ready_go_id <= 1'b0;
-          cnt <= 1;
-        end
-        else if (|U_EXE.load == `V_TRUE) begin
-          U_ID.rf_rdata2 <= `V_ZERO;
-          U_Pipe.ready_go_id <= 1'b0;
-          cnt <= 2;
-        end
-        else begin
-          U_ID.rf_rdata2 <= U_EXE.alu_result;
-          U_Pipe.ready_go_id <= 1'b1;
-          cnt <= 3;
-        end
+    if (rst == `V_TRUE) begin
+      ready_go_id2 <= 1'b1;
+    end
+    else if (U_ID.rf_oe2 == `V_TRUE) begin
+      if (U_Pipe.valid_exe == `V_TRUE && U_EXE.rf_we == `V_TRUE && U_EXE.rf_waddr == U_ID.rf_raddr2) begin
+        ready_go_id2 <= 1'b0;
       end
-      else if (U_Pipe.valid_mem == `V_TRUE && U_MEM.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_MEM.rf_waddr) begin
-        U_ID.rf_rdata2 <= |U_MEM.load == `V_TRUE ? U_MEM.ram_data : U_MEM.alu_result;
-        U_Pipe.ready_go_id <= 1'b1;
-          cnt <= 4;
+      else if (U_Pipe.valid_mem == `V_TRUE && U_MEM.rf_we == `V_TRUE && U_MEM.rf_waddr == U_ID.rf_raddr2) begin
+        ready_go_id2 <= 1'b0;
       end
-      else if (U_Pipe.valid_wb == `V_TRUE && U_WB.rf_we == `V_TRUE && U_ID.rf_raddr2 == U_WB.rf_waddr) begin
-        U_ID.rf_rdata2 <= U_WB.rf_wdata;
-        U_Pipe.ready_go_id <= 1'b1;
-          cnt <= 5;
+      else if (U_Pipe.valid_wb == `V_TRUE && U_WB.rf_we == `V_TRUE && U_WB.rf_waddr == U_ID.rf_raddr2) begin
+        ready_go_id2 <= 1'b0;
       end
       else begin
-        U_ID.rf_rdata2 <= U_ID.pre_rf_rdata2;
-        U_Pipe.ready_go_id <= 1'b1;
-          cnt <= 6;
+        ready_go_id2 <= 1'b1;
       end
     end
     else begin
-      U_ID.rf_rdata2 <= U_ID.pre_rf_rdata2;
-      U_Pipe.ready_go_id <= 1'b1;
+      ready_go_id2 <= 1'b1;
     end
   end
+  assign U_Pipe.ready_go_id = ready_go_id1 & ready_go_id2;
 
   always_ff @(*) begin
     if (U_Pipe.id_to_exe_valid == `V_TRUE && |U_ID.sel_next_pc[`V_COMP:`V_B_BL] == `V_TRUE) begin

@@ -1,7 +1,7 @@
 `include "define.sv"
 module EXE (
-  PipeLineData.ID U_ID,
-  PipeLineData.EXE U_EXE,
+  PipeLineData U_ID,
+  PipeLineData U_EXE,
   __PipeLineCtrl U_Pipe,
   Ram U_RAM
 );

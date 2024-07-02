@@ -1,7 +1,7 @@
 `include "define.sv"
 module MEM (
-  PipeLineData.EXE U_EXE,
-  PipeLineData.MEM U_MEM,
+  PipeLineData U_EXE,
+  PipeLineData U_MEM,
   __PipeLineCtrl U_Pipe,
   Ram U_RAM
 );
@@ -23,8 +23,8 @@ module MEM (
       U_MEM.rf_waddr   <= U_EXE.rf_waddr;
       U_MEM.rf_we      <= U_EXE.rf_we;
       U_MEM.alu_result <= U_EXE.alu_result;
-      U_MEM.load       <= U_EXE.load;
       U_MEM.branch     <= U_EXE.branch;
+      U_MEM.load       <= U_EXE.load;
       U_MEM.ram_addr   <= U_EXE.ram_addr;
       U_MEM.ram_be     <= U_EXE.ram_be;
       U_MEM.ram_oe     <= U_EXE.ram_oe;
