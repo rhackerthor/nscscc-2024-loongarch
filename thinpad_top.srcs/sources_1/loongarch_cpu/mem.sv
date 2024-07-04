@@ -32,6 +32,16 @@ module MEM (
     end
   end
   /* mem */
-  assign U_MEM.ram_data = U_RAM.data_ram_rdata;
+  // assign U_MEM.ram_data = U_RAM.data_ram_rdata;
+  always_ff @(*) begin
+    case (U_MEM.ram_be) 
+      4'b0001: begin U_MEM.ram_data = {{24{U_RAM.data_ram_rdata[ 7]}}, U_RAM.data_ram_rdata[ 7: 0]}; end
+      4'b0010: begin U_MEM.ram_data = {{24{U_RAM.data_ram_rdata[15]}}, U_RAM.data_ram_rdata[15: 8]}; end
+      4'b0100: begin U_MEM.ram_data = {{24{U_RAM.data_ram_rdata[23]}}, U_RAM.data_ram_rdata[23:16]}; end
+      4'b1000: begin U_MEM.ram_data = {{24{U_RAM.data_ram_rdata[31]}}, U_RAM.data_ram_rdata[31:24]}; end
+      4'b1111: begin U_MEM.ram_data = U_RAM.data_ram_rdata; end
+      default: begin U_MEM.ram_data = `V_ZERO; end
+    endcase
+  end
 
 endmodule

@@ -37,7 +37,7 @@ module IF (
       U_IF.pc         <= `R_PC;
     end
     else if (U_Pipe.allowin_if == `V_TRUE) begin
-      U_Pipe.valid_if <= U_Pipe.to_if_valid;
+      U_Pipe.valid_if <= !U_Pipe.valid_if | U_Pipe.to_if_valid;
     end
     if (pc_we == `V_TRUE && U_Pipe.to_if_valid == `V_TRUE && U_Pipe.allowin_if == `V_TRUE) begin
       U_IF.pc <= next_pc;

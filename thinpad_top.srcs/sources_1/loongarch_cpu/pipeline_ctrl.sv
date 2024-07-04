@@ -104,6 +104,7 @@ module PipeLineCtrl (
       ready_go_id2 <= 1'b1;
     end
   end
+
   assign U_Pipe.ready_go_id = ready_go_id1 & ready_go_id2;
 
   always_ff @(*) begin

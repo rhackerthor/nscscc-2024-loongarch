@@ -7,19 +7,20 @@
          <top_modules>
             <top_module name="glbl" />
             <top_module name="tb" />
+            <top_module name="vcomponents" />
          </top_modules>
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="23389500fs"></ZoomStartTime>
-      <ZoomEndTime time="23625801fs"></ZoomEndTime>
-      <Cursor1Time time="23530000fs"></Cursor1Time>
+      <ZoomStartTime time="1910260fs"></ZoomStartTime>
+      <ZoomEndTime time="2071014fs"></ZoomEndTime>
+      <Cursor1Time time="1990000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="248"></NameColumnWidth>
+      <NameColumnWidth column_width="224"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="120" />
+   <WVObjectSize size="121" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -76,6 +77,10 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_IF/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
       <obj_property name="ObjectShortName">pc[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_IF/inst">
+      <obj_property name="ElementShortName">inst[31:0]</obj_property>
+      <obj_property name="ObjectShortName">inst[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/IF0/next_pc">
       <obj_property name="ElementShortName">next_pc[31:0]</obj_property>
@@ -491,8 +496,8 @@
       <obj_property name="ObjectShortName">is_ext_ram</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/BASE_RAM_INIT_FILE">
-      <obj_property name="ElementShortName">BASE_RAM_INIT_FILE[423:0]</obj_property>
-      <obj_property name="ObjectShortName">BASE_RAM_INIT_FILE[423:0]</obj_property>
+      <obj_property name="ElementShortName">BASE_RAM_INIT_FILE[503:0]</obj_property>
+      <obj_property name="ObjectShortName">BASE_RAM_INIT_FILE[503:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/EXT_RAM_INIT_FILE">
       <obj_property name="ElementShortName">EXT_RAM_INIT_FILE[103:0]</obj_property>
