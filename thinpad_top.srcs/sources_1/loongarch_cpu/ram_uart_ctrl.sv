@@ -132,28 +132,37 @@ module RamUartCtrl (
     .empty (txd_fifo_empty)
   );
 
+  logic uart_flag, base_flag, ext_flag;
   always_ff @(*) begin
     if (is_uart_stat == `V_TRUE) begin
       txd_fifo_we  <= `V_ZERO;
       txd_fifo_din <= `V_ZERO;
       rxd_fifo_oe  <= `V_ZERO;
+      uart_rdata   <= {30'b0, ~rxd_fifo_empty, ~txd_fifo_full};
+      uart_flag    <= `V_TRUE;
     end
     else if (is_uart_data == `V_TRUE) begin
       if (cpu_ext_we_i == `V_TRUE) begin
         txd_fifo_we  <= `V_TRUE;
         txd_fifo_din <= cpu_ext_wdata_i[7:0];
         rxd_fifo_oe  <= `V_FALSE;
+        uart_rdata   <= `V_ZERO;
+        uart_flag    <= `V_TRUE;
       end
       else begin
         txd_fifo_we  <= `V_FALSE;
         txd_fifo_din <= `V_ZERO;
         rxd_fifo_oe  <= `V_TRUE;
+        uart_rdata   <= {24'b0, rxd_fifo_dout};
+        uart_flag    <= `V_TRUE;
       end
     end
     else begin
       txd_fifo_we  <= `V_FALSE;
       txd_fifo_din <= `V_ZERO;
       rxd_fifo_oe  <= `V_FALSE;
+      uart_rdata   <= `V_ZERO;
+      uart_flag    <= `V_ZERO;
     end
   end
 
@@ -174,6 +183,7 @@ module RamUartCtrl (
       base_ram_oe_n_r  <= `V_ONE;
       base_ram_we_n_r  <= `V_ONE;
       to_if_valid_o    <= `V_ZERO;
+      base_flag        <= `V_ZERO;
     end
     /* 访存阶段访问base ram */
     else if (is_base_ram == `V_TRUE && cpu_ext_ce_i == `V_TRUE) begin
@@ -184,6 +194,7 @@ module RamUartCtrl (
       base_ram_oe_n_r  <= ~cpu_ext_oe_i;
       base_ram_we_n_r  <= ~cpu_ext_we_i;
       to_if_valid_o    <= `V_ZERO;
+      base_flag        <= `V_TRUE;
     end
     else begin
       base_ram_wdata_r <= `V_ZERO;
@@ -193,6 +204,7 @@ module RamUartCtrl (
       base_ram_oe_n_r  <= ~cpu_base_ce_i;
       base_ram_we_n_r  <= `V_ONE;
       to_if_valid_o    <= `V_ONE;
+      base_flag        <= `V_FALSE;
     end
   end
 
@@ -212,6 +224,7 @@ module RamUartCtrl (
       ext_ram_ce_n_r  <= `V_ONE;
       ext_ram_oe_n_r  <= `V_ONE;
       ext_ram_we_n_r  <= `V_ONE;
+      ext_flag        <= `V_FALSE;
     end
     /* 访存阶段访问ext ram */
     else if (is_ext_ram == `V_TRUE) begin
@@ -221,6 +234,7 @@ module RamUartCtrl (
       ext_ram_ce_n_r  <= ~cpu_ext_ce_i;
       ext_ram_oe_n_r  <= ~cpu_ext_oe_i;
       ext_ram_we_n_r  <= ~cpu_ext_we_i;
+      ext_flag        <= `V_TRUE;
     end
     else begin
       ext_ram_wdata_r <= `V_ZERO;
@@ -229,6 +243,7 @@ module RamUartCtrl (
       ext_ram_ce_n_r  <= `V_ONE;
       ext_ram_oe_n_r  <= `V_ONE;
       ext_ram_we_n_r  <= `V_ONE;
+      ext_flag        <= `V_FALSE;
     end
   end
 
@@ -236,21 +251,30 @@ module RamUartCtrl (
     if (rst == `V_TRUE) begin
       base_ram_rdata_r <= `V_ZERO;
       ext_ram_rdata_r <= `V_ZERO;
-      uart_rdata <= `V_ZERO;
     end
     else begin
-      base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : base_ram_rdata_r;
-      ext_ram_rdata_r <= ~ext_ram_oe_n_r ? ext_ram_data_io : ext_ram_rdata_r;
-      uart_rdata <= is_uart_stat ? {30'b0, !rxd_fifo_empty, !txd_fifo_full} :
-                                   {24'b0, rxd_fifo_dout};
+/*       base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : base_ram_rdata_r;
+      ext_ram_rdata_r <= ~ext_ram_oe_n_r ? ext_ram_data_io : ext_ram_rdata_r; */
+      if (~base_ram_oe_n_r && ~base_flag) begin
+        base_ram_rdata_r <= base_ram_data_io;
+      end
+      else begin
+        base_ram_rdata_r <= base_ram_rdata_r;
+      end
+
+      if (~ext_ram_oe_n_r) begin
+        if (uart_flag) begin ext_ram_rdata_r <= uart_rdata; end
+        else if (base_flag) begin ext_ram_rdata_r <= base_ram_data_io; end
+        else if (ext_flag) begin ext_ram_rdata_r <= ext_ram_data_io; end
+        else begin ext_ram_rdata_r <= ext_ram_rdata_r; end
+      end
+      else begin ext_ram_rdata_r <= ext_ram_rdata_r; end
     end
   end
 
   /* 读内存 */
   assign cpu_base_rdata_o = base_ram_rdata_r;
-  assign cpu_ext_rdata_o = is_uart     ? uart_rdata :
-                           is_base_ram ? base_ram_rdata_r :
-                                         ext_ram_rdata_r;
+  assign cpu_ext_rdata_o = ext_ram_rdata_r;
 
   /* uart */
 
