@@ -20,4 +20,3 @@ thinpad_top.sim/sim_1/behav/xsim/
 *.log
 *.dcp
 /.lint/
-simpleide/rom/build

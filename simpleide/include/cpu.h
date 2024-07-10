@@ -5,27 +5,28 @@
 
 /* 记录寄存器值 */
 #define NR_GPR 32 // 数量
-typedef struct (
-  word_t pc;
+typedef struct {
   word_t gpr[NR_GPR];
-) reg;
+  word_t pc;
+} Reg;
+word_t gpr_str2val(const char *gprname);
+const char *gpr_nr2str(int n);
+void gpr_print_regfile(void);
 
 /* 记录cpu状态 */
+enum {CPU_RUNNING, CPU_STOP, CPU_QUIT};
 typedef struct {
-  enum {CPU_RUNNING, CPU_STOP, CPU_QUIT};
   state_t state;
-  reg reg_old, reg_now;
+  Reg reg;
   word_t inst;
   char logbuf[128];
 } CPU_state;
 extern CPU_state cpu;
-#define cpu_pc cpu.now.pc
-#define cpu_gpr(i) cpu.now.gpr[i]
+#define cpu_pc cpu.reg.pc
+#define cpu_gpr(i) cpu.reg.gpr[i]
 
 void cpu_init(void);
 uint64_t cpu_execute(uint64_t n);
-void gpr_print_regfile(void);
-void cpu_print_info(void);
 bool cpu_error(void);
 
 #endif

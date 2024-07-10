@@ -11,8 +11,9 @@ CPU_state cpu = {};
 void cpu_init(void) {
   cpu.state = CPU_RUNNING;
 }
-/* 输出指令 */
+
 static void execute_once(void) {
+  /* 输出指令 */
   char *p = cpu.logbuf;
   p += snprintf(p, sizeof(cpu.logbuf), FMT_WORD ":", cpu_pc);
   uint8_t *inst = (uint8_t *)&cpu.inst; 
@@ -23,6 +24,7 @@ static void execute_once(void) {
     Log(stdout, "%s", mycpu.logbuf);
   }
 
+  /* 更新cpu状态 */
   v_update(1);
 }
 

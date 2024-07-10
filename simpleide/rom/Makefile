@@ -17,7 +17,6 @@ TXT := $(BUILD_DIR)/img.txt
 all: image
 
 $(ELF): ./asm/$(IMG)
-	@rm -rf $(BUILD_DIR)
 	@mkdir -p $(BUILD_DIR)
 	$(CC) $(FLAGS) -Ttext 0x80000000 -Iinclude $^ -o $@
 

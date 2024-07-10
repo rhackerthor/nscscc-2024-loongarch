@@ -5,7 +5,7 @@ VerilatedContext *contextp nullptr;
 VerilatedVcdC *tfp = nullptr;
 Vtop *top = nullptr;
 
-v_init(const char *filename) {
+extern "C" v_init(const char *filename) {
   contextp = new VerilatedContext;
   tfp = new VerilatedVcdC;
   top = new Vtop;
@@ -31,12 +31,12 @@ static void v_rst(uint64_t n) {
   top->rst = 0; v_update(1);
 }
 
-void v_update(uint64_t n) {
+extern "C" void v_update(uint64_t n) {
   for (int i = 0; i < n; i++)
     v_one_cycle();
 }
 
-void v_end(void) {
+extern "C" void v_end(void) {
   top->final();
   tfp->close();
   delete top;

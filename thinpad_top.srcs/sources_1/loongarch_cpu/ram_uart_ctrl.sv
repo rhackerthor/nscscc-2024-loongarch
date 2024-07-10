@@ -138,23 +138,23 @@ module RamUartCtrl (
       txd_fifo_we  <= `V_ZERO;
       txd_fifo_din <= `V_ZERO;
       rxd_fifo_oe  <= `V_ZERO;
-      uart_rdata   <= {30'b0, ~rxd_fifo_empty, ~txd_fifo_full};
       uart_flag    <= `V_TRUE;
+      uart_rdata   <= {30'b0, !rxd_fifo_empty, !txd_fifo_full};
     end
     else if (is_uart_data == `V_TRUE) begin
       if (cpu_ext_we_i == `V_TRUE) begin
         txd_fifo_we  <= `V_TRUE;
         txd_fifo_din <= cpu_ext_wdata_i[7:0];
         rxd_fifo_oe  <= `V_FALSE;
-        uart_rdata   <= `V_ZERO;
         uart_flag    <= `V_TRUE;
+        uart_rdata   <= `V_ZERO;
       end
       else begin
         txd_fifo_we  <= `V_FALSE;
         txd_fifo_din <= `V_ZERO;
         rxd_fifo_oe  <= `V_TRUE;
-        uart_rdata   <= {24'b0, rxd_fifo_dout};
         uart_flag    <= `V_TRUE;
+        uart_rdata   <= {24'b0, rxd_fifo_dout};
       end
     end
     else begin
@@ -253,8 +253,6 @@ module RamUartCtrl (
       ext_ram_rdata_r <= `V_ZERO;
     end
     else begin
-/*       base_ram_rdata_r <= ~base_ram_oe_n_r ? base_ram_data_io : base_ram_rdata_r;
-      ext_ram_rdata_r <= ~ext_ram_oe_n_r ? ext_ram_data_io : ext_ram_rdata_r; */
       if (~base_ram_oe_n_r && ~base_flag) begin
         base_ram_rdata_r <= base_ram_data_io;
       end
@@ -275,7 +273,5 @@ module RamUartCtrl (
   /* 读内存 */
   assign cpu_base_rdata_o = base_ram_rdata_r;
   assign cpu_ext_rdata_o = ext_ram_rdata_r;
-
-  /* uart */
 
 endmodule
