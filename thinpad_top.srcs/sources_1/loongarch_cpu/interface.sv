@@ -19,6 +19,12 @@ interface PipeLineData (
   input  logic clk,
   input  logic rst
 );
+  /* pipeline ctrl */
+  logic valid;
+  logic valid_in;
+  logic allowin;
+  logic ready_go;
+  logic br_cancle;
   /* data */
   logic [`W_DATA] pc;
   logic [`W_DATA] inst;

@@ -1,19 +1,18 @@
 `include "define.sv"
 module WB (
   PipeLineData U_MEM,
-  PipeLineData U_WB,
-  __PipeLineCtrl U_Pipe
+  PipeLineData U_WB
 );
 
   /* 流水线寄存器 */
   always_ff @(posedge U_WB.clk) begin
     if (U_WB.rst == `V_TRUE) begin
-      U_Pipe.valid_wb <= `V_FALSE;
+      U_WB.valid <= `V_FALSE;
     end
-    else if (U_Pipe.allowin_wb == `V_TRUE) begin
-      U_Pipe.valid_wb <= U_Pipe.mem_to_wb_valid;
+    else if (U_WB.allowin == `V_TRUE) begin
+      U_WB.valid <= U_WB.valid_in;
     end
-    if (U_Pipe.mem_to_wb_valid == `V_TRUE && U_Pipe.allowin_wb == `V_TRUE) begin
+    if (U_WB.valid_in == `V_TRUE && U_WB.allowin == `V_TRUE) begin
       U_WB.pc         <= U_MEM.pc;
       U_WB.inst       <= U_MEM.inst;
       U_WB.rf_waddr   <= U_MEM.rf_waddr;

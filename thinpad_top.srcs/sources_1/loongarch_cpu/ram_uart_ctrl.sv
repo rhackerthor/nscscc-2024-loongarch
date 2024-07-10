@@ -139,7 +139,7 @@ module RamUartCtrl (
       txd_fifo_din <= `V_ZERO;
       rxd_fifo_oe  <= `V_ZERO;
       uart_flag    <= `V_TRUE;
-      uart_rdata   <= {30'b0, !rxd_fifo_empty, !txd_fifo_full};
+      uart_rdata   <= {30'b0, ~rxd_fifo_empty, ~txd_fifo_full};
     end
     else if (is_uart_data == `V_TRUE) begin
       if (cpu_ext_we_i == `V_TRUE) begin
@@ -182,7 +182,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= `V_ONE;
       base_ram_oe_n_r  <= `V_ONE;
       base_ram_we_n_r  <= `V_ONE;
-      to_if_valid_o    <= `V_ZERO;
+      to_if_valid_o    <= `V_FALSE;
       base_flag        <= `V_ZERO;
     end
     /* 访存阶段访问base ram */
@@ -193,7 +193,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= ~cpu_ext_ce_i;
       base_ram_oe_n_r  <= ~cpu_ext_oe_i;
       base_ram_we_n_r  <= ~cpu_ext_we_i;
-      to_if_valid_o    <= `V_ZERO;
+      to_if_valid_o    <= `V_FALSE;
       base_flag        <= `V_TRUE;
     end
     else begin
@@ -203,7 +203,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= ~cpu_base_ce_i;
       base_ram_oe_n_r  <= ~cpu_base_ce_i;
       base_ram_we_n_r  <= `V_ONE;
-      to_if_valid_o    <= `V_ONE;
+      to_if_valid_o    <= `V_TRUE;
       base_flag        <= `V_FALSE;
     end
   end
@@ -261,10 +261,10 @@ module RamUartCtrl (
       end
 
       if (~ext_ram_oe_n_r) begin
-        if (uart_flag) begin ext_ram_rdata_r <= uart_rdata; end
+        if (uart_flag)      begin ext_ram_rdata_r <= uart_rdata;       end
         else if (base_flag) begin ext_ram_rdata_r <= base_ram_data_io; end
-        else if (ext_flag) begin ext_ram_rdata_r <= ext_ram_data_io; end
-        else begin ext_ram_rdata_r <= ext_ram_rdata_r; end
+        else if (ext_flag)  begin ext_ram_rdata_r <= ext_ram_data_io;  end
+        else                begin ext_ram_rdata_r <= ext_ram_rdata_r;  end
       end
       else begin ext_ram_rdata_r <= ext_ram_rdata_r; end
     end

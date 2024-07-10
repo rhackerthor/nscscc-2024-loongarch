@@ -1,22 +1,21 @@
 `include "define.sv"
 module ID (
   PipeLineData U_IF,
-  PipeLineData U_ID,
-  __PipeLineCtrl U_Pipe
+  PipeLineData U_ID
 );
 
   /* 流水线寄存器 */
   always_ff @(posedge U_ID.clk) begin
     if (U_ID.rst == `V_TRUE) begin
-      U_Pipe.valid_id <= `V_FALSE;
+      U_ID.valid <= `V_FALSE;
     end
-    else if (U_Pipe.br_cancle == `V_TRUE) begin
-      U_Pipe.valid_id <= `V_FALSE;
+    else if (U_ID.br_cancle == `V_TRUE) begin
+      U_ID.valid <= `V_FALSE;
     end
-    else if (U_Pipe.allowin_id == `V_TRUE) begin
-      U_Pipe.valid_id <= U_Pipe.if_to_id_valid;
+    else if (U_ID.allowin == `V_TRUE) begin
+      U_ID.valid <= U_ID.valid_in;
     end
-    if (U_Pipe.if_to_id_valid == `V_TRUE && U_Pipe.allowin_id == `V_TRUE) begin
+    if (U_ID.valid_in == `V_TRUE && U_ID.allowin == `V_TRUE) begin
       U_ID.pc   <= U_IF.pc;
       U_ID.inst <= U_IF.inst;
     end
@@ -129,6 +128,8 @@ module ID (
   assign U_ID.b_bl_pc = U_ID.pc + {s_imm_26[29:0], 2'b0};
   assign U_ID.jump_pc = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
   assign U_ID.comp_pc = U_ID.pc + {s_imm_16[29:0], 2'b0};
+  /* jump and comp */
+  assign U_ID.branch = |U_ID.sel_next_pc[`V_COMP:`V_B_BL];
   /* alu */
   assign U_ID.alu_op[`V_ADD ] = |{inst_add_w, inst_addi_w, inst_bl, inst_jirl, inst_pcaddu12i};
   assign U_ID.alu_op[`V_SUB ] = inst_sub_w;
@@ -152,8 +153,6 @@ module ID (
   assign U_ID.store[`V_ST_W] = inst_st_w;
   assign U_ID.load[`V_LD_B] = inst_ld_b;
   assign U_ID.load[`V_LD_W] = inst_ld_w;
-  /* jump and comp */
-  assign U_ID.branch = |{inst_jirl, inst_beq, inst_bne, inst_bge};
   /* unsigned */
   assign U_ID.uflag = inst_sltui;
 

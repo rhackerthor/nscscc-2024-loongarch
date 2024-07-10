@@ -18,12 +18,12 @@ module LoongCpu (
   input  logic to_if_valid_i
 );
 
-  PipeLineData U_IF(clk, rst);
-  PipeLineData U_ID(clk, rst);
-  PipeLineData U_EXE(clk, rst);
-  PipeLineData U_MEM(clk, rst);
-  PipeLineData U_WB(clk, rst);
-  __PipeLineCtrl U_Pipe(to_if_valid_i);
+  PipeLineData U_IF  (clk, rst);
+  PipeLineData U_ID  (clk, rst);
+  PipeLineData U_EXE (clk, rst);
+  PipeLineData U_MEM (clk, rst);
+  PipeLineData U_WB  (clk, rst);
+
   Ram U_RAM(
     .inst_ram_rdata (inst_ram_rdata_i),
     .inst_ram_addr  (inst_ram_addr_o ),
@@ -36,26 +36,28 @@ module LoongCpu (
     .data_ram_oe    (data_ram_oe_o   ),
     .data_ram_we    (data_ram_we_o   )
   );
-  RegFile RegFile0(
-    .clk (clk),
-    .rst (rst),
+  RegFile RegFile0 (
+    .clk  (clk ),
+    .rst  (rst ),
     .U_ID (U_ID),
     .U_WB (U_WB)
   );
-  PipeLineCtrl PipeLineCtrl0(
-    .clk    (clk   ), 
-    .rst    (rst   ),
-    .U_IF   (U_IF  ),
-    .U_ID   (U_ID  ),
-    .U_EXE  (U_EXE ),
-    .U_MEM  (U_MEM ),
-    .U_WB   (U_WB  ),
-    .U_Pipe (U_Pipe)
+
+  PipeLineCtrl PipeLineCtrl0 (
+    .clk           (clk          ), 
+    .rst           (rst          ),
+    .to_if_valid_i (to_if_valid_i),
+    .U_IF          (U_IF         ),
+    .U_ID          (U_ID         ),
+    .U_EXE         (U_EXE        ),
+    .U_MEM         (U_MEM        ),
+    .U_WB          (U_WB         )
   );
-  IF IF0(U_IF, U_ID, U_Pipe, U_RAM);
-  ID ID0(U_IF, U_ID, U_Pipe);
-  EXE EXE0(U_ID, U_EXE, U_Pipe, U_RAM);
-  MEM MEM0(U_EXE, U_MEM, U_Pipe, U_RAM);
-  WB WB0(U_MEM, U_WB, U_Pipe);
+
+  IF  IF0  (U_IF  , U_ID  , U_RAM);
+  ID  ID0  (U_IF  , U_ID         );
+  EXE EXE0 (U_ID  , U_EXE , U_RAM);
+  MEM MEM0 (U_EXE , U_MEM , U_RAM);
+  WB  WB0  (U_MEM , U_WB         );
 
 endmodule

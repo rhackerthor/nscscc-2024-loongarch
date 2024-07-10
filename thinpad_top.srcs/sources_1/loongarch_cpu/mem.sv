@@ -2,19 +2,18 @@
 module MEM (
   PipeLineData U_EXE,
   PipeLineData U_MEM,
-  __PipeLineCtrl U_Pipe,
   Ram U_RAM
 );
 
   /* 流水线寄存器 */
   always_ff @(posedge U_MEM.clk) begin
     if (U_MEM.rst == `V_TRUE) begin
-      U_Pipe.valid_mem <= `V_FALSE;
+      U_MEM.valid <= `V_FALSE;
     end
-    else if (U_Pipe.allowin_mem == `V_TRUE) begin
-      U_Pipe.valid_mem <= U_Pipe.exe_to_mem_valid;
+    else if (U_MEM.allowin == `V_TRUE) begin
+      U_MEM.valid <= U_MEM.valid_in;
     end
-    if (U_Pipe.exe_to_mem_valid == `V_TRUE && U_Pipe.allowin_mem == `V_TRUE) begin
+    if (U_MEM.valid_in == `V_TRUE && U_MEM.allowin == `V_TRUE) begin
       U_MEM.pc         <= U_EXE.pc;
       U_MEM.inst       <= U_EXE.inst;
       U_MEM.imm        <= U_EXE.imm;

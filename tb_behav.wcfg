@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1910260fs"></ZoomStartTime>
-      <ZoomEndTime time="2071014fs"></ZoomEndTime>
-      <Cursor1Time time="1990000fs"></Cursor1Time>
+      <ZoomStartTime time="850560fs"></ZoomStartTime>
+      <ZoomEndTime time="1029889fs"></ZoomEndTime>
+      <Cursor1Time time="1000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="224"></NameColumnWidth>
+      <NameColumnWidth column_width="216"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="121" />
+   <WVObjectSize size="117" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -46,33 +46,25 @@
       <obj_property name="ObjectShortName">rf[31:0][31:0]</obj_property>
       <obj_property name="isExpanded"></obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/br_cancle">
-      <obj_property name="ElementShortName">br_cancle</obj_property>
-      <obj_property name="ObjectShortName">br_cancle</obj_property>
-   </wvobject>
    <wvobject fp_name="divider39" type="divider">
       <obj_property name="label">IF</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/valid_if">
-      <obj_property name="ElementShortName">valid_if</obj_property>
-      <obj_property name="ObjectShortName">valid_if</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_IF/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/allowin_if">
-      <obj_property name="ElementShortName">allowin_if</obj_property>
-      <obj_property name="ObjectShortName">allowin_if</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_IF/valid_in">
+      <obj_property name="ElementShortName">valid_in</obj_property>
+      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/ready_go_if">
-      <obj_property name="ElementShortName">ready_go_if</obj_property>
-      <obj_property name="ObjectShortName">ready_go_if</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_IF/allowin">
+      <obj_property name="ElementShortName">allowin</obj_property>
+      <obj_property name="ObjectShortName">allowin</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/to_if_valid">
-      <obj_property name="ElementShortName">to_if_valid</obj_property>
-      <obj_property name="ObjectShortName">to_if_valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/RamUartCtrl0/is_base_ram">
-      <obj_property name="ElementShortName">is_base_ram</obj_property>
-      <obj_property name="ObjectShortName">is_base_ram</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_IF/ready_go">
+      <obj_property name="ElementShortName">ready_go</obj_property>
+      <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_IF/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
@@ -115,21 +107,21 @@
       <obj_property name="label">ID</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/valid_id">
-      <obj_property name="ElementShortName">valid_id</obj_property>
-      <obj_property name="ObjectShortName">valid_id</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_ID/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/allowin_id">
-      <obj_property name="ElementShortName">allowin_id</obj_property>
-      <obj_property name="ObjectShortName">allowin_id</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_ID/valid_in">
+      <obj_property name="ElementShortName">valid_in</obj_property>
+      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/ready_go_id">
-      <obj_property name="ElementShortName">ready_go_id</obj_property>
-      <obj_property name="ObjectShortName">ready_go_id</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_ID/allowin">
+      <obj_property name="ElementShortName">allowin</obj_property>
+      <obj_property name="ObjectShortName">allowin</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/if_to_id_valid">
-      <obj_property name="ElementShortName">if_to_id_valid</obj_property>
-      <obj_property name="ObjectShortName">if_to_id_valid</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_ID/ready_go">
+      <obj_property name="ElementShortName">ready_go</obj_property>
+      <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_ID/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
@@ -203,21 +195,21 @@
       <obj_property name="label">EXE</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/valid_exe">
-      <obj_property name="ElementShortName">valid_exe</obj_property>
-      <obj_property name="ObjectShortName">valid_exe</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_EXE/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/allowin_exe">
-      <obj_property name="ElementShortName">allowin_exe</obj_property>
-      <obj_property name="ObjectShortName">allowin_exe</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_EXE/valid_in">
+      <obj_property name="ElementShortName">valid_in</obj_property>
+      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/ready_go_exe">
-      <obj_property name="ElementShortName">ready_go_exe</obj_property>
-      <obj_property name="ObjectShortName">ready_go_exe</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_EXE/allowin">
+      <obj_property name="ElementShortName">allowin</obj_property>
+      <obj_property name="ObjectShortName">allowin</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/id_to_exe_valid">
-      <obj_property name="ElementShortName">id_to_exe_valid</obj_property>
-      <obj_property name="ObjectShortName">id_to_exe_valid</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_EXE/ready_go">
+      <obj_property name="ElementShortName">ready_go</obj_property>
+      <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_EXE/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
@@ -279,21 +271,21 @@
       <obj_property name="label">MEM</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/valid_mem">
-      <obj_property name="ElementShortName">valid_mem</obj_property>
-      <obj_property name="ObjectShortName">valid_mem</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_MEM/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/allowin_mem">
-      <obj_property name="ElementShortName">allowin_mem</obj_property>
-      <obj_property name="ObjectShortName">allowin_mem</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_MEM/valid_in">
+      <obj_property name="ElementShortName">valid_in</obj_property>
+      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/ready_go_mem">
-      <obj_property name="ElementShortName">ready_go_mem</obj_property>
-      <obj_property name="ObjectShortName">ready_go_mem</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_MEM/allowin">
+      <obj_property name="ElementShortName">allowin</obj_property>
+      <obj_property name="ObjectShortName">allowin</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/exe_to_mem_valid">
-      <obj_property name="ElementShortName">exe_to_mem_valid</obj_property>
-      <obj_property name="ObjectShortName">exe_to_mem_valid</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_MEM/ready_go">
+      <obj_property name="ElementShortName">ready_go</obj_property>
+      <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_MEM/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
@@ -331,21 +323,21 @@
       <obj_property name="label">WB</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/valid_wb">
-      <obj_property name="ElementShortName">valid_wb</obj_property>
-      <obj_property name="ObjectShortName">valid_wb</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_WB/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/allowin_wb">
-      <obj_property name="ElementShortName">allowin_wb</obj_property>
-      <obj_property name="ObjectShortName">allowin_wb</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_WB/valid_in">
+      <obj_property name="ElementShortName">valid_in</obj_property>
+      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/ready_go_wb">
-      <obj_property name="ElementShortName">ready_go_wb</obj_property>
-      <obj_property name="ObjectShortName">ready_go_wb</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_WB/allowin">
+      <obj_property name="ElementShortName">allowin</obj_property>
+      <obj_property name="ObjectShortName">allowin</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_Pipe/mem_to_wb_valid">
-      <obj_property name="ElementShortName">mem_to_wb_valid</obj_property>
-      <obj_property name="ObjectShortName">mem_to_wb_valid</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_WB/ready_go">
+      <obj_property name="ElementShortName">ready_go</obj_property>
+      <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_WB/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
@@ -486,14 +478,6 @@
    <wvobject type="logic" fp_name="/tb/ext_ram_we_n">
       <obj_property name="ElementShortName">ext_ram_we_n</obj_property>
       <obj_property name="ObjectShortName">ext_ram_we_n</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/RamUartCtrl0/is_base_ram">
-      <obj_property name="ElementShortName">is_base_ram</obj_property>
-      <obj_property name="ObjectShortName">is_base_ram</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/RamUartCtrl0/is_ext_ram">
-      <obj_property name="ElementShortName">is_ext_ram</obj_property>
-      <obj_property name="ObjectShortName">is_ext_ram</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/BASE_RAM_INIT_FILE">
       <obj_property name="ElementShortName">BASE_RAM_INIT_FILE[503:0]</obj_property>

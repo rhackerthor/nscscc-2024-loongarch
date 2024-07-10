@@ -2,7 +2,6 @@
 module IF (
   PipeLineData U_IF,
   PipeLineData U_ID,
-  __PipeLineCtrl U_Pipe,
   Ram U_RAM
 );
 
@@ -10,9 +9,9 @@ module IF (
   logic [`W_DATA] seq_pc;
   logic           pc_we;
   /* 计算next pc */
-  assign pc_we = ~U_IF.rst & U_Pipe.ready_go_id;
+  assign pc_we = ~U_IF.rst & U_ID.ready_go;
   assign seq_pc = U_IF.pc + 32'h0000_0004;
-  assign U_IF.sel_next_pc = U_ID.sel_next_pc & {{3{U_Pipe.br_cancle}}, 1'b1};
+  assign U_IF.sel_next_pc = U_ID.sel_next_pc & {{3{U_ID.br_cancle}}, 1'b1};
   always_ff @(*) begin
     if (U_IF.rst == `V_TRUE) begin
       next_pc <= `V_ONE;//32'h8000_0000;
@@ -29,17 +28,17 @@ module IF (
   end  
   /* 输出inst ram地址 */
   assign U_RAM.inst_ram_addr = next_pc;
-  assign U_RAM.inst_ram_ce   = ~U_IF.rst & U_Pipe.ready_go_id;
+  assign U_RAM.inst_ram_ce   = ~U_IF.rst & U_ID.ready_go;
   /* 流水线寄存器 */
   always_ff @(posedge U_IF.clk) begin
     if (U_IF.rst == `V_TRUE) begin
-      U_Pipe.valid_if <= `V_FALSE;
-      U_IF.pc         <= `R_PC;
+      U_IF.valid <= `V_FALSE;
+      U_IF.pc    <= `R_PC;
     end
-    else if (U_Pipe.allowin_if == `V_TRUE) begin
-      U_Pipe.valid_if <= !U_Pipe.valid_if | U_Pipe.to_if_valid;
+    else if (U_IF.allowin == `V_TRUE) begin
+      U_IF.valid <= !U_IF.valid | U_IF.valid_in;
     end
-    if (pc_we == `V_TRUE && U_Pipe.to_if_valid == `V_TRUE && U_Pipe.allowin_if == `V_TRUE) begin
+    if (pc_we == `V_TRUE && U_IF.valid_in == `V_TRUE && U_IF.allowin == `V_TRUE) begin
       U_IF.pc <= next_pc;
     end
   end

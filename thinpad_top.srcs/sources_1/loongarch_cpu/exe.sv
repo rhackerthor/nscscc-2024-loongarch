@@ -2,19 +2,18 @@
 module EXE (
   PipeLineData U_ID,
   PipeLineData U_EXE,
-  __PipeLineCtrl U_Pipe,
   Ram U_RAM
 );
 
   /* 流水线寄存器 */
   always_ff @(posedge U_EXE.clk) begin
     if (U_EXE.rst == `V_TRUE) begin
-      U_Pipe.valid_exe <= `V_FALSE;
+      U_EXE.valid <= `V_FALSE;
     end
-    else if (U_Pipe.allowin_exe == `V_TRUE) begin
-      U_Pipe.valid_exe <= U_Pipe.id_to_exe_valid;
+    else if (U_EXE.allowin == `V_TRUE) begin
+      U_EXE.valid <= U_EXE.valid_in;
     end
-    if (U_Pipe.id_to_exe_valid == `V_TRUE && U_Pipe.allowin_exe == `V_TRUE) begin
+    if (U_EXE.valid_in == `V_TRUE && U_EXE.allowin == `V_TRUE) begin
       U_EXE.pc          <= U_ID.pc;
       U_EXE.inst        <= U_ID.inst;
       U_EXE.imm         <= U_ID.imm;
