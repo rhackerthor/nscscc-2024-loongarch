@@ -18,9 +18,11 @@ IMG ?= user-sample.s
 
 # Argument
 ARGS ?= 
-IMG ?=
 
 run: $(BIN)
 	@rm -rf $(ROM_BUILD)
 	$(MAKE) -C $(ROM_DIR) IMG=$(IMG)
 	@$^ $(ARGS) $(ROM_BUILD)/img.bin
+
+clean:
+	@rm -rf $(BUILD_DIR)

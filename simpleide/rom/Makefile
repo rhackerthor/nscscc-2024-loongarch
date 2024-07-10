@@ -23,3 +23,6 @@ $(ELF): ./asm/$(IMG)
 image: $(ELF)
 	$(OBJDUMP) -d $^ > $(TXT)
 	$(OBJCOPY) -j .text -O binary $^ $(BIN)
+
+clean:
+	@rm -rf $(BUILD_DIR)
