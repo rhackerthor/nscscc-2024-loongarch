@@ -1,25 +1,17 @@
 `include "define.sv"
 module ID (
-  PipeLineData U_IF,
-  PipeLineData U_ID
+  IFInterface.slave  U_IF,
+  IDInterface.master U_ID
 );
 
   /* 流水线寄存器 */
   always_ff @(posedge U_ID.clk) begin
-    if (U_ID.rst == `V_TRUE) begin
-      U_ID.valid <= `V_FALSE;
-    end
-    else if (U_ID.br_cancle == `V_TRUE) begin
-      U_ID.valid <= `V_FALSE;
-    end
-    else if (U_ID.allowin == `V_TRUE) begin
-      U_ID.valid <= U_ID.valid_in;
-    end
     if (U_ID.valid_in == `V_TRUE && U_ID.allowin == `V_TRUE) begin
       U_ID.pc   <= U_IF.pc;
       U_ID.inst <= U_IF.inst;
     end
   end
+
   /* 生成decode inst */
   logic [63:0] opcode_31_26, opcode_25_20;
   logic [15:0] opcode_25_22;
@@ -78,6 +70,7 @@ module ID (
   assign inst_beq       =  opcode_31_26[6'b010110];
   assign inst_bne       =  opcode_31_26[6'b010111];
   assign inst_bge       =  opcode_31_26[6'b011001];
+
   /* immediate */
   logic [`W_SEL_IMM] sel_imm;
   assign sel_imm[`V_UI5 ] = |{inst_slli_w, inst_srli_w, inst_srai_w};
@@ -109,6 +102,7 @@ module ID (
       default : begin U_ID.imm <= `V_ZERO; end 
     endcase
   end
+
   /* 译码reg file相关信号 */
   logic is_rd;
   assign is_rd = |{inst_st_b, inst_st_w, inst_beq, inst_bne, inst_bge};
@@ -118,6 +112,7 @@ module ID (
   assign U_ID.rf_we  = &{~inst_b, ~inst_beq, ~inst_bge, ~inst_bne, ~inst_st_b, ~inst_st_w};
   assign U_ID.rf_oe1 = &{~inst_b, ~inst_bl, ~inst_lu12i_w, ~inst_pcaddu12i};
   assign U_ID.rf_oe2 = |{inst_add_w, inst_sub_w, inst_and, inst_or, inst_xor, inst_beq, inst_bne, inst_bge, inst_st_b, inst_st_w};
+
   /* 分支跳转相关 */
   assign U_ID.sel_next_pc[`V_SEQ ] = &{~U_ID.sel_next_pc[`V_COMP:`V_B_BL]};
   assign U_ID.sel_next_pc[`V_B_BL] = |{inst_b, inst_bl};
@@ -125,11 +120,11 @@ module ID (
   assign U_ID.sel_next_pc[`V_COMP] = (inst_beq == `V_TRUE && U_ID.rf_rdata1 == U_ID.rf_rdata2) |
                                      (inst_bne == `V_TRUE && U_ID.rf_rdata1 != U_ID.rf_rdata2) |
                                      (inst_bge == `V_TRUE && U_ID.rf_rdata1 >= U_ID.rf_rdata2);
-  assign U_ID.b_bl_pc = U_ID.pc + {s_imm_26[29:0], 2'b0};
-  assign U_ID.jump_pc = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
-  assign U_ID.comp_pc = U_ID.pc + {s_imm_16[29:0], 2'b0};
-  /* jump and comp */
-  assign U_ID.branch = |U_ID.sel_next_pc[`V_COMP:`V_B_BL];
+  assign U_ID.b_bl_pc     = U_ID.pc + {s_imm_26[29:0], 2'b0};
+  assign U_ID.jump_pc     = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
+  assign U_ID.comp_pc     = U_ID.pc + {s_imm_16[29:0], 2'b0};
+  assign U_ID.branch_flag = |U_ID.sel_next_pc[`V_COMP:`V_JUMP];
+
   /* alu */
   assign U_ID.alu_op[`V_ADD ] = |{inst_add_w, inst_addi_w, inst_bl, inst_jirl, inst_pcaddu12i};
   assign U_ID.alu_op[`V_SUB ] = inst_sub_w;
@@ -148,12 +143,14 @@ module ID (
   assign U_ID.sel_alu_in2[`V_IS_RK  ] = |{inst_add_w, inst_sub_w, inst_and, inst_or, inst_xor, inst_mul_w};
   assign U_ID.sel_alu_in2[`V_IS_IMM ] = |{inst_addi_w, inst_andi, inst_ori, inst_slli_w, inst_srli_w, inst_srai_w, inst_sltui, inst_lu12i_w};
   assign U_ID.sel_alu_in2[`V_IS_FORE] = |{inst_bl, inst_jirl};
+
   /* ram */
-  assign U_ID.store[`V_ST_B] = inst_st_b;
-  assign U_ID.store[`V_ST_W] = inst_st_w;
-  assign U_ID.load[`V_LD_B] = inst_ld_b;
-  assign U_ID.load[`V_LD_W] = inst_ld_w;
+  assign U_ID.store_flag[`V_ST_B] = inst_st_b;
+  assign U_ID.store_flag[`V_ST_W] = inst_st_w;
+  assign U_ID.load_flag[`V_LD_B]  = inst_ld_b;
+  assign U_ID.load_flag[`V_LD_W]  = inst_ld_w;
+
   /* unsigned */
-  assign U_ID.uflag = inst_sltui;
+  assign U_ID.unsigned_flag = inst_sltui;
 
 endmodule

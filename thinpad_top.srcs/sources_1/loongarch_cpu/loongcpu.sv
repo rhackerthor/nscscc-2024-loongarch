@@ -2,6 +2,7 @@
 module LoongCpu (
   input  logic clk,
   input  logic rst,
+  input  logic ifetch_stop_i,
   /* inst ram */
   input  logic [`W_DATA  ] inst_ram_rdata_i,
   output logic [`W_DATA  ] inst_ram_addr_o,
@@ -13,18 +14,16 @@ module LoongCpu (
   output logic [`W_RAM_BE] data_ram_be_o,
   output logic             data_ram_ce_o,
   output logic             data_ram_oe_o,
-  output logic             data_ram_we_o,
-  /* valid in */
-  input  logic to_if_valid_i
+  output logic             data_ram_we_o
 );
 
-  PipeLineData U_IF  (clk, rst);
-  PipeLineData U_ID  (clk, rst);
-  PipeLineData U_EXE (clk, rst);
-  PipeLineData U_MEM (clk, rst);
-  PipeLineData U_WB  (clk, rst);
-
-  Ram U_RAM(
+  /* Interface */
+  IFInterface  U_IF  (clk, rst); /*   if    */
+  IDInterface  U_ID  (clk, rst); /*   id    */
+  EXEInterface U_EXE (clk, rst); /*   exe   */
+  WBInterface  U_WB  (clk, rst); /*   wb    */
+  RFInterface  U_RF  (clk, rst); /* regfile */
+  RamInterface U_RAM(            /*   ram   */
     .inst_ram_rdata (inst_ram_rdata_i),
     .inst_ram_addr  (inst_ram_addr_o ),
     .inst_ram_ce    (inst_ram_ce_o   ),
@@ -36,28 +35,27 @@ module LoongCpu (
     .data_ram_oe    (data_ram_oe_o   ),
     .data_ram_we    (data_ram_we_o   )
   );
+
   RegFile RegFile0 (
-    .clk  (clk ),
-    .rst  (rst ),
     .U_ID (U_ID),
-    .U_WB (U_WB)
+    .U_WB (U_WB),
+    .U_RF (U_RF)
   );
 
   PipeLineCtrl PipeLineCtrl0 (
     .clk           (clk          ), 
     .rst           (rst          ),
-    .to_if_valid_i (to_if_valid_i),
+    .ifetch_stop_i (ifetch_stop_i),
     .U_IF          (U_IF         ),
     .U_ID          (U_ID         ),
     .U_EXE         (U_EXE        ),
-    .U_MEM         (U_MEM        ),
-    .U_WB          (U_WB         )
+    .U_WB          (U_WB         ),
+    .U_RF          (U_RF         )
   );
 
   IF  IF0  (U_IF  , U_ID  , U_RAM);
   ID  ID0  (U_IF  , U_ID         );
   EXE EXE0 (U_ID  , U_EXE , U_RAM);
-  MEM MEM0 (U_EXE , U_MEM , U_RAM);
-  WB  WB0  (U_MEM , U_WB         );
+  WB  WB0  (U_EXE , U_WB  , U_RAM);
 
 endmodule

@@ -1,33 +1,41 @@
 `include "define.sv"
 module WB (
-  PipeLineData U_MEM,
-  PipeLineData U_WB
+  EXEInterface.slave U_EXE,
+  WBInterface.master U_WB,
+  RamInterface       U_RAM
 );
 
   /* 流水线寄存器 */
-  always_ff @(posedge U_WB.clk) begin
-    if (U_WB.rst == `V_TRUE) begin
-      U_WB.valid <= `V_FALSE;
-    end
-    else if (U_WB.allowin == `V_TRUE) begin
-      U_WB.valid <= U_WB.valid_in;
-    end
+  always @(posedge U_WB.clk) begin
     if (U_WB.valid_in == `V_TRUE && U_WB.allowin == `V_TRUE) begin
-      U_WB.pc         <= U_MEM.pc;
-      U_WB.inst       <= U_MEM.inst;
-      U_WB.rf_waddr   <= U_MEM.rf_waddr;
-      U_WB.rf_we      <= U_MEM.rf_we;
-      U_WB.alu_result <= U_MEM.alu_result;
-      U_WB.load       <= U_MEM.load;
-      U_WB.branch     <= U_MEM.branch;
-      U_WB.ram_data   <= U_MEM.ram_data;
-      U_WB.ram_addr   <= U_MEM.ram_addr;
-      U_WB.ram_be     <= U_MEM.ram_be;
+      U_WB.pc         <= U_EXE.pc;
+      U_WB.inst       <= U_EXE.inst;
+      U_WB.rf_rdata1  <= U_EXE.rf_rdata1;
+      U_WB.rf_rdata2  <= U_EXE.rf_rdata2;
+      U_WB.rf_waddr   <= U_EXE.rf_waddr;
+      U_WB.rf_we      <= U_EXE.rf_we;
+      U_WB.alu_result <= U_EXE.alu_result;
+      U_WB.ram_addr   <= U_EXE.ram_addr;
+      U_WB.ram_mask   <= U_EXE.ram_mask;
+      U_WB.load_flag  <= U_EXE.load_flag;
     end
   end
+
+  /* mem */
+  always @(*) begin
+    case (U_WB.ram_mask) 
+      4'b0001: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[ 7]}}, U_RAM.data_ram_rdata[ 7: 0]}; end
+      4'b0010: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[15]}}, U_RAM.data_ram_rdata[15: 8]}; end
+      4'b0100: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[23]}}, U_RAM.data_ram_rdata[23:16]}; end
+      4'b1000: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[31]}}, U_RAM.data_ram_rdata[31:24]}; end
+      4'b1111: begin U_WB.ram_data = U_RAM.data_ram_rdata; end
+      default: begin U_WB.ram_data = `V_ZERO;              end
+    endcase
+  end
+
   /* write back */
   always_ff @(*) begin
-    if (|U_WB.load == `V_TRUE) begin
+    if (|U_WB.load_flag == `V_TRUE) begin
       U_WB.rf_wdata <= U_WB.ram_data;
     end
     else begin

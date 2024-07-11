@@ -32,7 +32,7 @@ module RamUartCtrl (
   input  logic               rxd_i,
   output logic               txd_o,
   /* valid: IF流水级输入允许信号 */
-  output logic               to_if_valid_o
+  output logic               ifetch_stop_o
 );
 
   /* base 转接线 */
@@ -182,7 +182,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= `V_ONE;
       base_ram_oe_n_r  <= `V_ONE;
       base_ram_we_n_r  <= `V_ONE;
-      to_if_valid_o    <= `V_FALSE;
+      ifetch_stop_o    <= `V_TRUE;
       base_flag        <= `V_ZERO;
     end
     /* 访存阶段访问base ram */
@@ -193,7 +193,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= ~cpu_ext_ce_i;
       base_ram_oe_n_r  <= ~cpu_ext_oe_i;
       base_ram_we_n_r  <= ~cpu_ext_we_i;
-      to_if_valid_o    <= `V_FALSE;
+      ifetch_stop_o    <= `V_TRUE;
       base_flag        <= `V_TRUE;
     end
     else begin
@@ -203,7 +203,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= ~cpu_base_ce_i;
       base_ram_oe_n_r  <= ~cpu_base_ce_i;
       base_ram_we_n_r  <= `V_ONE;
-      to_if_valid_o    <= `V_TRUE;
+      ifetch_stop_o    <= `V_TRUE;
       base_flag        <= `V_FALSE;
     end
   end
@@ -218,55 +218,55 @@ module RamUartCtrl (
   always @(*) begin
     /* 复位值 */
     if (rst == `V_TRUE) begin
-      ext_ram_wdata_r <= `V_ZERO;
-      ext_ram_addr_r  <= `V_ZERO;
-      ext_ram_be_n_r  <= `V_ONE;
-      ext_ram_ce_n_r  <= `V_ONE;
-      ext_ram_oe_n_r  <= `V_ONE;
-      ext_ram_we_n_r  <= `V_ONE;
-      ext_flag        <= `V_FALSE;
+      ext_ram_wdata_r = `V_ZERO;
+      ext_ram_addr_r  = `V_ZERO;
+      ext_ram_be_n_r  = `V_ONE;
+      ext_ram_ce_n_r  = `V_ONE;
+      ext_ram_oe_n_r  = `V_ONE;
+      ext_ram_we_n_r  = `V_ONE;
+      ext_flag        = `V_FALSE;
     end
     /* 访存阶段访问ext ram */
     else if (is_ext_ram == `V_TRUE && cpu_ext_ce_i == `V_TRUE) begin
-      ext_ram_wdata_r <= cpu_ext_wdata_i;
-      ext_ram_addr_r  <= cpu_ext_addr_i[21:2];
-      ext_ram_be_n_r  <= ~cpu_ext_be_i;
-      ext_ram_ce_n_r  <= ~cpu_ext_ce_i;
-      ext_ram_oe_n_r  <= ~cpu_ext_oe_i;
-      ext_ram_we_n_r  <= ~cpu_ext_we_i;
-      ext_flag        <= `V_TRUE;
+      ext_ram_wdata_r = cpu_ext_wdata_i;
+      ext_ram_addr_r  = cpu_ext_addr_i[21:2];
+      ext_ram_be_n_r  = ~cpu_ext_be_i;
+      ext_ram_ce_n_r  = ~cpu_ext_ce_i;
+      ext_ram_oe_n_r  = ~cpu_ext_oe_i;
+      ext_ram_we_n_r  = ~cpu_ext_we_i;
+      ext_flag        = `V_TRUE;
     end
     else begin
-      ext_ram_wdata_r <= `V_ZERO;
-      ext_ram_addr_r  <= `V_ZERO;
-      ext_ram_be_n_r  <= `V_ONE;
-      ext_ram_ce_n_r  <= `V_ONE;
-      ext_ram_oe_n_r  <= `V_ONE;
-      ext_ram_we_n_r  <= `V_ONE;
-      ext_flag        <= `V_FALSE;
+      ext_ram_wdata_r = `V_ZERO;
+      ext_ram_addr_r  = `V_ZERO;
+      ext_ram_be_n_r  = `V_ONE;
+      ext_ram_ce_n_r  = `V_ONE;
+      ext_ram_oe_n_r  = `V_ONE;
+      ext_ram_we_n_r  = `V_ONE;
+      ext_flag        = `V_FALSE;
     end
   end
 
   always_ff @(posedge clk) begin
     if (rst == `V_TRUE) begin
-      base_ram_rdata_r <= `V_ZERO;
-      ext_ram_rdata_r <= `V_ZERO;
+      base_ram_rdata_r = `V_ZERO;
+      ext_ram_rdata_r  = `V_ZERO;
     end
     else begin
-      if (cpu_base_ce_i == `V_TRUE/*  && base_flag == `V_FALSE */) begin
-        base_ram_rdata_r <= base_ram_data_io;
+      if (cpu_base_ce_i == `V_TRUE) begin
+        base_ram_rdata_r = base_ram_data_io;
       end
       else begin
-        base_ram_rdata_r <= base_ram_rdata_r;
+        base_ram_rdata_r = base_ram_rdata_r;
       end
 
       if (cpu_ext_oe_i == `V_TRUE) begin
-        if (uart_flag)      begin ext_ram_rdata_r <= uart_rdata;       end
-        else if (base_flag) begin ext_ram_rdata_r <= base_ram_data_io; end
-        else if (ext_flag)  begin ext_ram_rdata_r <= ext_ram_data_io;  end
-        else                begin ext_ram_rdata_r <= ext_ram_rdata_r;  end
+        if (uart_flag)      begin ext_ram_rdata_r = uart_rdata;       end
+        else if (base_flag) begin ext_ram_rdata_r = base_ram_data_io; end
+        else if (ext_flag)  begin ext_ram_rdata_r = ext_ram_data_io;  end
+        else                begin ext_ram_rdata_r = ext_ram_rdata_r;  end
       end
-      else begin ext_ram_rdata_r <= ext_ram_rdata_r; end
+      else begin ext_ram_rdata_r = ext_ram_rdata_r; end
     end
   end
 

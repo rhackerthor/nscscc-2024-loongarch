@@ -68,9 +68,11 @@ module thinpad_top(
                         // 后级电路复位信号应当由它生成（见下）
    );
 
-  wire clk = clk_50M;
+  // 选择要使用的时钟
+  wire clk;
   reg reset_of_clk;
   // 异步复位，同步释放，将locked信号转为后级电路的复位reset_of_clk10M
+  assign clk = clk_50M;
   always@(posedge clk or negedge locked) begin
       if(~locked) reset_of_clk <= 1'b1;
       else        reset_of_clk <= 1'b0;
@@ -87,8 +89,7 @@ module thinpad_top(
   wire        cpu_ext_ce;
   wire        cpu_ext_oe;
   wire        cpu_ext_we;
-
-  wire        to_if_valid;
+  wire        iftech_stop;
 
   RamUartCtrl RamUartCtrl0 (
     .clk              (clk           ),
@@ -117,12 +118,13 @@ module thinpad_top(
     .ext_ram_we_n_o   (ext_ram_we_n  ),
     .rxd_i            (rxd           ),
     .txd_o            (txd           ),
-    .to_if_valid_o    (to_if_valid   )
+    .ifetch_stop_o    (iftech_stop   )
   );
 
-  LoongCpu LoongCpu (
+  LoongCpu LoongCpu0 (
     .clk              (clk           ),
     .rst              (reset_of_clk  ),
+    .ifetch_stop_i    (iftech_stop   ),
     .inst_ram_rdata_i (cpu_base_rdata),
     .inst_ram_addr_o  (cpu_base_addr ),
     .inst_ram_ce_o    (cpu_base_ce   ),
@@ -132,8 +134,7 @@ module thinpad_top(
     .data_ram_be_o    (cpu_ext_be    ),
     .data_ram_ce_o    (cpu_ext_ce    ),
     .data_ram_oe_o    (cpu_ext_oe    ),
-    .data_ram_we_o    (cpu_ext_we    ),
-    .to_if_valid_i    (to_if_valid   )
+    .data_ram_we_o    (cpu_ext_we    )
   );
 
 endmodule
