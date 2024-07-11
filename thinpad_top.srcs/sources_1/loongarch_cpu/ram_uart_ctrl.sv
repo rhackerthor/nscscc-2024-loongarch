@@ -253,7 +253,7 @@ module RamUartCtrl (
       ext_ram_rdata_r <= `V_ZERO;
     end
     else begin
-      if (cpu_base_ce_i == `V_TRUE && base_flag == `V_FALSE) begin
+      if (cpu_base_ce_i == `V_TRUE/*  && base_flag == `V_FALSE */) begin
         base_ram_rdata_r <= base_ram_data_io;
       end
       else begin

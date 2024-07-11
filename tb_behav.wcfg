@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="30773225fs"></ZoomStartTime>
-      <ZoomEndTime time="31045356fs"></ZoomEndTime>
-      <Cursor1Time time="30890000fs"></Cursor1Time>
+      <ZoomStartTime time="1718860fs"></ZoomStartTime>
+      <ZoomEndTime time="1852616fs"></ZoomEndTime>
+      <Cursor1Time time="1750000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="198"></NameColumnWidth>
+      <NameColumnWidth column_width="327"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="122" />
+   <WVObjectSize size="124" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -65,10 +65,6 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_IF/ready_go">
       <obj_property name="ElementShortName">ready_go</obj_property>
       <obj_property name="ObjectShortName">ready_go</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/IF0/cnt">
-      <obj_property name="ElementShortName">cnt</obj_property>
-      <obj_property name="ObjectShortName">cnt</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_IF/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
@@ -303,9 +299,21 @@
       <obj_property name="ElementShortName">inst[31:0]</obj_property>
       <obj_property name="ObjectShortName">inst[31:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_MEM/rf_waddr">
+      <obj_property name="ElementShortName">rf_waddr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_waddr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu/U_MEM/rf_we">
+      <obj_property name="ElementShortName">rf_we</obj_property>
+      <obj_property name="ObjectShortName">rf_we</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_MEM/ram_data">
       <obj_property name="ElementShortName">ram_data[31:0]</obj_property>
       <obj_property name="ObjectShortName">ram_data[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_MEM/alu_result">
+      <obj_property name="ElementShortName">alu_result[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_result[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu/U_MEM/ram_addr">
       <obj_property name="ElementShortName">ram_addr[31:0]</obj_property>

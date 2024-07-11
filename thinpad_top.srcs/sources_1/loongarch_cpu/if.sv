@@ -30,20 +30,15 @@ module IF (
   assign U_RAM.inst_ram_addr = next_pc;
   assign U_RAM.inst_ram_ce   = ~U_IF.rst & U_ID.ready_go;
   /* 流水线寄存器 */
-  logic cnt;
   always_ff @(posedge U_IF.clk) begin
     if (U_IF.rst == `V_TRUE) begin
       U_IF.valid <= `V_FALSE;
       U_IF.pc    <= `R_PC;
-      cnt        <= `V_ZERO;
     end
     else if (U_IF.allowin == `V_TRUE) begin
-      U_IF.valid <= cnt | U_IF.valid_in;//!U_IF.valid | U_IF.valid_in;
+      U_IF.valid <= `V_ONE;//!U_IF.valid | U_IF.valid_in;
     end
-    if (U_IF.rst <= `V_FALSE) begin
-      cnt <= ~U_IF.valid_in;
-    end
-    if ((U_IF.valid_in | cnt) && U_IF.allowin == `V_TRUE) begin
+    if (U_IF.rst == `V_FALSE && U_IF.allowin == `V_TRUE) begin
       U_IF.pc <= next_pc;
     end
   end

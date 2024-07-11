@@ -1,4 +1,5 @@
 `include "define.sv"
+
 module RegFile (
   input logic clk,
   input logic rst,
@@ -19,7 +20,7 @@ module RegFile (
     end
   end
   /* 读寄存器 */
-  assign U_ID.rf_rdata1 = U_ID.rf_raddr1 == `V_ZERO ? `V_ZERO : rf[U_ID.rf_raddr1];
-  assign U_ID.rf_rdata2 = U_ID.rf_raddr2 == `V_ZERO ? `V_ZERO : rf[U_ID.rf_raddr2];
+  assign U_ID.pre_rf_rdata1 = U_ID.rf_raddr1 == `V_ZERO ? `V_ZERO : rf[U_ID.rf_raddr1];
+  assign U_ID.pre_rf_rdata2 = U_ID.rf_raddr2 == `V_ZERO ? `V_ZERO : rf[U_ID.rf_raddr2];
 
 endmodule
