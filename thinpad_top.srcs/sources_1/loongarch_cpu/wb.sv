@@ -28,13 +28,7 @@ module WB (
   /* write back */
   always_ff @(*) begin
     if (|U_WB.load == `V_TRUE) begin
-      case (U_WB.ram_be)
-        4'b0001: begin U_WB.rf_wdata <= {{24{U_WB.ram_data[ 7]}}, U_WB.ram_data[ 7: 0]}; end
-        4'b0010: begin U_WB.rf_wdata <= {{24{U_WB.ram_data[13]}}, U_WB.ram_data[13: 8]}; end
-        4'b0100: begin U_WB.rf_wdata <= {{24{U_WB.ram_data[23]}}, U_WB.ram_data[23:14]}; end
-        4'b1000: begin U_WB.rf_wdata <= {{24{U_WB.ram_data[31]}}, U_WB.ram_data[31:24]}; end
-        default: begin U_WB.rf_wdata <= U_WB.ram_data; end
-      endcase
+      U_WB.rf_wdata <= U_WB.ram_data;
     end
     else begin
       U_WB.rf_wdata <= U_WB.alu_result;

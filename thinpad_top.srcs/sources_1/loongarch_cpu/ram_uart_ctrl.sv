@@ -104,7 +104,7 @@ module RamUartCtrl (
   async_transmitter #(.ClkFrequency(`V_FREQUENCY), .Baud(`V_BITRATE)) //发送模块
     ext_uart_t(
       .clk(clk),                        //外部时钟信号
-      .TxD(txd_o),                        //串行信号输出
+      .TxD(txd_o),                      //串行信号输出
       .TxD_busy(txd_busy),              //发送器忙状态指示
       .TxD_start(txd_start),            //开始发送信号
       .TxD_data(txd_data)               //待发送的数据
@@ -146,7 +146,7 @@ module RamUartCtrl (
         txd_fifo_we  <= `V_TRUE;
         txd_fifo_din <= cpu_ext_wdata_i[7:0];
         rxd_fifo_oe  <= `V_FALSE;
-        uart_flag    <= `V_TRUE;
+        uart_flag    <= `V_ZERO;
         uart_rdata   <= `V_ZERO;
       end
       else begin
@@ -161,8 +161,8 @@ module RamUartCtrl (
       txd_fifo_we  <= `V_FALSE;
       txd_fifo_din <= `V_ZERO;
       rxd_fifo_oe  <= `V_FALSE;
-      uart_rdata   <= `V_ZERO;
       uart_flag    <= `V_ZERO;
+      uart_rdata   <= `V_ZERO;
     end
   end
 
@@ -227,7 +227,7 @@ module RamUartCtrl (
       ext_flag        <= `V_FALSE;
     end
     /* 访存阶段访问ext ram */
-    else if (is_ext_ram == `V_TRUE) begin
+    else if (is_ext_ram == `V_TRUE && cpu_ext_ce_i == `V_TRUE) begin
       ext_ram_wdata_r <= cpu_ext_wdata_i;
       ext_ram_addr_r  <= cpu_ext_addr_i[21:2];
       ext_ram_be_n_r  <= ~cpu_ext_be_i;
@@ -253,14 +253,14 @@ module RamUartCtrl (
       ext_ram_rdata_r <= `V_ZERO;
     end
     else begin
-      if (~base_ram_oe_n_r && ~base_flag) begin
+      if (cpu_base_ce_i == `V_TRUE && base_flag == `V_FALSE) begin
         base_ram_rdata_r <= base_ram_data_io;
       end
       else begin
         base_ram_rdata_r <= base_ram_rdata_r;
       end
 
-      if (~ext_ram_oe_n_r) begin
+      if (cpu_ext_oe_i == `V_TRUE) begin
         if (uart_flag)      begin ext_ram_rdata_r <= uart_rdata;       end
         else if (base_flag) begin ext_ram_rdata_r <= base_ram_data_io; end
         else if (ext_flag)  begin ext_ram_rdata_r <= ext_ram_data_io;  end
@@ -272,6 +272,6 @@ module RamUartCtrl (
 
   /* 读内存 */
   assign cpu_base_rdata_o = base_ram_rdata_r;
-  assign cpu_ext_rdata_o = ext_ram_rdata_r;
+  assign cpu_ext_rdata_o  = ext_ram_rdata_r;
 
 endmodule

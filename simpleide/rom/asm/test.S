@@ -18,7 +18,6 @@ loop1:
     beq         $t0,$zero,.TESTW
     st.b        $a0,$s0,0x3F8
     ld.b        $a0,$s1,0x0
-    
     bne         $a0,$zero,loop1
 end:
     beq         $zero,$zero,end

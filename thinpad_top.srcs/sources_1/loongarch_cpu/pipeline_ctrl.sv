@@ -23,7 +23,7 @@ module PipeLineCtrl (
   assign U_MEM.valid_in = U_EXE.valid & U_EXE.ready_go;
   assign U_WB.valid_in  = U_MEM.valid & U_MEM.ready_go;
 
-  assign U_IF.ready_go  = 1'b1;
+  assign U_IF.ready_go  = 1'b1; 
   // assign U_ID.ready_go  = 1'b1;
   assign U_EXE.ready_go = 1'b1;
   assign U_MEM.ready_go = 1'b1;
