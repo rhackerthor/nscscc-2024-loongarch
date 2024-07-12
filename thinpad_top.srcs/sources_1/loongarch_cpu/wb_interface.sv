@@ -44,7 +44,7 @@ interface WBInterface (
     input  valid_in,
     input  allowin,
     input  ready_go,
-    output valid,
+    input  valid,
     output pc,
     output inst,
     output rf_rdata1,

@@ -60,7 +60,7 @@ interface IDInterface (
     input  allowin,
     input  ready_go,
     input  branch_cancle,
-    output valid,
+    input  valid,
     output pc,
     output inst,
     output imm,

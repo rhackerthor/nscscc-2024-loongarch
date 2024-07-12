@@ -27,7 +27,6 @@ interface EXEInterface (
   logic [`W_SEL_ALU_IN2] sel_alu_in2;
   logic [`W_DATA       ] alu_result;
   /* mem */
-  logic [`W_DATA  ] ram_data;
   logic [`W_DATA  ] ram_addr;
   logic [`W_RAM_BE] ram_mask;
   /* flag */
@@ -52,7 +51,7 @@ interface EXEInterface (
     input  valid_in,
     input  allowin,
     input  ready_go,
-    output valid,
+    input  valid,
     output pc,
     output inst,
     output imm,
@@ -65,7 +64,6 @@ interface EXEInterface (
     output sel_alu_in1,
     output sel_alu_in2,
     output alu_result,
-    output ram_data,
     output ram_addr,
     output ram_mask,
     output load_flag,
@@ -91,7 +89,6 @@ interface EXEInterface (
     input  sel_alu_in1,
     input  sel_alu_in2,
     input  alu_result,
-    input  ram_data,
     input  ram_addr,
     input  ram_mask,
     input  load_flag,

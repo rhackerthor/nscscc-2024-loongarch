@@ -14,13 +14,18 @@ module IF (
   assign seq_pc = U_IF.pc + 32'h0000_0004;
   assign sel_next_pc = U_ID.sel_next_pc & {{3{U_ID.branch_cancle}}, 1'b1};
   always_ff @(*) begin
-    case (sel_next_pc)
-      `V__SEQ : begin next_pc <= seq_pc; end
-      `V__B_BL: begin next_pc <= U_ID.b_bl_pc; end 
-      `V__JUMP: begin next_pc <= U_ID.jump_pc; end
-      `V__COMP: begin next_pc <= U_ID.comp_pc; end
-      default : begin next_pc <= seq_pc; end
-    endcase
+    if (U_IF.rst == `V_TRUE) begin
+      next_pc = `V_ZERO;
+    end
+    else begin
+      case (sel_next_pc)
+        `V__SEQ : begin next_pc = seq_pc; end
+        `V__B_BL: begin next_pc = U_ID.b_bl_pc; end 
+        `V__JUMP: begin next_pc = U_ID.jump_pc; end
+        `V__COMP: begin next_pc = U_ID.comp_pc; end
+        default : begin next_pc = seq_pc; end
+      endcase
+    end
   end  
   /* 输出inst ram地址 */
   assign U_RAM.inst_ram_addr = next_pc;

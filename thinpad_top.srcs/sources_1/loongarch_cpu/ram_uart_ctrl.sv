@@ -247,26 +247,26 @@ module RamUartCtrl (
     end
   end
 
-  always_ff @(posedge clk) begin
+  always @(posedge clk) begin
     if (rst == `V_TRUE) begin
       base_ram_rdata_r = `V_ZERO;
-      ext_ram_rdata_r  = `V_ZERO;
+      ext_ram_rdata_r  <= `V_ZERO;
     end
     else begin
       if (cpu_base_ce_i == `V_TRUE) begin
-        base_ram_rdata_r = base_ram_data_io;
+        base_ram_rdata_r <= base_ram_data_io;
       end
       else begin
-        base_ram_rdata_r = base_ram_rdata_r;
+        base_ram_rdata_r <= base_ram_rdata_r;
       end
 
       if (cpu_ext_oe_i == `V_TRUE) begin
-        if (uart_flag)      begin ext_ram_rdata_r = uart_rdata;       end
-        else if (base_flag) begin ext_ram_rdata_r = base_ram_data_io; end
-        else if (ext_flag)  begin ext_ram_rdata_r = ext_ram_data_io;  end
-        else                begin ext_ram_rdata_r = ext_ram_rdata_r;  end
+        if (uart_flag)      begin ext_ram_rdata_r <= uart_rdata;       end
+        else if (base_flag) begin ext_ram_rdata_r <= base_ram_data_io; end
+        else if (ext_flag)  begin ext_ram_rdata_r <= ext_ram_data_io;  end
+        else                begin ext_ram_rdata_r <= ext_ram_rdata_r;  end
       end
-      else begin ext_ram_rdata_r = ext_ram_rdata_r; end
+      else begin ext_ram_rdata_r <= ext_ram_rdata_r; end
     end
   end
 

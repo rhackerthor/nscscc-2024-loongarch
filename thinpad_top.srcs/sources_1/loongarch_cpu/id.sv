@@ -123,7 +123,6 @@ module ID (
   assign U_ID.b_bl_pc     = U_ID.pc + {s_imm_26[29:0], 2'b0};
   assign U_ID.jump_pc     = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
   assign U_ID.comp_pc     = U_ID.pc + {s_imm_16[29:0], 2'b0};
-  assign U_ID.branch_flag = |U_ID.sel_next_pc[`V_COMP:`V_JUMP];
 
   /* alu */
   assign U_ID.alu_op[`V_ADD ] = |{inst_add_w, inst_addi_w, inst_bl, inst_jirl, inst_pcaddu12i};
