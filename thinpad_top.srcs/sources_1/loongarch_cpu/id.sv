@@ -1,8 +1,21 @@
 `include "define.sv"
 module ID (
-  IFInterface.slave  U_IF,
-  IDInterface.master U_ID
+  IFInterface U_IF,
+  IDInterface U_ID
 );
+
+  /* pipeline ctrl */
+  always_ff @(posedge U_ID.clk) begin
+    if (U_ID.rst == `V_TRUE) begin
+      U_ID.valid <= `V_FALSE;
+    end
+    else if (U_ID.branch_cancle == `V_TRUE) begin
+      U_ID.valid <= `V_FALSE;
+    end
+    else if (U_ID.allowin == `V_TRUE) begin
+      U_ID.valid <= U_ID.valid_in;
+    end
+  end
 
   /* 流水线寄存器 */
   always_ff @(posedge U_ID.clk) begin

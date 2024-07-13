@@ -16,32 +16,12 @@ interface RFInterface (
   logic [`W_DATA   ] rf_oe2;
   logic [`W_DATA   ] rf_we;
 
-  modport master (
-    input  clk,
-    input  rst,
-    output rf,
-    output rf_raddr1,
-    output rf_raddr2,
-    output rf_waddr,
-    output rf_rdata1,
-    output rf_rdata2,
-    output rf_wdata,
-    output rf_oe1,
-    output rf_oe2,
-    output rf_we
-  );
-
-  modport slave (
-    input rf_rdata1,
-    input rf_rdata2
-  );
-
 endinterface
 
 module RegFile (
-  IDInterface.slave  U_ID,
-  WBInterface.slave  U_WB,
-  RFInterface.master U_RF
+  IDInterface U_ID,
+  WBInterface U_WB,
+  RFInterface U_RF
 );
 
   assign U_RF.rf_raddr1 = U_ID.rf_raddr1;

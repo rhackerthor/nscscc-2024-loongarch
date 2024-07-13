@@ -1,17 +1,25 @@
 `include "define.sv"
 module WB (
-  EXEInterface.slave U_EXE,
-  WBInterface.master U_WB,
+  EXEInterface U_EXE,
+  WBInterface  U_WB,
   RamInterface       U_RAM
 );
+
+  /* pipeline ctrl */
+  always_ff @(posedge U_WB.clk) begin
+    if (U_WB.rst == `V_TRUE) begin
+      U_WB.valid <= `V_FALSE;
+    end
+    else if (U_WB.allowin == `V_TRUE) begin
+      U_WB.valid <= U_WB.valid_in;
+    end
+  end
 
   /* 流水线寄存器 */
   always @(posedge U_WB.clk) begin
     if (U_WB.valid_in == `V_TRUE && U_WB.allowin == `V_TRUE) begin
       U_WB.pc         <= U_EXE.pc;
       U_WB.inst       <= U_EXE.inst;
-      U_WB.rf_rdata1  <= U_EXE.rf_rdata1;
-      U_WB.rf_rdata2  <= U_EXE.rf_rdata2;
       U_WB.rf_waddr   <= U_EXE.rf_waddr;
       U_WB.rf_we      <= U_EXE.rf_we;
       U_WB.alu_result <= U_EXE.alu_result;

@@ -182,7 +182,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= `V_ONE;
       base_ram_oe_n_r  <= `V_ONE;
       base_ram_we_n_r  <= `V_ONE;
-      ifetch_stop_o    <= `V_TRUE;
+      ifetch_stop_o    <= `V_FALSE;
       base_flag        <= `V_ZERO;
     end
     /* 访存阶段访问base ram */
@@ -203,7 +203,7 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= ~cpu_base_ce_i;
       base_ram_oe_n_r  <= ~cpu_base_ce_i;
       base_ram_we_n_r  <= `V_ONE;
-      ifetch_stop_o    <= `V_TRUE;
+      ifetch_stop_o    <= `V_FALSE;
       base_flag        <= `V_FALSE;
     end
   end
@@ -253,7 +253,7 @@ module RamUartCtrl (
       ext_ram_rdata_r  <= `V_ZERO;
     end
     else begin
-      if (cpu_base_ce_i == `V_TRUE) begin
+      if ((cpu_base_ce_i == `V_TRUE)) begin
         base_ram_rdata_r <= base_ram_data_io;
       end
       else begin

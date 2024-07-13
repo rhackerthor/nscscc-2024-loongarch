@@ -1,9 +1,19 @@
 `include "define.sv"
 module EXE (
-  IDInterface.slave   U_ID,
-  EXEInterface.master U_EXE,
-  RamInterface        U_RAM
+  IDInterface  U_ID,
+  EXEInterface U_EXE,
+  RamInterface U_RAM
 );
+
+  /* pipeline ctrl */
+  always_ff @(posedge U_EXE.clk) begin
+    if (U_EXE.rst == `V_TRUE) begin
+      U_EXE.valid <= `V_FALSE;
+    end
+    else if (U_EXE.allowin == `V_TRUE) begin
+      U_EXE.valid <= U_EXE.valid_in;
+    end
+  end
 
   /* 流水线寄存器 */
   always_ff @(posedge U_EXE.clk) begin
@@ -46,7 +56,7 @@ module EXE (
   assign U_EXE.ram_addr      = U_EXE.rf_rdata1 + U_EXE.imm;
   assign U_RAM.data_ram_addr = U_EXE.ram_addr;
   assign U_RAM.data_ram_be   = (|U_EXE.load_flag == `V_TRUE) ? `V_ONE : U_EXE.ram_mask;
-  assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag};
+  assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag} & U_EXE.valid;
   assign U_RAM.data_ram_oe   = |U_EXE.load_flag;
   assign U_RAM.data_ram_we   = |U_EXE.store_flag;
 
@@ -88,7 +98,7 @@ module EXE (
   assign sll_result  = alu_in1 << alu_in2[4:0];
   assign srl_result  = alu_in1 >> alu_in2[4:0];
   assign sra_result  = alu_in1 >>> alu_in2[4:0];
-  assign mul_result  = alu_in1 * alu_in2;
+  assign mul_result  = alu_in1 + alu_in2;
   assign lui_result  = alu_in2;
   always_ff @(*) begin
     case (U_EXE.alu_op)
