@@ -1,8 +1,9 @@
 `include "define.sv"
 module WB (
-  EXEInterface U_EXE,
-  WBInterface  U_WB,
-  RamInterface       U_RAM
+  EXEInterface   U_EXE,
+  WBInterface    U_WB,
+  RamInterface   U_RAM,
+  DebugInterface U_DEBUG
 );
 
   /* pipeline ctrl */
@@ -42,12 +43,22 @@ module WB (
   end
 
   /* write back */
-  always_ff @(*) begin
+  always @(*) begin
     if (|U_WB.load_flag == `V_TRUE) begin
       U_WB.rf_wdata <= U_WB.ram_data;
     end
     else begin
       U_WB.rf_wdata <= U_WB.alu_result;
+    end
+  end
+
+  always @(posedge U_WB.clk) begin
+    U_DEBUG.valid <= U_WB.valid;
+    if (U_WB.valid == `V_TRUE) begin
+      U_DEBUG.rf_we    <= U_WB.rf_we;
+      U_DEBUG.pc       <= U_WB.pc;
+      U_DEBUG.rf_waddr <= U_WB.rf_waddr;
+      U_DEBUG.rf_wdata <= U_WB.rf_wdata;
     end
   end
 

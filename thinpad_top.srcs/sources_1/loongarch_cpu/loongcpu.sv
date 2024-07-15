@@ -14,7 +14,13 @@ module LoongCpu (
   output logic [`W_RAM_BE] data_ram_be_o,
   output logic             data_ram_ce_o,
   output logic             data_ram_oe_o,
-  output logic             data_ram_we_o
+  output logic             data_ram_we_o,
+  /* debug */
+  output logic              debug_wb_valid_o,
+  output logic              debug_wb_rf_we_o,
+  output logic [`W_DATA   ] debug_wb_pc_o,
+  output logic [`W_RF_ADDR] debug_wb_rf_waddr_o,
+  output logic [`W_DATA   ] debug_wb_rf_wdata_o
 );
 
   /* Interface */
@@ -34,6 +40,14 @@ module LoongCpu (
     .data_ram_ce    (data_ram_ce_o   ),
     .data_ram_oe    (data_ram_oe_o   ),
     .data_ram_we    (data_ram_we_o   )
+  );
+
+  DebugInterface U_DEBUG (
+    debug_wb_valid_o,
+    debug_wb_rf_we_o,
+    debug_wb_pc_o,
+    debug_wb_rf_waddr_o,
+    debug_wb_rf_wdata_o
   );
 
   RegFile RegFile0 (
@@ -56,6 +70,6 @@ module LoongCpu (
   IF  IF0  (U_IF  , U_ID  , U_RAM);
   ID  ID0  (U_IF  , U_ID         );
   EXE EXE0 (U_ID  , U_EXE , U_RAM);
-  WB  WB0  (U_EXE , U_WB  , U_RAM);
+  WB  WB0  (U_EXE , U_WB  , U_RAM, U_DEBUG);
 
 endmodule

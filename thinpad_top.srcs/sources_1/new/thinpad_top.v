@@ -91,6 +91,7 @@ module thinpad_top(
   wire        cpu_ext_we;
   wire        iftech_stop;
 
+  wire        debug_wb_valid;
   wire        debug_wb_rf_we;
   wire [31:0] debug_wb_pc;
   wire [ 4:0] debug_wb_rf_waddr;
@@ -127,19 +128,24 @@ module thinpad_top(
   );
 
   LoongCpu LoongCpu0 (
-    .clk              (clk           ),
-    .rst              (reset_of_clk  ),
-    .ifetch_stop_i    (iftech_stop   ),
-    .inst_ram_rdata_i (cpu_base_rdata),
-    .inst_ram_addr_o  (cpu_base_addr ),
-    .inst_ram_ce_o    (cpu_base_ce   ),
-    .data_ram_rdata_i (cpu_ext_rdata ),
-    .data_ram_wdata_o (cpu_ext_wdata ),
-    .data_ram_addr_o  (cpu_ext_addr  ),
-    .data_ram_be_o    (cpu_ext_be    ),
-    .data_ram_ce_o    (cpu_ext_ce    ),
-    .data_ram_oe_o    (cpu_ext_oe    ),
-    .data_ram_we_o    (cpu_ext_we    )
+    .clk                 (clk              ),
+    .rst                 (reset_of_clk     ),
+    .ifetch_stop_i       (iftech_stop      ),
+    .inst_ram_rdata_i    (cpu_base_rdata   ),
+    .inst_ram_addr_o     (cpu_base_addr    ),
+    .inst_ram_ce_o       (cpu_base_ce      ),
+    .data_ram_rdata_i    (cpu_ext_rdata    ),
+    .data_ram_wdata_o    (cpu_ext_wdata    ),
+    .data_ram_addr_o     (cpu_ext_addr     ),
+    .data_ram_be_o       (cpu_ext_be       ),
+    .data_ram_ce_o       (cpu_ext_ce       ),
+    .data_ram_oe_o       (cpu_ext_oe       ),
+    .data_ram_we_o       (cpu_ext_we       ),
+    .debug_wb_valid_o    (debug_wb_valid   ),
+    .debug_wb_rf_we_o    (debug_wb_rf_we   ),
+    .debug_wb_pc_o       (debug_wb_pc      ),
+    .debug_wb_rf_waddr_o (debug_wb_rf_waddr),
+    .debug_wb_rf_wdata_o (debug_wb_rf_wdata)
   );
 
 endmodule

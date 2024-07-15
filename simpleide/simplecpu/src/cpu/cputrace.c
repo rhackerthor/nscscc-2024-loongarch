@@ -11,4 +11,5 @@ void cpu_trace_print(CPU_trace *trace) {
     trace_Fp->fp, "%d " FMT_WORD " %02x " FMT_WORD "\n", 
     trace->rf_we, trace->pc, trace->rf_waddr, trace->rf_wdata
   );
+  fflush(trace_Fp->fp);
 }

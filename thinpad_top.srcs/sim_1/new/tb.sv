@@ -102,6 +102,39 @@ clock osc(
     .clk_50M    (clk_50M)
 );
 
+/* get trace */
+integer trace_fd;
+initial begin
+  trace_fd = $fopen("/home/rhacker/nscscc-2024-loongarch/simpleide/simplecpu/build/cpu-trace.txt", "r");
+end
+logic        ref_rf_we;
+logic [31:0] ref_pc;
+logic [ 4:0] ref_rf_waddr;
+logic [31:0] ref_rf_wdata;
+always @(posedge dut.clk) begin
+  if (dut.debug_wb_valid == 1'b1) begin
+    $fscanf(trace_fd, "%h %h %h %h", ref_rf_we, ref_pc, ref_rf_waddr, ref_rf_wdata);
+    if ((ref_pc != dut.debug_wb_pc)) begin
+      $display("Error at pc:%08x except pc: %08x get pc: %08x", dut.debug_wb_pc, ref_pc, dut.debug_wb_pc);
+      $stop;
+    end
+    else if ((ref_rf_we != dut.debug_wb_rf_we)) begin
+      $display("Error at pc:%08x except rf we: %08x get rf we: %08x", dut.debug_wb_pc, ref_rf_we, dut.debug_wb_rf_we);
+      $stop;
+    end
+    else if ((ref_rf_we == 1'b1)) begin
+      if ((ref_rf_waddr != dut.debug_wb_rf_waddr)) begin
+        $display("Error at pc:%08x except rf waddr: %08x get rf waddr: %08x", dut.debug_wb_pc, ref_rf_waddr, dut.debug_wb_rf_waddr);
+        $stop;
+      end
+      else if ((ref_rf_wdata != dut.debug_wb_rf_wdata)) begin
+        $display("Error at pc:%08x except rf wdata: %08x get rf wdata: %08x", dut.debug_wb_pc, ref_rf_wdata, dut.debug_wb_rf_wdata);
+        $stop;
+      end
+    end
+  end
+end
+
 // BaseRAM 仿真模型
 sram_model base1(/*autoinst*/
             .DataIO(base_ram_data[15:0]),
