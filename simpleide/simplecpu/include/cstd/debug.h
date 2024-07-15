@@ -30,7 +30,7 @@
 
 #define Waring(fmt, ...) do { \
     Log(stdout, ANSI_FMT("WARING:", ANSI_BG_RED) " " \
-      fmt "\n", ##__VA_ARGS__); \
+      fmt, ##__VA_ARGS__); \
   } while (0)
 
 #include <assert.h>

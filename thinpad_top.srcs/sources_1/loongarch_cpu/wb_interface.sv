@@ -18,7 +18,7 @@ interface WBInterface (
   logic [`W_RF_ADDR] rf_waddr;
   logic              rf_we;
   /* alu */
-  logic [`W_DATA       ] alu_result;
+  logic [`W_DATA] alu_result;
   /* mem */
   logic [`W_DATA  ] ram_data;
   logic [`W_DATA  ] ram_addr;

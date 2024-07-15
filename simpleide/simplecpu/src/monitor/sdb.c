@@ -1,9 +1,9 @@
-#include <cpu.h>
+#include <cpu/cpu.h>
 
 /* 继续执行 */
 static int cmd_c(char *args) {
   // -1会被转换为无符号数,即对应位数的最大值
-	mycpu.execute((uint32_t)-1);
+	cpu_execute((uint32_t)-1);
   return 0;
 }
 
@@ -19,7 +19,7 @@ static int cmd_si(char *args) {
   if (args != NULL) {
     sscanf(args, "%lu", &n);
   }
-	execute(n);
+	cpu_execute(n);
   return 0;
 }
 
@@ -27,7 +27,7 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   if (strlen(args) != 1) return 0;
   switch (args[0]) {
-    case 'r': print_gpr(); break;
+    case 'r': gpr_print_regfile(); break;
     default: Waring("Usage:\nr: print infomation about regs");
   }
   return 0;

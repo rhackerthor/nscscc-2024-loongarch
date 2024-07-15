@@ -8,36 +8,33 @@ File *f_open(const char *filename, const char *mode) {
   File *Fp = malloc(sizeof(File));
   Fp->fp = fp;
   strncpy(Fp->name, filename, strlen(filename));
+  return Fp;
 }
 
 void f_read(void *dest, File *Fp, size_t nmemb, int offset) {
-	f_seek(Fp->fp, offset, FILE_SET);
+	f_seek(Fp, offset, FILE_SET);
 	int readsize = fread(dest, 1, nmemb, Fp->fp);
 	Assert(readsize == nmemb, "Read-out file '%s' unsuccessfully!", Fp->name);
 }
 
 void f_write(const void *src, File *Fp, size_t nmemb, int offset) {
-  f_seek(Fp->fp, offset, FILE_SET);
+  f_seek(Fp, offset, FILE_SET);
 	int writesize = fwrite(src, 1, nmemb, Fp->fp);
 	Assert(writesize == nmemb, "Write-in file '%s' unsuccessfully!", Fp->name);
 }
 
-int f_seek(File *Fp, int offset, int mode) {
+size_t f_seek(File *Fp, size_t offset, int mode) {
   switch(mode) {
     case FILE_SET: mode = SEEK_SET; break;
     case FILE_CUR: mode = SEEK_CUR; break;
     case FILE_END: mode = SEEK_END; break;
   }
   fseek(Fp->fp, offset, mode);
-	int position = ftell(Fp->fp);
-	Assert(position == offset, 
-    "The current position of file '%s' does not match the expected offset position",
-    Fp->name
-  );
-  return offset;
+	size_t position = ftell(Fp->fp);
+  return position;
 }
 
-int f_size(File *Fp) {
+size_t f_size(File *Fp) {
   return f_seek(Fp, 0, FILE_END);
 }
 

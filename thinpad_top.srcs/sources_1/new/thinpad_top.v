@@ -91,6 +91,11 @@ module thinpad_top(
   wire        cpu_ext_we;
   wire        iftech_stop;
 
+  wire        debug_wb_rf_we;
+  wire [31:0] debug_wb_pc;
+  wire [ 4:0] debug_wb_rf_waddr;
+  wire [31:0] debug_wb_rf_wdata;
+
   RamUartCtrl RamUartCtrl0 (
     .clk              (clk           ),
     .rst              (reset_of_clk  ),

@@ -1,5 +1,5 @@
-#ifndef __CPU_H__
-#define __CPU_H__
+#ifndef __CPU_CPU_H__
+#define __CPU_CPU_H__
 
 #include <common.h>
 
@@ -19,11 +19,13 @@ typedef struct {
   state_t state;
   Reg reg;
   word_t inst;
+  word_t next_pc;
   char logbuf[128];
 } CPU_state;
 extern CPU_state cpu;
-#define cpu_pc cpu.reg.pc
 #define cpu_gpr(i) cpu.reg.gpr[i]
+#define cpu_pc cpu.reg.pc
+#define cpu_next_pc cpu.next_pc
 
 void cpu_init(void);
 uint64_t cpu_execute(uint64_t n);

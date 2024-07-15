@@ -1,5 +1,5 @@
-#ifndef __DIFFTEST_DECODE_H__
-#define __DIFFTEST_DECODE_H__
+#ifndef __CPU_DECODE_H__
+#define __CPU_DECODE_H__
 
 #include <common.h>
 
@@ -41,7 +41,7 @@ finish:
   uint64_t key, mask, shift; \
   pattern_decode(pattern, STRLEN(pattern), &key, &mask, &shift); \
   if ((((uint64_t)INSTPAT_INST() >> shift) & mask) == key) { \
-    INSTPAT_MATCH(##__VA_ARGS__); \
+    INSTPAT_MATCH(__VA_ARGS__); \
     goto *(__instpat_end); \
   } \
 } while (0)
@@ -49,6 +49,6 @@ finish:
 #define INSTPAT_START(name) { const void ** __instpat_end = &&concat(__instpat_end_, name);
 #define INSTPAT_END(name)   concat(__instpat_end_, name): ; }
 
-void ref_decoder_execute(word_t inst);
+void decoder_execute(void);
 
 #endif

@@ -13,16 +13,20 @@ BUILD_DIR = ./build
 ELF := $(BUILD_DIR)/img.elf
 BIN := $(BUILD_DIR)/img.bin
 TXT := $(BUILD_DIR)/img.txt
+MIF := $(BUILD_DIR)/img.mif
 
-all: image
+INCFLAG := ../include
+CSRCS  = $(shell find $(abspath ../csrc/cstd) -name "*.c")
+
+all: $(BIN)
 
 $(ELF): ./asm/$(IMG)
 	@mkdir -p $(BUILD_DIR)
 	$(CC) $(FLAGS) -Ttext 0x80000000 -Iinclude $^ -o $@
 
-image: $(ELF)
+$(BIN): $(ELF)
+	$(OBJCOPY) -j .text -O binary $^ $@
 	$(OBJDUMP) -d $^ > $(TXT)
-	$(OBJCOPY) -j .text -O binary $^ $(BIN)
 
 clean:
 	@rm -rf $(BUILD_DIR)

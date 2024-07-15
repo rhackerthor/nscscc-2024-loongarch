@@ -1,10 +1,10 @@
-#include <cpu.h>
+#include <cpu/cpu.h>
 
 static const char *alias[] = {
-  "zero", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
-  "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
-  "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
-  "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+  "zero", "ra", "tp", "sp", "a0", "a1", "a2", "a3",
+  "a4", "a5", "a6", "a7", "t0", "t1", "t2", "t3", 
+	"t4", "t5", "t6", "t7", "t8", "-",  "fp", "s0", 
+	"s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8"
 };
 
 word_t gpr_str2val(const char *gprname) {
@@ -30,8 +30,8 @@ void gpr_print_regfile(void) {
   printf(" NR  NAME    VALUE\n");
   for (int i = 0; i < (NR_GPR >> 1); i++) {
     int j = i + (NR_GPR >> 1);
-    printf("X%02d %-4s " FMT_WORD "%s", i, alias[i], cpu_gpr(i), SPACE);
-    printf("X%02d %-4s " FMT_WORD "\n", j, alias[j], cpu_gpr(j));
+    printf("r%02d  %-4s " FMT_WORD "%s", i, alias[i], cpu_gpr(i), SPACE);
+    printf("r%02d  %-4s " FMT_WORD "\n", j, alias[j], cpu_gpr(j));
   }
   printf("\n");
 }

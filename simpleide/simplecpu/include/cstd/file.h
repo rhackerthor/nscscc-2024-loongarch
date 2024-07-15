@@ -14,8 +14,8 @@ typedef struct {
 File *f_open(const char *filename, const char *mode);
 void f_read(void *dest, File *Fp, size_t nmemb, int offset);
 void f_write(const void *src, File *Fp, size_t nmemb, int offset);
-void f_seek(File *Fp, int offset, int mode);
+size_t f_seek(File *Fp, size_t offset, int mode);
 size_t f_size(File *Fp);
-void f_colse(File *Fp);
+void f_close(File *Fp);
 
 #endif
