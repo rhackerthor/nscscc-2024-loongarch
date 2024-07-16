@@ -27,10 +27,10 @@ module PipeLineCtrl (
   assign U_EXE.ready_go = 1'b1;
   assign U_WB.ready_go  = 1'b1;
 
-  assign U_ID.rf_rdata1 = U_RF.rf_rdata1;
-  assign U_ID.rf_rdata2 = U_RF.rf_rdata2;
+/*   assign U_ID.rf_rdata1 = U_RF.rf_rdata1;
+  assign U_ID.rf_rdata2 = U_RF.rf_rdata2; */
 
-  always @(*) begin
+/*   always @(*) begin
     if (rst == `V_TRUE) begin
       id_ready_go[0] = `V_TRUE;
     end
@@ -68,21 +68,9 @@ module PipeLineCtrl (
     else begin
       id_ready_go[1] = `V_TRUE;
     end
-  end
+  end */
 
   always @(*) begin
-    if (rst == `V_TRUE) begin
-      id_ready_go[2] = `V_TRUE;
-    end
-    else if ((U_EXE.valid == `V_TRUE) && (ifetch_stop_i == `V_TRUE)) begin
-      id_ready_go[2] = `V_FALSE;
-    end
-    else begin
-      id_ready_go[2] = `V_TRUE;
-    end
-  end
-
-/*   always @(*) begin
     if (rst == `V_TRUE) begin
       id_ready_go[0] = `V_TRUE;
       U_ID.rf_rdata1 = `V_ZERO;
@@ -124,7 +112,7 @@ module PipeLineCtrl (
     end
     else if ((U_ID.rf_oe2 == `V_TRUE) && (U_ID.rf_raddr2 != `V_ZERO)) begin
       if ((U_EXE.valid == `V_TRUE) && (U_EXE.rf_we == `V_TRUE) && (U_EXE.rf_waddr == U_ID.rf_raddr2)) begin
-        if (|U_ID.sel_next_pc[`V_COMP] == `V_TRUE) begin
+        if (U_ID.sel_next_pc[`V_COMP] == `V_TRUE) begin
           id_ready_go[1] = `V_FALSE;
           U_ID.rf_rdata2 = `V_ZERO;
         end
@@ -150,7 +138,19 @@ module PipeLineCtrl (
       id_ready_go[1] = `V_TRUE;
       U_ID.rf_rdata2 = U_RF.rf_rdata2;
     end
-  end */
+  end
+
+  always @(*) begin
+    if (rst == `V_TRUE) begin
+      id_ready_go[2] = `V_TRUE;
+    end
+    else if ((U_EXE.valid == `V_TRUE) && (ifetch_stop_i == `V_TRUE)) begin
+      id_ready_go[2] = `V_FALSE;
+    end
+    else begin
+      id_ready_go[2] = `V_TRUE;
+    end
+  end
 
   always @(*) begin
     if ((U_EXE.valid_in == `V_TRUE) && |U_ID.sel_next_pc[`V_COMP:`V_B_BL]) begin

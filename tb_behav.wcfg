@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="10735670fs"></ZoomStartTime>
-      <ZoomEndTime time="11001381fs"></ZoomEndTime>
-      <Cursor1Time time="10850000fs"></Cursor1Time>
+      <ZoomStartTime time="19988780fs"></ZoomStartTime>
+      <ZoomEndTime time="20115381fs"></ZoomEndTime>
+      <Cursor1Time time="20030000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="271"></NameColumnWidth>
+      <NameColumnWidth column_width="263"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="128" />
+   <WVObjectSize size="129" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -158,6 +158,10 @@
       <obj_property name="ElementShortName">imm[31:0]</obj_property>
       <obj_property name="ObjectShortName">imm[31:0]</obj_property>
    </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/ID0/inst_beq">
+      <obj_property name="ElementShortName">inst_beq</obj_property>
+      <obj_property name="ObjectShortName">inst_beq</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/rf_rdata1">
       <obj_property name="ElementShortName">rf_rdata1[31:0]</obj_property>
       <obj_property name="ObjectShortName">rf_rdata1[31:0]</obj_property>
@@ -195,8 +199,8 @@
       <obj_property name="ObjectShortName">sel_next_pc[3:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_op">
-      <obj_property name="ElementShortName">alu_op[10:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_op[10:0]</obj_property>
+      <obj_property name="ElementShortName">alu_op[12:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_op[12:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/sel_alu_in1">
       <obj_property name="ElementShortName">sel_alu_in1</obj_property>
@@ -281,8 +285,8 @@
       <obj_property name="ObjectShortName">rf_we</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/alu_op">
-      <obj_property name="ElementShortName">alu_op[10:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_op[10:0]</obj_property>
+      <obj_property name="ElementShortName">alu_op[12:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_op[12:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/sel_alu_in1">
       <obj_property name="ElementShortName">sel_alu_in1</obj_property>

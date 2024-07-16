@@ -42,10 +42,10 @@ module EXE (
     end
     else if ((U_EXE.store_flag == `V__ST_B) || (U_EXE.load_flag == `V__LD_B))  begin
       case (U_EXE.ram_addr[1:0])
-        2'b00:   begin U_EXE.ram_mask = 4'b0001; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[ 7: 0]}}; end
-        2'b01:   begin U_EXE.ram_mask = 4'b0010; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[15: 8]}}; end
-        2'b10:   begin U_EXE.ram_mask = 4'b0100; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[23:16]}}; end
-        2'b11:   begin U_EXE.ram_mask = 4'b1000; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[31:24]}}; end
+        2'b00: begin U_EXE.ram_mask = 4'b0001; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[ 7: 0]}}; end
+        2'b01: begin U_EXE.ram_mask = 4'b0010; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[15: 8]}}; end
+        2'b10: begin U_EXE.ram_mask = 4'b0100; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[23:16]}}; end
+        2'b11: begin U_EXE.ram_mask = 4'b1000; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[31:24]}}; end
       endcase
     end
     else begin
@@ -57,8 +57,8 @@ module EXE (
   assign U_RAM.data_ram_addr = U_EXE.ram_addr;
   assign U_RAM.data_ram_be   = (|U_EXE.load_flag == `V_TRUE) ? `V_ONE : U_EXE.ram_mask;
   assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag} & U_EXE.valid;
-  assign U_RAM.data_ram_oe   = |U_EXE.load_flag;
-  assign U_RAM.data_ram_we   = |U_EXE.store_flag;
+  assign U_RAM.data_ram_oe   = |U_EXE.load_flag & U_EXE.valid;
+  assign U_RAM.data_ram_we   = |U_EXE.store_flag & U_EXE.valid;
 
   /* alu */
   logic [`W_DATA] alu_in1, alu_in2;

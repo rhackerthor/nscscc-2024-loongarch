@@ -154,16 +154,15 @@ module ID (
                           inst_st_b, inst_st_w
                         };
 
-  /* 分支跳转相关 */
   assign U_ID.sel_next_pc[`V_SEQ ] = &{~U_ID.sel_next_pc[`V_COMP:`V_B_BL]};
   assign U_ID.sel_next_pc[`V_B_BL] = |{inst_b, inst_bl};
   assign U_ID.sel_next_pc[`V_JUMP] = inst_jirl;
-  assign U_ID.sel_next_pc[`V_COMP] = (inst_beq  == `V_TRUE && U_ID.rf_rdata1 == U_ID.rf_rdata2) |
-                                     (inst_bne  == `V_TRUE && U_ID.rf_rdata1 != U_ID.rf_rdata2) |
-                                     (inst_bgeu == `V_TRUE && U_ID.rf_rdata1 >= U_ID.rf_rdata2) |
-                                     (inst_bltu == `V_TRUE && U_ID.rf_rdata1 < U_ID.rf_rdata2)  |
-                                     (inst_bge  == `V_TRUE && $signed(U_ID.rf_rdata1) >= $signed(U_ID.rf_rdata2)) |
-                                     (inst_blt  == `V_TRUE && $signed(U_ID.rf_rdata1) < $signed(U_ID.rf_rdata2));
+  assign U_ID.sel_next_pc[`V_COMP] = ((inst_beq  == `V_TRUE) && (U_ID.rf_rdata1 == U_ID.rf_rdata2)) |
+                                     ((inst_bne  == `V_TRUE) && (U_ID.rf_rdata1 != U_ID.rf_rdata2)) |
+                                     ((inst_bgeu == `V_TRUE) && (U_ID.rf_rdata1 >= U_ID.rf_rdata2)) |
+                                     ((inst_bltu == `V_TRUE) && (U_ID.rf_rdata1 <  U_ID.rf_rdata2)) |
+                                     ((inst_bge  == `V_TRUE) && ($signed(U_ID.rf_rdata1) >= $signed(U_ID.rf_rdata2))) |
+                                     ((inst_blt  == `V_TRUE) && ($signed(U_ID.rf_rdata1) <  $signed(U_ID.rf_rdata2)));
   assign U_ID.b_bl_pc     = U_ID.pc + {s_imm_26[29:0], 2'b0};
   assign U_ID.jump_pc     = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
   assign U_ID.comp_pc     = U_ID.pc + {s_imm_16[29:0], 2'b0};

@@ -8,7 +8,7 @@ CSRCS = $(shell find $(abspath ./src) -name "*.c")
 SRCS  = $(CSRCS)
 
 IMG   = $(abspath ../rom/build/img.bin)
-ARGS  = -t $(BUILD_DIR)/cpu-trace.txt
+ARGS  += -t $(BUILD_DIR)/cpu-trace.txt
 
 all: run
 
