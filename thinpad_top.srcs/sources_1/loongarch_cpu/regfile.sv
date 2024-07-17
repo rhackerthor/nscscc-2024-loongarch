@@ -34,7 +34,7 @@ module RegFile (
 
   /* write reg file */
   always @(posedge U_RF.clk) begin
-    if (U_RF.rst == `V_TRUE) begin
+    if (U_RF.rst) begin
       for (int i = 0; i < `V_RF_NR; i = i + 1) begin
         U_RF.rf[i] <= `V_ZERO;
       end
@@ -47,7 +47,7 @@ module RegFile (
   /* read reg file */
   /* rdata1 */
   always @(*) begin
-    if ((U_RF.rf_oe1 == `V_TRUE) && (U_RF.rf_raddr1 != `V_ZERO)) begin
+    if (U_RF.rf_raddr1 != `V_ZERO) begin
       U_RF.rf_rdata1 = U_RF.rf[U_RF.rf_raddr1];
     end
     else begin
@@ -56,7 +56,7 @@ module RegFile (
   end
   /* rdata2 */
   always @(*) begin
-    if ((U_RF.rf_oe2 == `V_TRUE) && (U_RF.rf_raddr2 != `V_ZERO)) begin
+    if (U_RF.rf_raddr2 != `V_ZERO) begin
       U_RF.rf_rdata2 = U_RF.rf[U_RF.rf_raddr2];
     end
     else begin
