@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1622665fs"></ZoomStartTime>
-      <ZoomEndTime time="1752466fs"></ZoomEndTime>
-      <Cursor1Time time="1690000fs"></Cursor1Time>
+      <ZoomStartTime time="1598787fs"></ZoomStartTime>
+      <ZoomEndTime time="1773388fs"></ZoomEndTime>
+      <Cursor1Time time="1710000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="231"></NameColumnWidth>
+      <NameColumnWidth column_width="215"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="128" />
+   <WVObjectSize size="125" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -50,22 +50,6 @@
       <obj_property name="label">icache</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/valid">
-      <obj_property name="ElementShortName">valid</obj_property>
-      <obj_property name="ObjectShortName">valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/valid_in">
-      <obj_property name="ElementShortName">valid_in</obj_property>
-      <obj_property name="ObjectShortName">valid_in</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/allowin">
-      <obj_property name="ElementShortName">allowin</obj_property>
-      <obj_property name="ObjectShortName">allowin</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/ready_go">
-      <obj_property name="ElementShortName">ready_go</obj_property>
-      <obj_property name="ObjectShortName">ready_go</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/pc">
       <obj_property name="ElementShortName">pc[31:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">pc[31:0][31:0]</obj_property>
@@ -79,10 +63,6 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/Icache0/pre_pc">
       <obj_property name="ElementShortName">pre_pc[31:0]</obj_property>
       <obj_property name="ObjectShortName">pre_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/rdata">
-      <obj_property name="ElementShortName">rdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rdata[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/addr">
       <obj_property name="ElementShortName">addr[31:0]</obj_property>
@@ -247,6 +227,14 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/unsigned_flag">
       <obj_property name="ElementShortName">unsigned_flag</obj_property>
       <obj_property name="ObjectShortName">unsigned_flag</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/branch_flag">
+      <obj_property name="ElementShortName">branch_flag</obj_property>
+      <obj_property name="ObjectShortName">branch_flag</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/branch_pc">
+      <obj_property name="ElementShortName">branch_pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">branch_pc[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider118" type="divider">
       <obj_property name="label">EXE</obj_property>

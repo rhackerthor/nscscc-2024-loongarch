@@ -17,6 +17,9 @@ module IF (
     else if (U_IF.allowin == `V_TRUE) begin
       U_IF.valid <= U_IF.valid_in;
     end
+    else if (U_ID.branch_cancle) begin
+      U_IF.valid <= `V_ZERO;
+    end
   end
 
   /* 流水线寄存器 */
@@ -24,7 +27,7 @@ module IF (
     if (U_IF.rst == `V_TRUE) begin
       U_IF.pc <= `R_PC;
     end
-    else if (U_IF.valid_in && U_IF.allowin == `V_TRUE) begin
+    else if (U_IF.valid_in && U_IF.allowin) begin
       U_IF.pc <= next_pc;
     end
   end
@@ -32,7 +35,7 @@ module IF (
 
   /* 计算next pc */
   assign seq_pc      = U_IF.pc + 32'h0000_0004;
-  assign branch_flag = U_ID.branch_flag & U_ID.branch_cancle;
+  assign branch_flag = U_ID.branch_flag;// & U_ID.branch_cancle;
   always_ff @(*) begin
     if (U_IF.rst == `V_TRUE) begin
       next_pc = `V_ZERO;

@@ -150,7 +150,7 @@ module ID (
   assign sel_alu_in2[`V_IS_IMM ] = |{
                                       U_D._addi_w, U_D._andi, U_D._ori, U_D._xori,
                                       U_D._slli_w, U_D._srli_w, U_D._srai_w,
-                                      U_D._slti, U_D._sltui, U_D._lu12i_w
+                                      U_D._slti, U_D._sltui, U_D._lu12i_w, U_D._pcaddu12i
                                     };
   assign sel_alu_in2[`V_IS_FORE] = |{U_D._bl, U_D._jirl};
   always @(*) begin

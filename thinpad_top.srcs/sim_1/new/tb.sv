@@ -111,24 +111,32 @@ logic        ref_rf_we;
 logic [31:0] ref_pc;
 logic [ 4:0] ref_rf_waddr;
 logic [31:0] ref_rf_wdata;
+logic        dut_rf_we;
+logic [31:0] dut_pc;
+logic [ 4:0] dut_rf_waddr;
+logic [31:0] dut_rf_wdata;
 always @(posedge dut.clk) begin
-  if (dut.debug_wb_valid == 1'b1) begin
+  dut_rf_we    <= dut.debug_wb_rf_we;
+  dut_pc       <= dut.debug_wb_pc;
+  dut_rf_waddr <= dut.debug_wb_rf_waddr;
+  dut_rf_wdata <= dut.debug_wb_rf_wdata;
+  if (dut_pc != dut.debug_wb_pc) begin
     $fscanf(trace_fd, "%h %h %h %h", ref_rf_we, ref_pc, ref_rf_waddr, ref_rf_wdata);
-    if ((ref_pc != dut.debug_wb_pc)) begin
-      $display("Error at pc:%08x except pc: %08x get pc: %08x", dut.debug_wb_pc, ref_pc, dut.debug_wb_pc);
+    if ((ref_pc != dut_pc)) begin
+      $display("Error at pc:%08x except pc: %08x get pc: %08x", dut_pc, ref_pc, dut_pc);
       $stop;
     end
-    else if ((ref_rf_we != dut.debug_wb_rf_we)) begin
-      $display("Error at pc:%08x except rf we: %08x get rf we: %08x", dut.debug_wb_pc, ref_rf_we, dut.debug_wb_rf_we);
+    else if ((ref_rf_we != dut_rf_we)) begin
+      $display("Error at pc:%08x except rf we: %08x get rf we: %08x", dut_pc, ref_rf_we, dut_rf_we);
       $stop;
     end
     else if ((ref_rf_we == 1'b1)) begin
-      if ((ref_rf_waddr != dut.debug_wb_rf_waddr)) begin
-        $display("Error at pc:%08x except rf waddr: %08x get rf waddr: %08x", dut.debug_wb_pc, ref_rf_waddr, dut.debug_wb_rf_waddr);
+      if ((ref_rf_waddr != dut_rf_waddr)) begin
+        $display("Error at pc:%08x except rf waddr: %08x get rf waddr: %08x", dut_pc, ref_rf_waddr, dut_rf_waddr);
         $stop;
       end
-      else if ((ref_rf_wdata != dut.debug_wb_rf_wdata)) begin
-        $display("Error at pc:%08x except rf wdata: %08x get rf wdata: %08x", dut.debug_wb_pc, ref_rf_wdata, dut.debug_wb_rf_wdata);
+      else if ((ref_rf_wdata != dut_rf_wdata)) begin
+        $display("Error at pc:%08x except rf wdata: %08x get rf wdata: %08x", dut_pc, ref_rf_wdata, dut_rf_wdata);
         $stop;
       end
     end

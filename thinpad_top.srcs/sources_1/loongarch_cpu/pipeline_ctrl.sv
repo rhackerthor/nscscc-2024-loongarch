@@ -16,7 +16,7 @@ module PipeLineCtrl (
   assign U_EXE.allowin = !U_EXE.valid || (U_EXE.ready_go && U_WB.allowin);
   assign U_WB.allowin  = !U_WB.valid  ||  U_WB.ready_go;
 
-  assign U_IF.valid_in  = `V_TRUE;// U_IC.valid  & U_IC.ready_go;
+  assign U_IF.valid_in  = `V_TRUE;
   assign U_ID.valid_in  = U_IF.valid  & U_IF.ready_go;
   assign U_EXE.valid_in = U_ID.valid  & U_ID.ready_go;
   assign U_WB.valid_in  = U_EXE.valid & U_EXE.ready_go;
@@ -33,7 +33,10 @@ module PipeLineCtrl (
     if (rst) begin
       if_ready_go = `V_TRUE;
     end
-    else if (U_IF.valid && (~U_IC.cache_valid)) begin
+    else if (~U_IC.cache_valid) begin
+      if_ready_go = `V_FALSE;
+    end
+    else if (ifetch_stop_i) begin
       if_ready_go = `V_FALSE;
     end
     else begin
@@ -119,7 +122,6 @@ module PipeLineCtrl (
       exe_ready_go = `V_TRUE;
     end
     else if (U_WB.valid && (|{U_EXE.load_flag, U_EXE.store_flag})) begin
-      // exe_ready_go = `V_FALSE;
       exe_ready_go = `V_FALSE;
     end
     else begin
