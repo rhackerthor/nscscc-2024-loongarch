@@ -2,7 +2,7 @@
 module IF (
   IFInterface  U_IF,
   IDInterface  U_ID,
-  RamInterface U_RAM
+  IcacheInterface U_IC
 );
 
   logic [`W_SEL_NEXT_PC] sel_next_pc;
@@ -24,32 +24,27 @@ module IF (
     if (U_IF.rst == `V_TRUE) begin
       U_IF.pc <= `R_PC;
     end
-    else if (U_IF.allowin == `V_TRUE) begin
+    else if (U_IF.valid_in && U_IF.allowin == `V_TRUE) begin
       U_IF.pc <= next_pc;
     end
   end
-  assign U_IF.inst = U_RAM.inst_ram_rdata;
+  assign U_IF.inst = U_IC.data[U_IF.pc[6:2]];
 
   /* 计算next pc */
   assign seq_pc      = U_IF.pc + 32'h0000_0004;
-  assign sel_next_pc = U_ID.sel_next_pc & {{3{U_ID.branch_cancle}}, 1'b1};
+  assign branch_flag = U_ID.branch_flag & U_ID.branch_cancle;
   always_ff @(*) begin
     if (U_IF.rst == `V_TRUE) begin
       next_pc = `V_ZERO;
     end
     else begin
-      case (sel_next_pc)
-        `V__SEQ : begin next_pc = seq_pc; end
-        `V__B_BL: begin next_pc = U_ID.b_bl_pc; end 
-        `V__JUMP: begin next_pc = U_ID.jump_pc; end
-        `V__COMP: begin next_pc = U_ID.comp_pc; end
-        default : begin next_pc = seq_pc; end
-      endcase
+      if (branch_flag) begin next_pc = U_ID.branch_pc; end
+      else             begin next_pc = seq_pc;         end
     end
   end  
 
   /* 输出inst ram地址 */
-  assign U_RAM.inst_ram_addr = next_pc;
-  assign U_RAM.inst_ram_ce   = ~U_IF.rst & U_ID.ready_go;
+  assign U_IC.addr = next_pc;
+  assign U_IC.ce   = ~U_IF.rst & U_IF.allowin;
 
 endmodule

@@ -22,10 +22,10 @@ interface EXEInterface (
   logic [`W_RF_ADDR] rf_waddr;
   logic              rf_we;
   /* alu */
-  logic [`W_ALU_OP     ] alu_op;
-  logic                  sel_alu_in1;
-  logic [`W_SEL_ALU_IN2] sel_alu_in2;
-  logic [`W_DATA       ] alu_result;
+  logic [`W_ALU_OP] alu_op;
+  logic [`W_DATA  ] alu_in1;
+  logic [`W_DATA  ] alu_in2;
+  logic [`W_DATA  ] alu_result;
   /* mem */
   logic [`W_DATA  ] ram_addr;
   logic [`W_RAM_BE] ram_mask;

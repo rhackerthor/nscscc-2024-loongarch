@@ -102,3 +102,6 @@
 `define V_LD_W 1
 `define V__LD_B 2'B01
 `define V__LD_W 2'B10
+/* icache */
+`define W_ICACHE 31:0
+`define V_ICACHE 32

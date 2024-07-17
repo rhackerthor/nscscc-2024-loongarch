@@ -12,7 +12,7 @@ class inst_decoder(object):
     for i in range(1, self.rows + 1):
       inst_name = self.ws.cell(i, 1).value
       if inst_name is not None and isinstance(inst_name, str):
-        self.ws.cell(row=i, column=1, value='inst_' + inst_name.lower().replace(".", "_").replace("inst_", ""))
+        self.ws.cell(row=i, column=1, value= '_' + inst_name.lower().replace("_", "", 1))
 
       inst_value = self.ws.cell(i, 2).value
       if inst_value is not None and isinstance(inst_value, str):
@@ -35,20 +35,19 @@ class inst_decoder(object):
       for i in range(1, self.rows + 1):
         if int(self.cell(i, 3)) == 0:
           continue
-        fout.write("assign %-14s = "  % self.cell(i, 1))
+        fout.write("assign U_D.%-10s = "  % self.cell(i, 1))
         s = self.cell(i, 2)
         opcode = [s[j:j + 6] for j in range(0, len(s), 6)]
         flag = True
         start = 31
         for subop in opcode:
           if flag is False:
-            fout.write(" & ")
-          if len(subop) == 1:
-            if subop[0] == "0":
-              fout.write("~")
-            fout.write("inst_i[%d]" % start)
+            fout.write(" && ")
+          if (len(subop) == 1):
+            fout.write("(inst[%d]" %(start))
           else:
-            fout.write("opcode_%d_%d[%d'b%s]" % (start, start - len(subop) + 1, len(subop), subop))
+            fout.write("(inst[%d:%d]" %(start, start - len(subop) + 1))
+          fout.write(" == %d'b%s)" %(len(subop), subop))
           start -= len(subop)
           flag = False
         fout.write(";\n")
@@ -64,7 +63,6 @@ class inst_decoder(object):
         inst += '?' * (32 - len(inst))
         if int(self.cell(i, 3)) == 1: 
           fout.write("INSTPAT(\"%s\", %-10s, %-5s, );\n" %(inst, name, type))
-
 
 def main():
   D = inst_decoder()
