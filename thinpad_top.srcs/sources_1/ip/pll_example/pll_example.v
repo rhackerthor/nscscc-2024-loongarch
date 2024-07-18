@@ -56,9 +56,8 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out1__10.00000______0.000______50.0______296.755____161.614
-// clk_out2__20.00000______0.000______50.0______258.893____161.614
-// clk_out3__60.00000______0.000______50.0______199.644____161.614
+// clk_out1__60.00000______0.000______50.0______185.708____160.484
+// clk_out2__65.00000______0.000______50.0______181.851____160.484
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -67,14 +66,13 @@
 
 `timescale 1ps/1ps
 
-(* CORE_GENERATION_INFO = "pll_example,clk_wiz_v6_0_4_0_0,{component_name=pll_example,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=3,clkin1_period=20.000,clkin2_period=10.0,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
+(* CORE_GENERATION_INFO = "pll_example,clk_wiz_v6_0_4_0_0,{component_name=pll_example,use_phase_alignment=true,use_min_o_jitter=false,use_max_i_jitter=false,use_dyn_phase_shift=false,use_inclk_switchover=false,use_dyn_reconfig=false,enable_axi=0,feedback_source=FDBK_AUTO,PRIMITIVE=MMCM,num_out_clk=2,clkin1_period=20.000,clkin2_period=10.0,use_power_down=false,use_reset=true,use_locked=true,use_inclk_stopped=false,feedback_type=SINGLE,CLOCK_MGR_TYPE=NA,manual_override=false}" *)
 
 module pll_example 
  (
   // Clock out ports
   output        clk_out1,
   output        clk_out2,
-  output        clk_out3,
   // Status and control signals
   input         reset,
   output        locked,
@@ -87,7 +85,6 @@ module pll_example
   // Clock out ports  
   .clk_out1(clk_out1),
   .clk_out2(clk_out2),
-  .clk_out3(clk_out3),
   // Status and control signals               
   .reset(reset), 
   .locked(locked),

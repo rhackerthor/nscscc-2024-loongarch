@@ -56,9 +56,8 @@
 //  Output     Output      Phase    Duty Cycle   Pk-to-Pk     Phase
 //   Clock     Freq (MHz)  (degrees)    (%)     Jitter (ps)  Error (ps)
 //----------------------------------------------------------------------------
-// clk_out1__10.00000______0.000______50.0______296.755____161.614
-// clk_out2__20.00000______0.000______50.0______258.893____161.614
-// clk_out3__60.00000______0.000______50.0______199.644____161.614
+// clk_out1__60.00000______0.000______50.0______185.708____160.484
+// clk_out2__65.00000______0.000______50.0______181.851____160.484
 //
 //----------------------------------------------------------------------------
 // Input Clock   Freq (MHz)    Input Jitter (UI)
@@ -73,7 +72,6 @@ module pll_example_clk_wiz
   // Clock out ports
   output        clk_out1,
   output        clk_out2,
-  output        clk_out3,
   // Status and control signals
   input         reset,
   output        locked,
@@ -114,6 +112,7 @@ wire clk_in2_pll_example;
   wire        clkfboutb_unused;
     wire clkout0b_unused;
    wire clkout1b_unused;
+   wire clkout2_unused;
    wire clkout2b_unused;
    wire clkout3_unused;
    wire clkout3b_unused;
@@ -130,21 +129,17 @@ wire clk_in2_pll_example;
     .COMPENSATION         ("ZHOLD"),
     .STARTUP_WAIT         ("FALSE"),
     .DIVCLK_DIVIDE        (1),
-    .CLKFBOUT_MULT_F      (18.000),
+    .CLKFBOUT_MULT_F      (19.500),
     .CLKFBOUT_PHASE       (0.000),
     .CLKFBOUT_USE_FINE_PS ("FALSE"),
-    .CLKOUT0_DIVIDE_F     (90.000),
+    .CLKOUT0_DIVIDE_F     (16.250),
     .CLKOUT0_PHASE        (0.000),
     .CLKOUT0_DUTY_CYCLE   (0.500),
     .CLKOUT0_USE_FINE_PS  ("FALSE"),
-    .CLKOUT1_DIVIDE       (45),
+    .CLKOUT1_DIVIDE       (15),
     .CLKOUT1_PHASE        (0.000),
     .CLKOUT1_DUTY_CYCLE   (0.500),
     .CLKOUT1_USE_FINE_PS  ("FALSE"),
-    .CLKOUT2_DIVIDE       (15),
-    .CLKOUT2_PHASE        (0.000),
-    .CLKOUT2_DUTY_CYCLE   (0.500),
-    .CLKOUT2_USE_FINE_PS  ("FALSE"),
     .CLKIN1_PERIOD        (20.000))
   mmcm_adv_inst
     // Output clocks
@@ -155,7 +150,7 @@ wire clk_in2_pll_example;
     .CLKOUT0B            (clkout0b_unused),
     .CLKOUT1             (clk_out2_pll_example),
     .CLKOUT1B            (clkout1b_unused),
-    .CLKOUT2             (clk_out3_pll_example),
+    .CLKOUT2             (clkout2_unused),
     .CLKOUT2B            (clkout2b_unused),
     .CLKOUT3             (clkout3_unused),
     .CLKOUT3B            (clkout3b_unused),
@@ -212,10 +207,6 @@ wire clk_in2_pll_example;
   BUFG clkout2_buf
    (.O   (clk_out2),
     .I   (clk_out2_pll_example));
-
-  BUFG clkout3_buf
-   (.O   (clk_out3),
-    .I   (clk_out3_pll_example));
 
 
 

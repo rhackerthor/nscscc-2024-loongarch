@@ -33,16 +33,11 @@ module PipeLineCtrl (
     if (rst) begin
       if_ready_go = `V_TRUE;
     end
-    else if ((U_ID.rf_oe1 == `V_TRUE) && (U_ID.rf_raddr1 != `V_ZERO)) begin
-      if ((U_EXE.valid == `V_TRUE) && (U_EXE.rf_we == `V_TRUE) && (U_EXE.rf_waddr == U_ID.rf_raddr1)) begin
-        id_ready_go[0] = `V_FALSE;
-      end
-      else if ((U_WB.valid == `V_TRUE) && (U_WB.rf_we == `V_TRUE) && (U_WB.rf_waddr == U_ID.rf_raddr1)) begin
-        id_ready_go[0] = `V_FALSE;
-      end
-      else begin
-        id_ready_go[0] = `V_TRUE;
-      end
+    else if (~U_IC.cache_valid) begin
+      if_ready_go = `V_FALSE;
+    end
+    else if (ifetch_stop_i) begin
+      if_ready_go = `V_FALSE;
     end
     else begin
       if_ready_go = `V_TRUE;
@@ -119,6 +114,18 @@ module PipeLineCtrl (
     end
     else begin
       U_ID.branch_cancle = `V_FALSE;
+    end
+  end
+
+  always @(*) begin
+    if (rst) begin
+      exe_ready_go = `V_TRUE;
+    end
+    else if (U_WB.valid && (|{U_EXE.load_flag, U_EXE.store_flag})) begin
+      exe_ready_go = `V_FALSE;
+    end
+    else begin
+      exe_ready_go = `V_TRUE;
     end
   end
 
