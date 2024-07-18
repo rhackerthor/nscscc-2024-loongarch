@@ -14,7 +14,7 @@ void cpu_init(void) {
 
 static void execute_once(void) {
   /* inst fetch */
-  cpu.inst    = pmem_read(cpu_pc);
+  cpu.inst    = pmem_read(cpu_pc, 0b1111);
   cpu_next_pc = cpu_pc + 4;
   decoder_execute();
   /* 输出指令 */

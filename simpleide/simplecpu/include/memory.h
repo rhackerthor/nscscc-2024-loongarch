@@ -13,7 +13,7 @@
 #define EXT_END (EXT_BEGIN + RAM_SIZE - 1)
 
 //extern uint8_t pmem[MEM_SIZE];
-word_t pmem_read(word_t raddr);
+word_t pmem_read(word_t raddr, state_t rmask);
 void pmem_write(word_t waddr, word_t wdata, state_t wmask);
 void load_image(const char *filename);
 

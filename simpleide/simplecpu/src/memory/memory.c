@@ -11,17 +11,40 @@ static word_t guest_to_host(word_t vaddr) {
   return ((vaddr - MEM_BEGIN) >> 2) << 2;
 }
 
-word_t pmem_read(word_t raddr) {
+word_t pmem_read(word_t raddr, state_t rmask) {
+  /* 串口 */
+  if (raddr == 0xbfd003fc) return 0x3;
+  if (raddr == 0xbfd003f8) {
+    Waring("uart rdata:");
+    char c;
+    scanf("%c", &c);
+    return c;
+  }
+  /* 正常访存 */
   word_t addr = guest_to_host(raddr);
 	word_t rdata = 0;
 	uint8_t *d = (uint8_t *) &rdata;
 	for (int i = 0; i < 4; i++) {
 		d[i] = pmem[addr + i];
   }
+  switch (rmask) {
+    case 0b0001: rdata = BITS(rdata,  7,  0); break;
+    case 0b0010: rdata = BITS(rdata, 15,  8); break;
+    case 0b0100: rdata = BITS(rdata, 23, 16); break;
+    case 0b1000: rdata = BITS(rdata, 31, 24); break;
+    default:     rdata = rdata;               break;
+  }
 	return rdata;
 }
 
 void pmem_write(word_t waddr, word_t wdata, state_t wmask) {
+  /* 串口 */
+  if (waddr == 0xbfd003fc) return;
+  if (waddr == 0xbfd003f8) {
+    Waring("at pc: " FMT_WORD " uart wdata: %c", cpu_pc, wdata);
+    return;
+  }
+  /* 正常访存 */
   word_t addr = guest_to_host(waddr);
   uint8_t *d = (uint8_t *)&wdata;
   for (int i = 0; i < 4; i++) {
