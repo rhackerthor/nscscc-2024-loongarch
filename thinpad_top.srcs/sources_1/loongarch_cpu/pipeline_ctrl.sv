@@ -16,7 +16,7 @@ module PipeLineCtrl (
   assign U_EXE.allowin = !U_EXE.valid || (U_EXE.ready_go && U_WB.allowin);
   assign U_WB.allowin  = !U_WB.valid  ||  U_WB.ready_go;
 
-  assign U_IF.valid_in  = `V_TRUE;
+  assign U_IF.valid_in  = `V_TRUE;// U_IC.valid  & U_IC.ready_go;
   assign U_ID.valid_in  = U_IF.valid  & U_IF.ready_go;
   assign U_EXE.valid_in = U_ID.valid  & U_ID.ready_go;
   assign U_WB.valid_in  = U_EXE.valid & U_EXE.ready_go;
@@ -33,11 +33,16 @@ module PipeLineCtrl (
     if (rst) begin
       if_ready_go = `V_TRUE;
     end
-    else if (~U_IC.cache_valid) begin
-      if_ready_go = `V_FALSE;
-    end
-    else if (ifetch_stop_i) begin
-      if_ready_go = `V_FALSE;
+    else if ((U_ID.rf_oe1 == `V_TRUE) && (U_ID.rf_raddr1 != `V_ZERO)) begin
+      if ((U_EXE.valid == `V_TRUE) && (U_EXE.rf_we == `V_TRUE) && (U_EXE.rf_waddr == U_ID.rf_raddr1)) begin
+        id_ready_go[0] = `V_FALSE;
+      end
+      else if ((U_WB.valid == `V_TRUE) && (U_WB.rf_we == `V_TRUE) && (U_WB.rf_waddr == U_ID.rf_raddr1)) begin
+        id_ready_go[0] = `V_FALSE;
+      end
+      else begin
+        id_ready_go[0] = `V_TRUE;
+      end
     end
     else begin
       if_ready_go = `V_TRUE;
@@ -114,18 +119,6 @@ module PipeLineCtrl (
     end
     else begin
       U_ID.branch_cancle = `V_FALSE;
-    end
-  end
-
-  always @(*) begin
-    if (rst) begin
-      exe_ready_go = `V_TRUE;
-    end
-    else if (U_WB.valid && (|{U_EXE.load_flag, U_EXE.store_flag})) begin
-      exe_ready_go = `V_FALSE;
-    end
-    else begin
-      exe_ready_go = `V_TRUE;
     end
   end
 

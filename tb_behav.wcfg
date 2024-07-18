@@ -211,7 +211,13 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in1">
       <obj_property name="ElementShortName">alu_in1[31:0]</obj_property>
       <obj_property name="ObjectShortName">alu_in1[31:0]</obj_property>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in1">
+      <obj_property name="ElementShortName">alu_in1[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_in1[31:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in2">
+      <obj_property name="ElementShortName">alu_in2[31:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_in2[31:0]</obj_property>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in2">
       <obj_property name="ElementShortName">alu_in2[31:0]</obj_property>
       <obj_property name="ObjectShortName">alu_in2[31:0]</obj_property>
@@ -306,6 +312,7 @@
       <obj_property name="ElementShortName">alu_in1[31:0]</obj_property>
       <obj_property name="ObjectShortName">alu_in1[31:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/alu_in2">
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/alu_in2">
       <obj_property name="ElementShortName">alu_in2[31:0]</obj_property>
       <obj_property name="ObjectShortName">alu_in2[31:0]</obj_property>
