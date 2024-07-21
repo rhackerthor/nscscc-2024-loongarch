@@ -37,8 +37,7 @@
 `define V__JUMP 4'b0100
 `define V__COMP 4'b1000
 /* exe */
-`define W_ADDER 32:0
-`define W_ALU_OP 12:0
+`define W_ALU_OP 10:0
 `define V_ADD   0
 `define V_SUB   1
 `define V_AND   2
@@ -48,10 +47,9 @@
 `define V_SLL   6
 `define V_SRL   7
 `define V_SRA   8
-`define V_SLT   9
-`define V_SLTU 10
-`define V_LUI  11
-`define V__ADD  (1 << `V_ADD)
+`define V_SLTU  9
+`define V_LUI  10
+`define V__ADD  (1 << `V_ADD )
 `define V__SUB  (1 << `V_SUB )
 `define V__AND  (1 << `V_AND )
 `define V__OR   (1 << `V_OR  )
@@ -60,7 +58,6 @@
 `define V__SLL  (1 << `V_SLL )
 `define V__SRL  (1 << `V_SRL )
 `define V__SRA  (1 << `V_SRA )
-`define V__SLT  (1 << `V_SLT )
 `define V__SLTU (1 << `V_SLTU)
 `define V__LUI  (1 << `V_LUI )
 `define W_SEL_ALU_IN2 2:0

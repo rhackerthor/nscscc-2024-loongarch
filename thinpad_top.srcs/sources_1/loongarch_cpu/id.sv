@@ -6,37 +6,51 @@ module ID (
 
   /* pipeline ctrl */
   always_ff @(posedge U_ID.clk) begin
-    if (U_ID.rst == `V_TRUE) begin
+    if (U_ID.rst) begin
       U_ID.valid <= `V_FALSE;
     end
-    else if (U_ID.branch_cancle == `V_TRUE) begin
+    else if (U_ID.branch_cancle) begin
       U_ID.valid <= `V_FALSE;
     end
-    else if (U_ID.allowin == `V_TRUE) begin
+    else if (U_ID.allowin) begin
       U_ID.valid <= U_ID.valid_in;
     end
   end
 
   /* 流水线寄存器 */
   always_ff @(posedge U_ID.clk) begin
-    if (U_ID.valid_in == `V_TRUE && U_ID.allowin == `V_TRUE) begin
+    if (U_ID.valid_in && U_ID.allowin) begin
       U_ID.pc   <= U_IF.pc;
       U_ID.inst <= U_IF.inst;
     end
   end
 
   /* decode */ 
+  /* 下面基本采用 */
   DecodeInterface U_D ();
   Decode Decode0 (U_ID.inst, U_D);
 
   /* immediate */
   logic [`W_SEL_IMM] sel_imm;
-  assign sel_imm[`V_UI5 ] = |{U_D._slli_w, U_D._srli_w, U_D._srai_w};
-  assign sel_imm[`V_UI12] = |{U_D._andi, U_D._ori, U_D._xori};
-  assign sel_imm[`V_SI12] = |{U_D._addi_w, U_D._sltui, U_D._slti, U_D._st_b, U_D._st_w, U_D._ld_b, U_D._ld_w};
-  assign sel_imm[`V_SI16] = |{U_D._beq, U_D._bne, U_D._blt, U_D._bge, U_D._bltu, U_D._bgeu, U_D._jirl};
-  assign sel_imm[`V_SI20] = |{U_D._lu12i_w, U_D._pcaddu12i};
-  assign sel_imm[`V_SI26] = |{U_D._b, U_D._bl};
+  assign sel_imm[`V_UI5] = |{
+    U_D._srai_w, U_D._srli_w, U_D._slli_w
+  };
+  assign sel_imm[`V_UI12] = |{
+    U_D._andi, U_D._ori
+  };
+  assign sel_imm[`V_SI12] = |{
+    U_D._sltui, U_D._addi_w, U_D._ld_b, U_D._ld_w,
+    U_D._st_b, U_D._st_w
+  };
+  assign sel_imm[`V_SI16] = |{
+    U_D._jirl, U_D._beq, U_D._bne, U_D._bge
+  };
+  assign sel_imm[`V_SI20] = |{
+    U_D._lu12i_w, U_D._pcaddu12i
+  };
+  assign sel_imm[`V_SI26] = |{
+    U_D._b, U_D._bl
+  };
   logic [`W_DATA] u_imm_5;
   logic [`W_DATA] u_imm_12;
   logic [`W_DATA] s_imm_12;
@@ -62,20 +76,36 @@ module ID (
   end
 
   /* 译码reg file相关信号 */
-  logic is_rd;
-  assign is_rd = |{U_D._st_b, U_D._st_w, U_D._beq, U_D._bne, U_D._bge, U_D._bgeu, U_D._bltu};
+  logic rf_oe2_is_rd;
+  assign rf_oe2_is_rd = |{
+    U_D._st_b, U_D._st_w, U_D._beq, U_D._bne,
+    U_D._bge
+  };
   assign U_ID.rf_waddr  = U_ID.inst[`W_RF_RD];
   assign U_ID.rf_raddr1 = U_ID.inst[`W_RF_RJ];
-  assign U_ID.rf_raddr2 = ~is_rd ? U_ID.inst[`W_RF_RK] : U_ID.inst[`W_RF_RD];
-  assign U_ID.rf_we  = &{~U_D._b, ~U_D._beq, ~U_D._bge, ~U_D._blt, ~U_D._bltu, ~U_D._bgeu, ~U_D._bne, ~U_D._st_b, ~U_D._st_w};
-  assign U_ID.rf_oe1 = &{~U_D._b, ~U_D._bl, ~U_D._lu12i_w, ~U_D._pcaddu12i};
+  assign U_ID.rf_raddr2 = rf_oe2_is_rd ? U_ID.inst[`W_RF_RD] : U_ID.inst[`W_RF_RK];
+  assign U_ID.rf_we  = |{
+    U_D._add_w, U_D._sub_w, U_D._and, U_D._or,
+    U_D._xor, U_D._mul_w, U_D._srai_w, U_D._srli_w,
+    U_D._slli_w, U_D._sltui, U_D._addi_w, U_D._andi,
+    U_D._ori, U_D._ld_b, U_D._ld_w, U_D._lu12i_w,
+    U_D._pcaddu12i, U_D._jirl, U_D._bl
+  };
+  assign U_ID.rf_oe1 = |{
+    U_D._add_w, U_D._sub_w, U_D._and, U_D._or,
+    U_D._xor, U_D._mul_w, U_D._srai_w, U_D._srli_w,
+    U_D._slli_w, U_D._sltui, U_D._addi_w, U_D._andi,
+    U_D._ori, U_D._ld_b, U_D._ld_w, U_D._st_b,
+    U_D._st_w, U_D._jirl, U_D._beq, U_D._bne,
+    U_D._bge
+  };
   assign U_ID.rf_oe2 = |{
-                          U_D._add_w, U_D._sub_w, U_D._and, U_D._or, U_D._xor, U_D._nor,
-                          U_D._beq, U_D._bne, U_D._bge, U_D._bgeu, U_D._blt, U_D._bltu,
-                          U_D._sll_w, U_D._srl_w, U_D._sra_w, U_D._slt, U_D._sltu,
-                          U_D._st_b, U_D._st_w
-                        };
+    U_D._add_w, U_D._sub_w, U_D._and, U_D._or,
+    U_D._xor, U_D._mul_w, U_D._st_b, U_D._st_w,
+    U_D._beq, U_D._bne, U_D._bge
+  };
 
+  /* sel branch pc */
   always @(*) begin
     if (U_ID.rst) begin
       U_ID.branch_flag = `V_FALSE;
@@ -128,32 +158,38 @@ module ID (
   assign U_ID.alu_op[`V_SUB ] = U_D._sub_w;
   assign U_ID.alu_op[`V_AND ] = |{U_D._and, U_D._andi};
   assign U_ID.alu_op[`V_OR  ] = |{U_D._or, U_D._ori};
-  assign U_ID.alu_op[`V_XOR ] = |{U_D._xor, U_D._xori};
+  assign U_ID.alu_op[`V_XOR ] = U_D._xor;
   assign U_ID.alu_op[`V_MUL ] = U_D._mul_w;
-  assign U_ID.alu_op[`V_SLL ] = |{U_D._sll_w, U_D._slli_w};
-  assign U_ID.alu_op[`V_SRL ] = |{U_D._srl_w, U_D._srli_w};
-  assign U_ID.alu_op[`V_SRA ] = |{U_D._sra_w, U_D._srai_w};
-  assign U_ID.alu_op[`V_SLT ] = |{U_D._slt, U_D._slti};
-  assign U_ID.alu_op[`V_SLTU] = |{U_D._sltu, U_D._sltui};
+  assign U_ID.alu_op[`V_SLL ] = U_D._slli_w;
+  assign U_ID.alu_op[`V_SRL ] = U_D._srli_w;
+  assign U_ID.alu_op[`V_SRA ] = U_D._srai_w;
+  assign U_ID.alu_op[`V_SLTU] = U_D._sltui;
   assign U_ID.alu_op[`V_LUI ] = U_D._lu12i_w;
 
   logic sel_alu_in1;
   logic [`W_SEL_ALU_IN2] sel_alu_in2;
-  /* sel alu in1 */
-  assign sel_alu_in1 = |{U_D._bl, U_D._jirl, U_D._pcaddu12i};
+  /* sel alu in1: if alu in1 is pc */
+  assign sel_alu_in1 = |{
+    U_D._pcaddu12i, U_D._jirl, U_D._bl
+  };
+  assign U_ID.alu_in1 = sel_alu_in1 ? U_ID.pc : U_ID.rf_rdata1;
+
   /* sel alu in2 */
-  assign sel_alu_in2[`V_IS_RK  ] = |{
-                                      U_D._add_w, U_D._sub_w, U_D._mul_w,
-                                      U_D._and, U_D._or, U_D._xor, U_D._nor, U_D._sltu
-                                    };
-  assign sel_alu_in2[`V_IS_IMM ] = |{
-                                      U_D._addi_w, U_D._andi, U_D._ori, U_D._xori,
-                                      U_D._slli_w, U_D._srli_w, U_D._srai_w,
-                                      U_D._slti, U_D._sltui, U_D._lu12i_w, U_D._pcaddu12i
-                                    };
-  assign sel_alu_in2[`V_IS_FOUR] = |{U_D._bl, U_D._jirl};
+  /* if alu in2 is rk */
+  assign sel_alu_in2[`V_IS_RK] = |{
+    U_D._add_w, U_D._sub_w, U_D._and, U_D._or,
+    U_D._xor, U_D._mul_w
+  };
+  /* if alu in2 is immediate */
+  assign sel_alu_in2[`V_IS_IMM] = |{
+    U_D._srai_w, U_D._srli_w, U_D._slli_w, U_D._sltui,
+    U_D._addi_w, U_D._andi, U_D._ori, U_D._lu12i_w,
+    U_D._pcaddu12i
+  };
+  assign sel_alu_in2[`V_IS_FOUR] = |{
+    U_D._jirl, U_D._bl
+  };
   always @(*) begin
-    U_ID.alu_in1 = sel_alu_in1 ? U_ID.pc : U_ID.rf_rdata1;
     case (sel_alu_in2)
       `V__IS_RK  : begin U_ID.alu_in2 = U_ID.rf_rdata2; end
       `V__IS_IMM : begin U_ID.alu_in2 = U_ID.imm;       end
