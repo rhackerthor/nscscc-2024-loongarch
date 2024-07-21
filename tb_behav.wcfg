@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1598787fs"></ZoomStartTime>
-      <ZoomEndTime time="1773388fs"></ZoomEndTime>
-      <Cursor1Time time="1710000fs"></Cursor1Time>
+      <ZoomStartTime time="4639851fs"></ZoomStartTime>
+      <ZoomEndTime time="4884752fs"></ZoomEndTime>
+      <Cursor1Time time="4774615fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="215"></NameColumnWidth>
+      <NameColumnWidth column_width="207"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="125" />
+   <WVObjectSize size="117" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -44,7 +44,6 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_RF/rf">
       <obj_property name="ElementShortName">rf[31:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">rf[31:0][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject fp_name="divider156" type="divider">
       <obj_property name="label">icache</obj_property>
@@ -53,12 +52,10 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/pc">
       <obj_property name="ElementShortName">pc[31:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">pc[31:0][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/data">
       <obj_property name="ElementShortName">data[31:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">data[31:0][31:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/Icache0/pre_pc">
       <obj_property name="ElementShortName">pre_pc[31:0]</obj_property>
@@ -114,14 +111,6 @@
       <obj_property name="ElementShortName">inst[31:0]</obj_property>
       <obj_property name="ObjectShortName">inst[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/IF0/next_pc">
-      <obj_property name="ElementShortName">next_pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">next_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/IF0/seq_pc">
-      <obj_property name="ElementShortName">seq_pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">seq_pc[31:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="divider103" type="divider">
       <obj_property name="label">ID</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -151,10 +140,6 @@
       <obj_property name="ElementShortName">branch_cancle</obj_property>
       <obj_property name="ObjectShortName">branch_cancle</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/PipeLineCtrl0/id_ready_go">
-      <obj_property name="ElementShortName">id_ready_go[2:0]</obj_property>
-      <obj_property name="ObjectShortName">id_ready_go[2:0]</obj_property>
-   </wvobject>
    <wvobject fp_name="divider158" type="divider">
       <obj_property name="label">data</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -180,6 +165,10 @@
       <obj_property name="ElementShortName">rf_rdata2[31:0]</obj_property>
       <obj_property name="ObjectShortName">rf_rdata2[31:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/rf_waddr">
+      <obj_property name="ElementShortName">rf_waddr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">rf_waddr[4:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/rf_raddr1">
       <obj_property name="ElementShortName">rf_raddr1[4:0]</obj_property>
       <obj_property name="ObjectShortName">rf_raddr1[4:0]</obj_property>
@@ -187,10 +176,6 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/rf_raddr2">
       <obj_property name="ElementShortName">rf_raddr2[4:0]</obj_property>
       <obj_property name="ObjectShortName">rf_raddr2[4:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/rf_waddr">
-      <obj_property name="ElementShortName">rf_waddr[4:0]</obj_property>
-      <obj_property name="ObjectShortName">rf_waddr[4:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/rf_we">
       <obj_property name="ElementShortName">rf_we</obj_property>
@@ -204,6 +189,22 @@
       <obj_property name="ElementShortName">rf_oe2</obj_property>
       <obj_property name="ObjectShortName">rf_oe2</obj_property>
    </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/branch_flag">
+      <obj_property name="ElementShortName">branch_flag</obj_property>
+      <obj_property name="ObjectShortName">branch_flag</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/branch_pc">
+      <obj_property name="ElementShortName">branch_pc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">branch_pc[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/jirl_flag">
+      <obj_property name="ElementShortName">jirl_flag</obj_property>
+      <obj_property name="ObjectShortName">jirl_flag</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/comp_flag">
+      <obj_property name="ElementShortName">comp_flag</obj_property>
+      <obj_property name="ObjectShortName">comp_flag</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_op">
       <obj_property name="ElementShortName">alu_op[12:0]</obj_property>
       <obj_property name="ObjectShortName">alu_op[12:0]</obj_property>
@@ -211,13 +212,7 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in1">
       <obj_property name="ElementShortName">alu_in1[31:0]</obj_property>
       <obj_property name="ObjectShortName">alu_in1[31:0]</obj_property>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in1">
-      <obj_property name="ElementShortName">alu_in1[31:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_in1[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in2">
-      <obj_property name="ElementShortName">alu_in2[31:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_in2[31:0]</obj_property>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in2">
       <obj_property name="ElementShortName">alu_in2[31:0]</obj_property>
       <obj_property name="ObjectShortName">alu_in2[31:0]</obj_property>
@@ -234,15 +229,7 @@
       <obj_property name="ElementShortName">unsigned_flag</obj_property>
       <obj_property name="ObjectShortName">unsigned_flag</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/branch_flag">
-      <obj_property name="ElementShortName">branch_flag</obj_property>
-      <obj_property name="ObjectShortName">branch_flag</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/branch_pc">
-      <obj_property name="ElementShortName">branch_pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">branch_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="divider118" type="divider">
+   <wvobject fp_name="divider103" type="divider">
       <obj_property name="label">EXE</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
@@ -266,6 +253,10 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/ready_go">
       <obj_property name="ElementShortName">ready_go</obj_property>
       <obj_property name="ObjectShortName">ready_go</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/cnt">
+      <obj_property name="ElementShortName">cnt[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt[7:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider158" type="divider">
       <obj_property name="label">data</obj_property>
@@ -313,7 +304,6 @@
       <obj_property name="ObjectShortName">alu_in1[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/alu_in2">
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/alu_in2">
       <obj_property name="ElementShortName">alu_in2[31:0]</obj_property>
       <obj_property name="ObjectShortName">alu_in2[31:0]</obj_property>
    </wvobject>
@@ -337,11 +327,7 @@
       <obj_property name="ElementShortName">load_flag[1:0]</obj_property>
       <obj_property name="ObjectShortName">load_flag[1:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/unsigned_flag">
-      <obj_property name="ElementShortName">unsigned_flag</obj_property>
-      <obj_property name="ObjectShortName">unsigned_flag</obj_property>
-   </wvobject>
-   <wvobject fp_name="divider131" type="divider">
+   <wvobject fp_name="divider103" type="divider">
       <obj_property name="label">WB</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
@@ -411,11 +397,7 @@
       <obj_property name="ElementShortName">load_flag[1:0]</obj_property>
       <obj_property name="ObjectShortName">load_flag[1:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/PipeLineCtrl0/id_ready_go">
-      <obj_property name="ElementShortName">id_ready_go[2:0]</obj_property>
-      <obj_property name="ObjectShortName">id_ready_go[2:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="divider142" type="divider">
+   <wvobject fp_name="divider297" type="divider">
       <obj_property name="label">ram</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
@@ -459,84 +441,60 @@
       <obj_property name="ElementShortName">data_ram_we</obj_property>
       <obj_property name="ObjectShortName">data_ram_we</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/RamUartCtrl0/uart_flag">
-      <obj_property name="ElementShortName">uart_flag</obj_property>
-      <obj_property name="ObjectShortName">uart_flag</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/RamUartCtrl0/base_flag">
-      <obj_property name="ElementShortName">base_flag</obj_property>
-      <obj_property name="ObjectShortName">base_flag</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/RamUartCtrl0/ext_flag">
-      <obj_property name="ElementShortName">ext_flag</obj_property>
-      <obj_property name="ObjectShortName">ext_flag</obj_property>
-   </wvobject>
-   <wvobject fp_name="divider174" type="divider">
+   <wvobject fp_name="divider298" type="divider">
       <obj_property name="label">base</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/base_ram_data">
+   <wvobject type="array" fp_name="/tb/dut/base_ram_data">
       <obj_property name="ElementShortName">base_ram_data[31:0]</obj_property>
       <obj_property name="ObjectShortName">base_ram_data[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/base_ram_addr">
+   <wvobject type="array" fp_name="/tb/dut/base_ram_addr">
       <obj_property name="ElementShortName">base_ram_addr[19:0]</obj_property>
       <obj_property name="ObjectShortName">base_ram_addr[19:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/base_ram_be_n">
+   <wvobject type="array" fp_name="/tb/dut/base_ram_be_n">
       <obj_property name="ElementShortName">base_ram_be_n[3:0]</obj_property>
       <obj_property name="ObjectShortName">base_ram_be_n[3:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/base_ram_ce_n">
+   <wvobject type="logic" fp_name="/tb/dut/base_ram_ce_n">
       <obj_property name="ElementShortName">base_ram_ce_n</obj_property>
       <obj_property name="ObjectShortName">base_ram_ce_n</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/base_ram_oe_n">
+   <wvobject type="logic" fp_name="/tb/dut/base_ram_oe_n">
       <obj_property name="ElementShortName">base_ram_oe_n</obj_property>
       <obj_property name="ObjectShortName">base_ram_oe_n</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/base_ram_we_n">
+   <wvobject type="logic" fp_name="/tb/dut/base_ram_we_n">
       <obj_property name="ElementShortName">base_ram_we_n</obj_property>
       <obj_property name="ObjectShortName">base_ram_we_n</obj_property>
    </wvobject>
-   <wvobject fp_name="divider175" type="divider">
+   <wvobject fp_name="divider299" type="divider">
       <obj_property name="label">ext</obj_property>
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/ext_ram_data">
+   <wvobject type="array" fp_name="/tb/dut/ext_ram_data">
       <obj_property name="ElementShortName">ext_ram_data[31:0]</obj_property>
       <obj_property name="ObjectShortName">ext_ram_data[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/ext_ram_addr">
+   <wvobject type="array" fp_name="/tb/dut/ext_ram_addr">
       <obj_property name="ElementShortName">ext_ram_addr[19:0]</obj_property>
       <obj_property name="ObjectShortName">ext_ram_addr[19:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/ext_ram_be_n">
+   <wvobject type="array" fp_name="/tb/dut/ext_ram_be_n">
       <obj_property name="ElementShortName">ext_ram_be_n[3:0]</obj_property>
       <obj_property name="ObjectShortName">ext_ram_be_n[3:0]</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/ext_ram_ce_n">
+   <wvobject type="logic" fp_name="/tb/dut/ext_ram_ce_n">
       <obj_property name="ElementShortName">ext_ram_ce_n</obj_property>
       <obj_property name="ObjectShortName">ext_ram_ce_n</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/ext_ram_oe_n">
+   <wvobject type="logic" fp_name="/tb/dut/ext_ram_oe_n">
       <obj_property name="ElementShortName">ext_ram_oe_n</obj_property>
       <obj_property name="ObjectShortName">ext_ram_oe_n</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/ext_ram_we_n">
+   <wvobject type="logic" fp_name="/tb/dut/ext_ram_we_n">
       <obj_property name="ElementShortName">ext_ram_we_n</obj_property>
       <obj_property name="ObjectShortName">ext_ram_we_n</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/BASE_RAM_INIT_FILE">
-      <obj_property name="ElementShortName">BASE_RAM_INIT_FILE[503:0]</obj_property>
-      <obj_property name="ObjectShortName">BASE_RAM_INIT_FILE[503:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/EXT_RAM_INIT_FILE">
-      <obj_property name="ElementShortName">EXT_RAM_INIT_FILE[103:0]</obj_property>
-      <obj_property name="ObjectShortName">EXT_RAM_INIT_FILE[103:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/FLASH_INIT_FILE">
-      <obj_property name="ElementShortName">FLASH_INIT_FILE[119:0]</obj_property>
-      <obj_property name="ObjectShortName">FLASH_INIT_FILE[119:0]</obj_property>
    </wvobject>
 </wave_config>

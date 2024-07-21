@@ -24,7 +24,6 @@ module LoongCpu (
 );
 
   /* Interface */
-  IcacheInterface U_IC  (clk, rst); /*  icache */
   IFInterface     U_IF  (clk, rst); /*   if    */
   IDInterface     U_ID  (clk, rst); /*   id    */
   EXEInterface    U_EXE (clk, rst); /*   exe   */
@@ -61,7 +60,6 @@ module LoongCpu (
     .clk           (clk          ), 
     .rst           (rst          ),
     .ifetch_stop_i (ifetch_stop_i),
-    .U_IC          (U_IC         ),
     .U_IF          (U_IF         ),
     .U_ID          (U_ID         ),
     .U_EXE         (U_EXE        ),
@@ -69,15 +67,9 @@ module LoongCpu (
     .U_RF          (U_RF         )
   );
 
-
-  Icache Icache0 (
-    .U_IC  (U_IC ),
-    .U_RAM (U_RAM)
-  );
-
-  IF  IF0  (U_IF  , U_ID  , U_IC );
-  ID  ID0  (U_IF  , U_ID         );
-  EXE EXE0 (U_ID  , U_EXE , U_RAM);
+  IF  IF0  (U_IF  , U_ID  , U_RAM         );
+  ID  ID0  (U_IF  , U_ID                  );
+  EXE EXE0 (U_ID  , U_EXE , U_RAM         );
   WB  WB0  (U_EXE , U_WB  , U_RAM, U_DEBUG);
 
 endmodule

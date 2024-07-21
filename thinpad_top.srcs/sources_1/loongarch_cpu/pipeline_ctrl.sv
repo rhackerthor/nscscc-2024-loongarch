@@ -3,7 +3,6 @@ module PipeLineCtrl (
   input logic  clk,
   input logic  rst,
   input logic  ifetch_stop_i,
-  IcacheInterface U_IC,
   IFInterface  U_IF,
   IDInterface  U_ID,
   EXEInterface U_EXE,
@@ -16,33 +15,16 @@ module PipeLineCtrl (
   assign U_EXE.allowin = !U_EXE.valid || (U_EXE.ready_go && U_WB.allowin);
   assign U_WB.allowin  = !U_WB.valid  ||  U_WB.ready_go;
 
-  assign U_IF.valid_in  = `V_TRUE;// U_IC.valid  & U_IC.ready_go;
+  assign U_IF.valid_in  = `V_TRUE;
   assign U_ID.valid_in  = U_IF.valid  & U_IF.ready_go;
   assign U_EXE.valid_in = U_ID.valid  & U_ID.ready_go;
   assign U_WB.valid_in  = U_EXE.valid & U_EXE.ready_go;
 
-  logic if_ready_go;
   logic [2:0] id_ready_go;
-  logic exe_ready_go;
-  assign U_IF.ready_go  = if_ready_go;
+  assign U_IF.ready_go  = `V_TRUE;
   assign U_ID.ready_go  = &id_ready_go;
-  assign U_EXE.ready_go = exe_ready_go;
+  assign U_EXE.ready_go = `V_TRUE;
   assign U_WB.ready_go  = `V_TRUE;
-
-  always @(*) begin
-    if (rst) begin
-      if_ready_go = `V_TRUE;
-    end
-    else if (~U_IC.cache_valid) begin
-      if_ready_go = `V_FALSE;
-    end
-    else if (ifetch_stop_i) begin
-      if_ready_go = `V_FALSE;
-    end
-    else begin
-      if_ready_go = `V_TRUE;
-    end
-  end
 
   /* sel rf rdata1 */
   always @(*) begin
@@ -114,18 +96,6 @@ module PipeLineCtrl (
     end
     else begin
       U_ID.branch_cancle = `V_FALSE;
-    end
-  end
-
-  always @(*) begin
-    if (rst) begin
-      exe_ready_go = `V_TRUE;
-    end
-    else if (U_WB.valid && (|{U_EXE.load_flag, U_EXE.store_flag})) begin
-      exe_ready_go = `V_FALSE;
-    end
-    else begin
-      exe_ready_go = `V_TRUE;
     end
   end
 

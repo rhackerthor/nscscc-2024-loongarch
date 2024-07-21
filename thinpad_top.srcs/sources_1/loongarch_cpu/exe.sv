@@ -30,7 +30,10 @@ module EXE (
       U_EXE.alu_in2       <= U_ID.alu_in2;
       U_EXE.load_flag     <= U_ID.load_flag;
       U_EXE.store_flag    <= U_ID.store_flag;
-      U_EXE.unsigned_flag <= U_ID.unsigned_flag;
+      U_EXE.cnt           <= 1;
+    end
+    else begin
+      U_EXE.cnt <= {U_EXE.cnt[6:0], U_EXE.cnt[7]};
     end
   end
 
@@ -56,7 +59,7 @@ module EXE (
   assign U_EXE.ram_addr      = U_EXE.rf_rdata1 + U_EXE.imm;
   assign U_RAM.data_ram_addr = U_EXE.ram_addr;
   assign U_RAM.data_ram_be   = (|U_EXE.load_flag == `V_TRUE) ? `V_ONE : U_EXE.ram_mask;
-  assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag} & U_EXE.valid;
+  assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag} & (|U_EXE.cnt[1:0]);
   assign U_RAM.data_ram_oe   = |U_EXE.load_flag & U_EXE.valid;
   assign U_RAM.data_ram_we   = |U_EXE.store_flag & U_EXE.valid;
 

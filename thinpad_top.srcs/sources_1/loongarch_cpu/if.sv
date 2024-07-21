@@ -2,7 +2,7 @@
 module IF (
   IFInterface  U_IF,
   IDInterface  U_ID,
-  IcacheInterface U_IC
+  RamInterface U_RAM
 );
 
   logic [`W_SEL_NEXT_PC] sel_next_pc;
@@ -17,9 +17,9 @@ module IF (
     else if (U_IF.allowin == `V_TRUE) begin
       U_IF.valid <= U_IF.valid_in;
     end
-    else if (U_ID.branch_cancle) begin
+/*     else if (U_ID.branch_cancle) begin
       U_IF.valid <= `V_ZERO;
-    end
+    end */
   end
 
   /* 流水线寄存器 */
@@ -31,11 +31,10 @@ module IF (
       U_IF.pc <= next_pc;
     end
   end
-  assign U_IF.inst = U_IC.data[U_IF.pc[6:2]];
 
   /* 计算next pc */
   assign seq_pc      = U_IF.pc + 32'h0000_0004;
-  assign branch_flag = U_ID.branch_flag;// & U_ID.branch_cancle;
+  assign branch_flag = U_ID.branch_cancle;
   always_ff @(*) begin
     if (U_IF.rst == `V_TRUE) begin
       next_pc = `V_ZERO;
@@ -47,7 +46,8 @@ module IF (
   end  
 
   /* 输出inst ram地址 */
-  assign U_IC.addr = next_pc;
-  assign U_IC.ce   = ~U_IF.rst & U_IF.allowin;
+  assign U_RAM.inst_ram_addr = next_pc;
+  assign U_RAM.inst_ram_ce = ~U_IF.rst & U_IF.allowin;
+  assign U_IF.inst = U_RAM.inst_ram_rdata;
 
 endmodule
