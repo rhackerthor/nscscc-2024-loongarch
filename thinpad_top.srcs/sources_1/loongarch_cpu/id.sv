@@ -151,13 +151,13 @@ module ID (
                                       U_D._slli_w, U_D._srli_w, U_D._srai_w,
                                       U_D._slti, U_D._sltui, U_D._lu12i_w, U_D._pcaddu12i
                                     };
-  assign sel_alu_in2[`V_IS_FOUE] = |{U_D._bl, U_D._jirl};
+  assign sel_alu_in2[`V_IS_FOUR] = |{U_D._bl, U_D._jirl};
   always @(*) begin
     U_ID.alu_in1 = sel_alu_in1 ? U_ID.pc : U_ID.rf_rdata1;
     case (sel_alu_in2)
       `V__IS_RK  : begin U_ID.alu_in2 = U_ID.rf_rdata2; end
       `V__IS_IMM : begin U_ID.alu_in2 = U_ID.imm;       end
-      `V__IS_FOUE: begin U_ID.alu_in2 = 32'h0000_0004;  end
+      `V__IS_FOUR: begin U_ID.alu_in2 = 32'h0000_0004;  end
       default    : begin U_ID.alu_in2 = `V_ZERO;        end
     endcase
   end
