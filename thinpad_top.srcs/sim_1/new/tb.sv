@@ -103,7 +103,7 @@ clock osc(
 );
 
 /* get trace */
-integer trace_fd;
+/* integer trace_fd;
 initial begin
   trace_fd = $fopen("/home/rhacker/nscscc-2024-loongarch/simpleide/simplecpu/build/cpu-trace.txt", "r");
 end
@@ -141,7 +141,7 @@ always @(posedge dut.clk) begin
       end
     end
   end
-end
+end */
 
 // BaseRAM 仿真模型
 sram_model base1(/*autoinst*/

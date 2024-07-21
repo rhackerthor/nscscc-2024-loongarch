@@ -44,37 +44,35 @@
 `define V_AND   2
 `define V_OR    3
 `define V_XOR   4
-`define V_NOR   5
-`define V_MUL   6
-`define V_SLL   7
-`define V_SRL   8
-`define V_SRA   9
-`define V_SLT  10
-`define V_SLTU 11
-`define V_LUI  12
-`define V__ADD  13'B0_0000_0000_0001
-`define V__SUB  13'B0_0000_0000_0010
-`define V__AND  13'B0_0000_0000_0100
-`define V__OR   13'B0_0000_0000_1000
-`define V__XOR  13'B0_0000_0001_0000
-`define V__NOR  13'B0_0000_0010_0000
-`define V__MUL  13'B0_0000_0100_0000
-`define V__SLL  13'B0_0000_1000_0000
-`define V__SRL  13'B0_0001_0000_0000
-`define V__SRA  13'B0_0010_0000_0000
-`define V__SLT  13'B0_0100_0000_0000
-`define V__SLTU 13'B0_1000_0000_0000
-`define V__LUI  13'B1_0000_0000_0000
+`define V_MUL   5
+`define V_SLL   6
+`define V_SRL   7
+`define V_SRA   8
+`define V_SLT   9
+`define V_SLTU 10
+`define V_LUI  11
+`define V__ADD  (1 << `V_ADD)
+`define V__SUB  (1 << `V_SUB )
+`define V__AND  (1 << `V_AND )
+`define V__OR   (1 << `V_OR  )
+`define V__XOR  (1 << `V_XOR )
+`define V__MUL  (1 << `V_MUL )
+`define V__SLL  (1 << `V_SLL )
+`define V__SRL  (1 << `V_SRL )
+`define V__SRA  (1 << `V_SRA )
+`define V__SLT  (1 << `V_SLT )
+`define V__SLTU (1 << `V_SLTU)
+`define V__LUI  (1 << `V_LUI )
 `define W_SEL_ALU_IN2 2:0
 `define V_IS_RK   0
 `define V_IS_IMM  1
-`define V_IS_FORE 2
-`define V__IS_RK   3'B001
-`define V__IS_IMM  3'B010
-`define V__IS_FORE 3'B100
+`define V_IS_FOUR 2
+`define V__IS_RK   3'b001
+`define V__IS_IMM  3'b010
+`define V__IS_FOUR 3'b100
 /* const VALUE */
-`define V_TRUE 1'B1  // true
-`define V_FALSE 1'B0 // false
+`define V_TRUE 1'b1  // true
+`define V_FALSE 1'b0 // false
 `define V_ZERO 0     // 全0
 `define V_ONE -1     // 全1
 /* immedIATE */
@@ -85,23 +83,23 @@
 `define V_SI16 3
 `define V_SI20 4
 `define V_SI26 5
-`define V__UI5  6'B000_001
-`define V__UI12 6'B000_010
-`define V__SI12 6'B000_100
-`define V__SI16 6'B001_000
-`define V__SI20 6'B010_000
-`define V__SI26 6'B100_000
+`define V__UI5  6'b000_001
+`define V__UI12 6'b000_010
+`define V__SI12 6'b000_100
+`define V__SI16 6'b001_000
+`define V__SI20 6'b010_000
+`define V__SI26 6'b100_000
 /* store AND LOAD */
 `define W_STORE 1:0
 `define W_LOAD 1:0
 `define V_ST_B 0
 `define V_ST_W 1
-`define V__ST_B 2'B01
-`define V__ST_W 2'B10
+`define V__ST_B 2'b01
+`define V__ST_W 2'b10
 `define V_LD_B 0
 `define V_LD_W 1
-`define V__LD_B 2'B01
-`define V__LD_W 2'B10
+`define V__LD_B 2'b01
+`define V__LD_W 2'b10
 /* icache */
 `define W_ICACHE 31:0
 `define V_ICACHE 32

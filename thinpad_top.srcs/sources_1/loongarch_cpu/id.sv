@@ -108,7 +108,7 @@ module ID (
         U_ID.jirl_flag   = `V_FALSE;
         U_ID.comp_flag   = `V_TRUE;
       end
-      else if (U_D._bge && (U_ID.rf_rdata1 >= U_ID.rf_rdata2)) begin
+      else if (U_D._bge && ($signed(U_ID.rf_rdata1) >= $signed(U_ID.rf_rdata2))) begin
         U_ID.branch_flag = `V_TRUE;
         U_ID.branch_pc   = U_ID.pc + {s_imm_16[29:0], 2'b0};
         U_ID.jirl_flag   = `V_FALSE;
@@ -129,7 +129,6 @@ module ID (
   assign U_ID.alu_op[`V_AND ] = |{U_D._and, U_D._andi};
   assign U_ID.alu_op[`V_OR  ] = |{U_D._or, U_D._ori};
   assign U_ID.alu_op[`V_XOR ] = |{U_D._xor, U_D._xori};
-  assign U_ID.alu_op[`V_NOR ] = U_D._nor;
   assign U_ID.alu_op[`V_MUL ] = U_D._mul_w;
   assign U_ID.alu_op[`V_SLL ] = |{U_D._sll_w, U_D._slli_w};
   assign U_ID.alu_op[`V_SRL ] = |{U_D._srl_w, U_D._srli_w};
@@ -152,13 +151,14 @@ module ID (
                                       U_D._slli_w, U_D._srli_w, U_D._srai_w,
                                       U_D._slti, U_D._sltui, U_D._lu12i_w, U_D._pcaddu12i
                                     };
-  assign sel_alu_in2[`V_IS_FORE] = |{U_D._bl, U_D._jirl};
+  assign sel_alu_in2[`V_IS_FOUE] = |{U_D._bl, U_D._jirl};
   always @(*) begin
     U_ID.alu_in1 = sel_alu_in1 ? U_ID.pc : U_ID.rf_rdata1;
     case (sel_alu_in2)
       `V__IS_RK  : begin U_ID.alu_in2 = U_ID.rf_rdata2; end
       `V__IS_IMM : begin U_ID.alu_in2 = U_ID.imm;       end
-      `V__IS_FORE: begin U_ID.alu_in2 = 32'h0000_0004;  end
+      `V__IS_FOUE: begin U_ID.alu_in2 = 32'h0000_0004;  end
+      default    : begin U_ID.alu_in2 = `V_ZERO;        end
     endcase
   end
 
@@ -167,8 +167,5 @@ module ID (
   assign U_ID.store_flag[`V_ST_W] = U_D._st_w;
   assign U_ID.load_flag[`V_LD_B]  = U_D._ld_b;
   assign U_ID.load_flag[`V_LD_W]  = U_D._ld_w;
-
-  /* unsigned */
-  assign U_ID.unsigned_flag = |{U_D._sltui, U_D._sltu};
 
 endmodule

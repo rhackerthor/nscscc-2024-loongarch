@@ -59,26 +59,47 @@ module EXE (
   assign U_EXE.ram_addr      = U_EXE.rf_rdata1 + U_EXE.imm;
   assign U_RAM.data_ram_addr = U_EXE.ram_addr;
   assign U_RAM.data_ram_be   = (|U_EXE.load_flag == `V_TRUE) ? `V_ONE : U_EXE.ram_mask;
-  assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag} & (|U_EXE.cnt[1:0]);
+  assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag} & (U_EXE.cnt[0]);
   assign U_RAM.data_ram_oe   = |U_EXE.load_flag & U_EXE.valid;
   assign U_RAM.data_ram_we   = |U_EXE.store_flag & U_EXE.valid;
 
   /* 计算 */
+  logic [`W_DATA] add_result;
+  logic [`W_DATA] sub_result;
+  logic [`W_DATA] and_result;
+  logic [`W_DATA] or_result;
+  logic [`W_DATA] xor_result;
+  logic [`W_DATA] mul_result;
+  logic [`W_DATA] sll_result;
+  logic [`W_DATA] srl_result;
+  logic [`W_DATA] sra_result;
+  logic [`W_DATA] slui_result;
+  logic [`W_DATA] lui_result;
+  assign add_result  = U_EXE.alu_in1 + U_EXE.alu_in2;                              
+  assign sub_result  = U_EXE.alu_in1 + (~U_EXE.alu_in2) + 1;                       
+  assign and_result  = U_EXE.alu_in1 & U_EXE.alu_in2;                              
+  assign or_result   = U_EXE.alu_in1 | U_EXE.alu_in2;                              
+  assign xor_result  = U_EXE.alu_in1 ^ U_EXE.alu_in2;                              
+  assign mul_result  = U_EXE.alu_in1 * U_EXE.alu_in2;                              
+  assign sll_result  = U_EXE.alu_in1 << U_EXE.alu_in2[4:0];                        
+  assign srl_result  = U_EXE.alu_in1 >> U_EXE.alu_in2[4:0];                        
+  assign sra_result  = $signed(U_EXE.alu_in1) >>> U_EXE.alu_in2[4:0];              
+  assign slui_result = $unsigned(U_EXE.alu_in1) < $unsigned(U_EXE.alu_in2) ? 1 : 0;
+  assign lui_result  = U_EXE.alu_in2;                                              
   always @(*) begin
     case (U_EXE.alu_op)
-      `V__ADD : begin U_EXE.alu_result =  U_EXE.alu_in1 + U_EXE.alu_in2;                 end 
-      `V__SUB : begin U_EXE.alu_result =  U_EXE.alu_in1 + (~U_EXE.alu_in2) + 1;          end
-      `V__AND : begin U_EXE.alu_result =  U_EXE.alu_in1 & U_EXE.alu_in2;                 end
-      `V__OR  : begin U_EXE.alu_result =  U_EXE.alu_in1 | U_EXE.alu_in2;                 end
-      `V__NOR : begin U_EXE.alu_result =  ~(U_EXE.alu_in1 | U_EXE.alu_in2);              end
-      `V__XOR : begin U_EXE.alu_result =  U_EXE.alu_in1 ^ U_EXE.alu_in2;                 end
-      `V__MUL : begin U_EXE.alu_result =  U_EXE.alu_in1 * U_EXE.alu_in2;                 end
-      `V__SLL : begin U_EXE.alu_result =  U_EXE.alu_in1 << U_EXE.alu_in2[4:0];           end
-      `V__SRL : begin U_EXE.alu_result =  U_EXE.alu_in1 >> U_EXE.alu_in2[4:0];           end
-      `V__SRA : begin U_EXE.alu_result =  $signed(U_EXE.alu_in1) <<< U_EXE.alu_in2[4:0]; end
-      `V__SLTU: begin U_EXE.alu_result =  U_EXE.alu_in1 < U_EXE.alu_in2;                 end
-      `V__LUI : begin U_EXE.alu_result =  U_EXE.alu_in2;                                 end
-      default : begin U_EXE.alu_result =  `V_ZERO;                                       end
+      `V__ADD : begin U_EXE.alu_result = add_result;  end 
+      `V__SUB : begin U_EXE.alu_result = sub_result;  end
+      `V__AND : begin U_EXE.alu_result = and_result;  end
+      `V__OR  : begin U_EXE.alu_result = or_result;   end
+      `V__XOR : begin U_EXE.alu_result = xor_result;  end
+      `V__MUL : begin U_EXE.alu_result = mul_result;  end
+      `V__SLL : begin U_EXE.alu_result = sll_result;  end
+      `V__SRL : begin U_EXE.alu_result = srl_result;  end
+      `V__SRA : begin U_EXE.alu_result = sra_result;  end
+      `V__SLTU: begin U_EXE.alu_result = slui_result; end
+      `V__LUI : begin U_EXE.alu_result = lui_result;  end
+      default : begin U_EXE.alu_result =  `V_ZERO;    end
     endcase
   end
   /* rf_wdata */

@@ -26,15 +26,15 @@ loop1:
     ld.b        $a0,$s1,0x0
     bne         $a0,$zero,loop1
 
-# READSERIAL:
-    # # lui       $  s0,-0x40300
-# .TESTR:
-    # ld.b        $t0,$s0,0x3fc
-    # andi        $t0,$t0,0x002
-    # beq         $t0,$zero,.TESTR
-    # ld.b        $a0,$s0,0x3F8
-    # addi.w      $t0,$zero,0x54  # char 'T'
-    # bne         $a0,$t0,READSERIAL
+READSERIAL:
+    # lui       $  s0,-0x40300
+.TESTR:
+    ld.b        $t0,$s0,0x3fc
+    andi        $t0,$t0,0x002
+    beq         $t0,$zero,.TESTR
+    ld.b        $a0,$s0,0x3F8
+    addi.w      $t0,$zero,0x54  # char 'T'
+    bne         $a0,$t0,READSERIAL
 FEEDBACK:
     lu12i.w     $s0,-0x40300    # s0 = 0xbfd00000
     la.local    $s1,feed
