@@ -17,20 +17,35 @@ module EXE (
 
   /* 流水线寄存器 */
   always @(posedge U_EXE.clk) begin
-    if (U_EXE.valid_in == `V_TRUE && U_EXE.allowin == `V_TRUE) begin
-      U_EXE.pc            <= U_ID.pc;
-      U_EXE.inst          <= U_ID.inst;
-      U_EXE.imm           <= U_ID.imm;
-      U_EXE.rf_rdata1     <= U_ID.rf_rdata1;
-      U_EXE.rf_rdata2     <= U_ID.rf_rdata2;
-      U_EXE.rf_waddr      <= U_ID.rf_waddr;
-      U_EXE.rf_we         <= U_ID.rf_we;
-      U_EXE.alu_op        <= U_ID.alu_op;
-      U_EXE.alu_in1       <= U_ID.alu_in1;
-      U_EXE.alu_in2       <= U_ID.alu_in2;
-      U_EXE.load_flag     <= U_ID.load_flag;
-      U_EXE.store_flag    <= U_ID.store_flag;
-      U_EXE.cnt           <= 1;
+    if (U_EXE.rst) begin
+      U_EXE.pc         <= `V_ZERO;
+      U_EXE.inst       <= `V_ZERO;
+      U_EXE.imm        <= `V_ZERO;
+      U_EXE.rf_rdata1  <= `V_ZERO;
+      U_EXE.rf_rdata2  <= `V_ZERO;
+      U_EXE.rf_waddr   <= `V_ZERO;
+      U_EXE.rf_we      <= `V_ZERO;
+      U_EXE.alu_op     <= `V_ZERO;
+      U_EXE.alu_in1    <= `V_ZERO;
+      U_EXE.alu_in2    <= `V_ZERO;
+      U_EXE.load_flag  <= `V_ZERO;
+      U_EXE.store_flag <= `V_ZERO;
+      U_EXE.cnt        <= `V_ZERO;
+    end
+    else if (U_EXE.valid_in == `V_TRUE && U_EXE.allowin == `V_TRUE) begin
+      U_EXE.pc         <= U_ID.pc;
+      U_EXE.inst       <= U_ID.inst;
+      U_EXE.imm        <= U_ID.imm;
+      U_EXE.rf_rdata1  <= U_ID.rf_rdata1;
+      U_EXE.rf_rdata2  <= U_ID.rf_rdata2;
+      U_EXE.rf_waddr   <= U_ID.rf_waddr;
+      U_EXE.rf_we      <= U_ID.rf_we;
+      U_EXE.alu_op     <= U_ID.alu_op;
+      U_EXE.alu_in1    <= U_ID.alu_in1;
+      U_EXE.alu_in2    <= U_ID.alu_in2;
+      U_EXE.load_flag  <= U_ID.load_flag;
+      U_EXE.store_flag <= U_ID.store_flag;
+      U_EXE.cnt        <= 1;
     end
     else begin
       U_EXE.cnt <= {U_EXE.cnt[6:0], U_EXE.cnt[7]};
@@ -59,9 +74,9 @@ module EXE (
   assign U_EXE.ram_addr      = U_EXE.rf_rdata1 + U_EXE.imm;
   assign U_RAM.data_ram_addr = U_EXE.ram_addr;
   assign U_RAM.data_ram_be   = (|U_EXE.load_flag == `V_TRUE) ? `V_ONE : U_EXE.ram_mask;
-  assign U_RAM.data_ram_ce   = |{U_EXE.load_flag, U_EXE.store_flag} & (U_EXE.cnt[0]);
-  assign U_RAM.data_ram_oe   = |U_EXE.load_flag & U_EXE.valid;
-  assign U_RAM.data_ram_we   = |U_EXE.store_flag & U_EXE.valid;
+  assign U_RAM.data_ram_ce   = (|{U_EXE.load_flag, U_EXE.store_flag}) && (U_EXE.cnt[0]);
+  assign U_RAM.data_ram_oe   = (|U_EXE.load_flag) && (U_EXE.cnt[0]);
+  assign U_RAM.data_ram_we   = (|U_EXE.store_flag) && (U_EXE.cnt[0]);
 
   /* 计算 */
   logic [`W_DATA] add_result;
