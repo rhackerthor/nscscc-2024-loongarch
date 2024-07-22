@@ -85,7 +85,7 @@ module ID (
     U_D._st_b, U_D._st_w, U_D._beq, U_D._bne,
     U_D._bge
   };
-  assign U_ID.rf_waddr  = U_ID.inst[`W_RF_RD];
+  assign U_ID.rf_waddr  = U_D._bl ? 5'b00001 : U_ID.inst[`W_RF_RD];
   assign U_ID.rf_raddr1 = U_ID.inst[`W_RF_RJ];
   assign U_ID.rf_raddr2 = rf_oe2_is_rd ? U_ID.inst[`W_RF_RD] : U_ID.inst[`W_RF_RK];
   assign U_ID.rf_we  = |{
@@ -118,9 +118,9 @@ module ID (
       U_ID.comp_flag   = `V_FALSE;
     end
     else begin
-      if (U_D._b && U_D._bl) begin
+      if (U_D._b || U_D._bl) begin
         U_ID.branch_flag = `V_TRUE;
-        U_ID.branch_pc   = U_ID.pc + {s_imm_16[29:0], 2'b0};
+        U_ID.branch_pc   = U_ID.pc + {s_imm_26[29:0], 2'b0};
         U_ID.jirl_flag   = `V_FALSE;
         U_ID.comp_flag   = `V_FALSE;
       end
