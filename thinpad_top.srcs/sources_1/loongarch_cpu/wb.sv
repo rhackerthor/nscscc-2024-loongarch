@@ -8,23 +8,31 @@ module WB (
 
   /* pipeline ctrl */
   always_ff @(posedge U_WB.clk) begin
-    if (U_WB.rst == `V_TRUE) begin
+    if (U_WB.rst) begin
       U_WB.valid <= `V_FALSE;
     end
-    else if (U_WB.allowin == `V_TRUE) begin
+    else if (U_WB.allowin) begin
       U_WB.valid <= U_WB.valid_in;
     end
   end
 
   /* 流水线寄存器 */
   always @(posedge U_WB.clk) begin
-    if (U_WB.valid_in == `V_TRUE && U_WB.allowin == `V_TRUE) begin
+    if (U_WB.rst) begin
+      U_WB.pc         <= `V_ZERO;
+      U_WB.inst       <= `V_ZERO;
+      U_WB.rf_waddr   <= `V_ZERO;
+      U_WB.rf_we      <= `V_ZERO;
+      U_WB.alu_result <= `V_ZERO;
+      U_WB.ram_mask   <= `V_ZERO;
+      U_WB.load_flag  <= `V_ZERO;
+    end
+    else if (U_WB.valid_in && U_WB.allowin) begin
       U_WB.pc         <= U_EXE.pc;
       U_WB.inst       <= U_EXE.inst;
       U_WB.rf_waddr   <= U_EXE.rf_waddr;
       U_WB.rf_we      <= U_EXE.rf_we;
       U_WB.alu_result <= U_EXE.alu_result;
-      U_WB.ram_addr   <= U_EXE.ram_addr;
       U_WB.ram_mask   <= U_EXE.ram_mask;
       U_WB.load_flag  <= U_EXE.load_flag;
     end
@@ -44,7 +52,7 @@ module WB (
 
   /* write back */
   always @(*) begin
-    if (|U_WB.load_flag == `V_TRUE) begin
+    if (|U_WB.load_flag) begin
       U_WB.rf_wdata <= U_WB.ram_data;
     end
     else begin
@@ -54,7 +62,7 @@ module WB (
 
   always @(posedge U_WB.clk) begin
     U_DEBUG.valid <= U_WB.valid;
-    if (U_WB.valid == `V_TRUE) begin
+    if (U_WB.valid) begin
       U_DEBUG.rf_we    <= U_WB.rf_we;
       U_DEBUG.pc       <= U_WB.pc;
       U_DEBUG.rf_waddr <= U_WB.rf_waddr;
