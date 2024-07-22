@@ -19,7 +19,11 @@ module ID (
 
   /* 流水线寄存器 */
   always_ff @(posedge U_ID.clk) begin
-    if (U_ID.valid_in && U_ID.allowin) begin
+    if (U_ID.rst) begin
+      U_ID.pc   <= `V_ZERO;
+      U_ID.inst <= `V_ZERO;
+    end
+    else if (U_ID.valid_in && U_ID.allowin) begin
       U_ID.pc   <= U_IF.pc;
       U_ID.inst <= U_IF.inst;
     end
