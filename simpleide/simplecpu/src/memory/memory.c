@@ -13,11 +13,10 @@ static word_t guest_to_host(word_t vaddr) {
 
 word_t pmem_read(word_t raddr, state_t rmask) {
   /* 串口 */
-  if (raddr == 0xbfd003fc) return 0x1;
+  if (raddr == 0xbfd003fc) return 0x3;
   if (raddr == 0xbfd003f8) {
     Waring("uart rdata:");
-    char c;
-    scanf("%c", &c);
+    char c = getchar();
     return c;
   }
   /* 正常访存 */

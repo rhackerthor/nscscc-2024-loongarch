@@ -95,12 +95,16 @@ module EXE (
   logic [`W_DATA] sra_result;
   logic [`W_DATA] slui_result;
   logic [`W_DATA] lui_result;
+  /* mul result */
+  logic [63:0] signed_mul_result;
+  assign signed_mul_result = $signed(U_EXE.alu_in1) * $signed(U_EXE.alu_in2);
+  /* alu result */
   assign add_result  = U_EXE.alu_in1 + U_EXE.alu_in2;                              
   assign sub_result  = U_EXE.alu_in1 + (~U_EXE.alu_in2) + 1;                       
   assign and_result  = U_EXE.alu_in1 & U_EXE.alu_in2;                              
   assign or_result   = U_EXE.alu_in1 | U_EXE.alu_in2;                              
   assign xor_result  = U_EXE.alu_in1 ^ U_EXE.alu_in2;                              
-  assign mul_result  = U_EXE.alu_in1 * U_EXE.alu_in2;                              
+  assign mul_result  = signed_mul_result[31:0];
   assign sll_result  = U_EXE.alu_in1 << U_EXE.alu_in2[4:0];                        
   assign srl_result  = U_EXE.alu_in1 >> U_EXE.alu_in2[4:0];                        
   assign sra_result  = $signed(U_EXE.alu_in1) >>> U_EXE.alu_in2[4:0];              
