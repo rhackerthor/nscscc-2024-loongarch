@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="4639851fs"></ZoomStartTime>
-      <ZoomEndTime time="4884752fs"></ZoomEndTime>
-      <Cursor1Time time="4774615fs"></Cursor1Time>
+      <ZoomStartTime time="43547290fs"></ZoomStartTime>
+      <ZoomEndTime time="43792991fs"></ZoomEndTime>
+      <Cursor1Time time="43777290fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="207"></NameColumnWidth>
+      <NameColumnWidth column_width="199"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="117" />
+   <WVObjectSize size="110" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -48,30 +48,6 @@
    <wvobject fp_name="divider156" type="divider">
       <obj_property name="label">icache</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/pc">
-      <obj_property name="ElementShortName">pc[31:0][31:0]</obj_property>
-      <obj_property name="ObjectShortName">pc[31:0][31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/data">
-      <obj_property name="ElementShortName">data[31:0][31:0]</obj_property>
-      <obj_property name="ObjectShortName">data[31:0][31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/Icache0/pre_pc">
-      <obj_property name="ElementShortName">pre_pc[31:0]</obj_property>
-      <obj_property name="ObjectShortName">pre_pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/addr">
-      <obj_property name="ElementShortName">addr[31:0]</obj_property>
-      <obj_property name="ObjectShortName">addr[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/ce">
-      <obj_property name="ElementShortName">ce[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ce[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/cache_valid">
-      <obj_property name="ElementShortName">cache_valid</obj_property>
-      <obj_property name="ObjectShortName">cache_valid</obj_property>
    </wvobject>
    <wvobject fp_name="divider39" type="divider">
       <obj_property name="label">IF</obj_property>
@@ -206,8 +182,8 @@
       <obj_property name="ObjectShortName">comp_flag</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_op">
-      <obj_property name="ElementShortName">alu_op[12:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_op[12:0]</obj_property>
+      <obj_property name="ElementShortName">alu_op[10:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_op[10:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/alu_in1">
       <obj_property name="ElementShortName">alu_in1[31:0]</obj_property>
@@ -224,10 +200,6 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_ID/load_flag">
       <obj_property name="ElementShortName">load_flag[1:0]</obj_property>
       <obj_property name="ObjectShortName">load_flag[1:0]</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/unsigned_flag">
-      <obj_property name="ElementShortName">unsigned_flag</obj_property>
-      <obj_property name="ObjectShortName">unsigned_flag</obj_property>
    </wvobject>
    <wvobject fp_name="divider103" type="divider">
       <obj_property name="label">EXE</obj_property>
@@ -296,8 +268,8 @@
       <obj_property name="ObjectShortName">rf_we</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/alu_op">
-      <obj_property name="ElementShortName">alu_op[12:0]</obj_property>
-      <obj_property name="ObjectShortName">alu_op[12:0]</obj_property>
+      <obj_property name="ElementShortName">alu_op[10:0]</obj_property>
+      <obj_property name="ObjectShortName">alu_op[10:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/alu_in1">
       <obj_property name="ElementShortName">alu_in1[31:0]</obj_property>
