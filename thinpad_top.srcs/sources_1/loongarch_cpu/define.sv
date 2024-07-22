@@ -26,16 +26,7 @@
 `define W_RF_RJ 9:5
 `define W_RF_RK 14:10
 /* if */
-`define R_PC 32'h7fff_fffc // pc复位值
-`define W_SEL_NEXT_PC 3:0  // next pc选择信号宽度
-`define V_SEQ  0
-`define V_B_BL 1
-`define V_JUMP 2
-`define V_COMP 3
-`define V__SEQ  4'b0001
-`define V__B_BL 4'b0010
-`define V__JUMP 4'b0100
-`define V__COMP 4'b1000
+`define V_RST_PC 32'h7fff_fffc // pc复位值
 /* exe */
 `define W_ALU_OP 10:0
 `define V_ADD   0
@@ -60,13 +51,18 @@
 `define V__SRA  (1 << `V_SRA )
 `define V__SLTU (1 << `V_SLTU)
 `define V__LUI  (1 << `V_LUI )
+/* mul */
+`define W_MUL_RESULT 63:0
+`define W_MUL_LB 31:0
+`define W_MUL_HB 63:32
+/* sel alu in2 */
 `define W_SEL_ALU_IN2 2:0
 `define V_IS_RK   0
 `define V_IS_IMM  1
 `define V_IS_FOUR 2
-`define V__IS_RK   3'b001
-`define V__IS_IMM  3'b010
-`define V__IS_FOUR 3'b100
+`define V__IS_RK   (1 << `V_IS_RK  ) 
+`define V__IS_IMM  (1 << `V_IS_IMM )
+`define V__IS_FOUR (1 << `V_IS_FOUR)
 /* const VALUE */
 `define V_TRUE 1'b1  // true
 `define V_FALSE 1'b0 // false
@@ -80,12 +76,12 @@
 `define V_SI16 3
 `define V_SI20 4
 `define V_SI26 5
-`define V__UI5  6'b000_001
-`define V__UI12 6'b000_010
-`define V__SI12 6'b000_100
-`define V__SI16 6'b001_000
-`define V__SI20 6'b010_000
-`define V__SI26 6'b100_000
+`define V__UI5  (1 << `V_UI5 )
+`define V__UI12 (1 << `V_UI12)
+`define V__SI12 (1 << `V_SI12)
+`define V__SI16 (1 << `V_SI16)
+`define V__SI20 (1 << `V_SI20)
+`define V__SI26 (1 << `V_SI26)
 /* store AND LOAD */
 `define W_STORE 1:0
 `define W_LOAD 1:0

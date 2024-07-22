@@ -5,9 +5,8 @@ module IF (
   RamInterface U_RAM
 );
 
-  logic [`W_SEL_NEXT_PC] sel_next_pc;
-  logic [`W_DATA       ] next_pc;
-  logic [`W_DATA       ] seq_pc;
+  logic [`W_DATA] next_pc;
+  logic [`W_DATA] seq_pc;
 
   /* pipeline ctrl */
   always @(posedge U_IF.clk) begin
@@ -25,7 +24,7 @@ module IF (
   /* 流水线寄存器 */
   always @(posedge U_IF.clk) begin
     if (U_IF.rst == `V_TRUE) begin
-      U_IF.pc <= `R_PC;
+      U_IF.pc <= `V_RST_PC;
     end
     else if (U_IF.valid_in && U_IF.allowin) begin
       U_IF.pc <= next_pc;
