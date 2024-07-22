@@ -27,7 +27,21 @@ module PipeLineCtrl (
   assign U_EXE.ready_go = `V_TRUE;
   assign U_WB.ready_go  = `V_TRUE;
 
-  /* sel rf rdata1 */
+  /* if ready go */
+  always @(*) begin
+    if (rst) begin
+      if_ready_go = `V_TRUE;
+    end
+    /* 当访问base时，暂停if */
+    else if (U_EXE.cnt[0] && ifetch_stop_i) begin
+      if_ready_go = `V_FALSE;
+    end
+    else begin
+      if_ready_go = `V_TRUE;
+    end
+  end
+
+  /* select rf rdata1 */
   always @(*) begin
     if (rst) begin
       id_ready_go[0] = `V_TRUE;
@@ -53,7 +67,7 @@ module PipeLineCtrl (
     end
   end
 
-  /* sel rf rdata2 */
+  /* select rf rdata2 */
   always @(*) begin
     if (rst) begin
       id_ready_go[1] = `V_TRUE;
@@ -76,18 +90,6 @@ module PipeLineCtrl (
     else begin
       id_ready_go[1] = `V_TRUE;
       U_ID.rf_rdata2 = U_RF.rf_rdata2;
-    end
-  end
-
-  always @(*) begin
-    if (rst) begin
-      if_ready_go = `V_TRUE;
-    end
-    else if (U_EXE.cnt[0] && ifetch_stop_i) begin
-      if_ready_go = `V_FALSE;
-    end
-    else begin
-      if_ready_go = `V_TRUE;
     end
   end
 
