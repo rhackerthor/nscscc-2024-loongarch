@@ -23,7 +23,7 @@ module IF (
   end
 
   /* 流水线寄存器 */
-  always_ff @(posedge U_IF.clk) begin
+  always @(posedge U_IF.clk) begin
     if (U_IF.rst == `V_TRUE) begin
       U_IF.pc <= `R_PC;
     end
@@ -35,7 +35,7 @@ module IF (
   /* 计算next pc */
   assign seq_pc      = U_IF.pc + 32'h0000_0004;
   assign branch_flag = U_ID.branch_cancle;
-  always_ff @(*) begin
+  always @(*) begin
     if (U_IF.rst == `V_TRUE) begin
       next_pc = `V_ZERO;
     end

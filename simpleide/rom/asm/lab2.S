@@ -95,15 +95,15 @@ RANDOMTEST:
     # ori         s1,s1,0x4
 # slti_next:
 
-# sltui:
-    # andi        t0,s2,0x8
-    # beq         t0,zero,sltui_next
-    # TEST_SLTUI(0xc254e3d8, 0x00000469, 0x0)
-    # TEST_SLTUI(0x719d44a8, 0x00000000, 0x0)
-    # TEST_SLTUI(0x00000000, 0x00000625, 0x1)
-    # TEST_SLTUI(0x00000000, 0x00000000, 0x0)
-    # ori         s1,s1,8
-# sltui_next:
+sltui:
+    andi        t0,s2,0x8
+    beq         t0,zero,sltui_next
+    TEST_SLTUI(0xc254e3d8, 0x00000469, 0x0)
+    TEST_SLTUI(0x719d44a8, 0x00000000, 0x0)
+    TEST_SLTUI(0x00000000, 0x00000625, 0x1)
+    TEST_SLTUI(0x00000000, 0x00000000, 0x0)
+    ori         s1,s1,8
+sltui_next:
 
 # sll_w:
     # andi        t0,s2,0x10
@@ -135,15 +135,15 @@ RANDOMTEST:
     # ori         s1,s1,0x40
 # sra_w_next:
 
-# srai_w:
-    # andi        t0,s2,0x80
-    # beq         t0,zero,srai_w_next
-    # TEST_SRAI_W(0x7e0083f0, 0x00000009, 0x003f0041)
-    # TEST_SRAI_W(0x76668ec8, 0x00000000, 0x76668ec8)
-    # TEST_SRAI_W(0x00000000, 0x0000001f, 0x00000000)
-    # TEST_SRAI_W(0x00000000, 0x00000000, 0x00000000)
-    # ori         s1,s1,0x80
-# srai_w_next:
+srai_w:
+    andi        t0,s2,0x80
+    beq         t0,zero,srai_w_next
+    TEST_SRAI_W(0x7e0083f0, 0x00000009, 0x003f0041)
+    TEST_SRAI_W(0x76668ec8, 0x00000000, 0x76668ec8)
+    TEST_SRAI_W(0x00000000, 0x0000001f, 0x00000000)
+    TEST_SRAI_W(0x00000000, 0x00000000, 0x00000000)
+    ori         s1,s1,0x80
+srai_w_next:
 
 # blt:
     # andi        t0,s2,0x100
@@ -159,10 +159,9 @@ bge:
     andi        t0,s2,0x200
     beq         t0,zero,bge_next
     TEST_BGE(0x92592dfe, 0x7a3a35db, 0xa9323570, 0xad8a1211, 0x00000000, 0x00000000)
-    ori         s1,s1,0x100
     TEST_BGE(0x7f0abb70, 0xf99858d2, 0xe4f97794, 0xefe63e5d, 0xe4f97794, 0xefe63e5d)
-    # TEST_BGE(0x576abeb2, 0x98405bbc, 0xd231a69c, 0x5d97e746, 0xd231a69c, 0x5d97e746)
-    # TEST_BGE(0xcf435850, 0x260b67a7, 0x8139b160, 0xa56a6657, 0x00000000, 0x00000000)
+    TEST_BGE(0x576abeb2, 0x98405bbc, 0xd231a69c, 0x5d97e746, 0xd231a69c, 0x5d97e746)
+    TEST_BGE(0xcf435850, 0x260b67a7, 0x8139b160, 0xa56a6657, 0x00000000, 0x00000000)
     ori         s1,s1,0x200
 bge_next:
 
@@ -190,21 +189,19 @@ bge_next:
     or          t0,t0,s1
     xor         t0,t0,s3
     st.w        t0,s0,0x0
-    st.w        s1,s0,0x4
-    st.w        s2,s0,0x8
     bne         s1,s2,end
-# FEEDBACK:
-    # lu12i.w     s0,-0x40300    # s0 = 0xbfd00000
-    # la.local    s1,feed
-    # ld.b        a0,s1,0x0
-# loop2:
-    # addi.w      s1,s1,0x1
-# .TEST:
-    # ld.b        t0,s0,0x3fc
-    # andi        t0,t0,0x001
-    # beq         t0,zero,.TEST
-    # st.b        a0,s0,0x3F8
-    # ld.b        a0,s1,0x0
-    # bne         a0,zero,loop2
+FEEDBACK:
+    lu12i.w     s0,-0x40300    # s0 = 0xbfd00000
+    la.local    s1,feed
+    ld.b        a0,s1,0x0
+loop2:
+    addi.w      s1,s1,0x1
+.TEST:
+    ld.b        t0,s0,0x3fc
+    andi        t0,t0,0x001
+    beq         t0,zero,.TEST
+    st.b        a0,s0,0x3F8
+    ld.b        a0,s1,0x0
+    bne         a0,zero,loop2
 end:
     beq         zero,zero,end
