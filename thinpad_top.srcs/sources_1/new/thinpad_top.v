@@ -91,6 +91,11 @@ module thinpad_top(
   wire        cpu_ext_we;
   wire        iftech_stop;
 
+  wire is_base_ram;
+  wire is_ext_ram;
+  wire is_uart_stat;
+  wire is_uart_data;
+
   wire        debug_wb_valid;
   wire        debug_wb_rf_we;
   wire [31:0] debug_wb_pc;
@@ -124,13 +129,16 @@ module thinpad_top(
     .ext_ram_we_n_o   (ext_ram_we_n  ),
     .rxd_i            (rxd           ),
     .txd_o            (txd           ),
-    .ifetch_stop_o    (iftech_stop   )
+    .is_base_ram_i    (is_base_ram   ),
+    .is_ext_ram_i     (is_ext_ram    ),
+    .is_uart_stat_i   (is_uart_stat  ),
+    .is_uart_data_i   (is_uart_data  )
+
   );
 
   LoongCpu LoongCpu0 (
     .clk                 (clk              ),
     .rst                 (reset_of_clk     ),
-    .ifetch_stop_i       (iftech_stop      ),
     .inst_ram_rdata_i    (cpu_base_rdata   ),
     .inst_ram_addr_o     (cpu_base_addr    ),
     .inst_ram_ce_o       (cpu_base_ce      ),
@@ -141,6 +149,10 @@ module thinpad_top(
     .data_ram_ce_o       (cpu_ext_ce       ),
     .data_ram_oe_o       (cpu_ext_oe       ),
     .data_ram_we_o       (cpu_ext_we       ),
+    .is_base_ram_o       (is_base_ram      ),
+    .is_ext_ram_o        (is_ext_ram       ),
+    .is_uart_stat_o      (is_uart_stat     ),
+    .is_uart_data_o      (is_uart_data     ),
     .debug_wb_valid_o    (debug_wb_valid   ),
     .debug_wb_rf_we_o    (debug_wb_rf_we   ),
     .debug_wb_pc_o       (debug_wb_pc      ),

@@ -2,12 +2,12 @@
 module PipeLineCtrl (
   input logic  clk,
   input logic  rst,
-  input logic  ifetch_stop_i,
   IFInterface  U_IF,
   IDInterface  U_ID,
   EXEInterface U_EXE,
   WBInterface  U_WB,
-  RFInterface  U_RF
+  RFInterface  U_RF,
+  RamInterface U_RAM
 );
 
   assign U_IF.allowin  = !U_IF.valid  || (U_IF.ready_go  && U_ID.allowin);
@@ -33,7 +33,7 @@ module PipeLineCtrl (
       if_ready_go = `V_TRUE;
     end
     /* 当访问base时，暂停if */
-    else if (U_EXE.cnt[0] && ifetch_stop_i) begin
+    else if (U_EXE.cnt[0] && U_RAM.inst_ram_busy) begin
       if_ready_go = `V_FALSE;
     end
     else begin

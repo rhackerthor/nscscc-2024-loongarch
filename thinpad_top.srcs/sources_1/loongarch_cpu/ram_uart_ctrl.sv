@@ -28,11 +28,14 @@ module RamUartCtrl (
   output logic               ext_ram_ce_n_o,
   output logic               ext_ram_oe_n_o,
   output logic               ext_ram_we_n_o,
-  /* 直连串口信号 */
+  /* uart */
   input  logic               rxd_i,
   output logic               txd_o,
-  /* valid: IF流水级输入允许信号 */
-  output logic               ifetch_stop_o
+  /* addr range */
+  input  logic               is_base_ram_i,
+  input  logic               is_ext_ram_i,
+  input  logic               is_uart_stat_i,
+  input  logic               is_uart_data_i
 );
 
   /* base 转接线 */
@@ -76,22 +79,15 @@ module RamUartCtrl (
   logic                txd_fifo_empty;
   logic [`W_UART_DATA] txd_fifo_dout;
 
-  /* 判断数据访存范围 */
-  logic is_base_ram, is_ext_ram;
-  logic is_uart_stat, is_uart_data, is_uart;
-  assign is_base_ram = (`V_BASE_RAM_BEGIN <= cpu_ext_addr_i) && (cpu_ext_addr_i <= `V_BASE_RAM_END);
-  assign is_ext_ram  = (`V_EXT_RAM_BEGIN <= cpu_ext_addr_i) && (cpu_ext_addr_i <= `V_EXT_RAM_END);
-  assign is_uart_stat = cpu_ext_addr_i == `V_UART_STAT;
-  assign is_uart_data = cpu_ext_addr_i == `V_UART_DATA;
-  assign is_uart = is_uart_stat || is_uart_data;
+  logic uart_flag, base_flag, ext_flag;
 
   /* uart */
   assign txd_fifo_oe  = txd_start;
-  assign txd_start    = (!txd_busy) && (!txd_fifo_empty);
+  assign txd_start    = (~txd_busy) && (~txd_fifo_empty);
   assign txd_data     = txd_fifo_dout;
   assign rxd_fifo_we  = rxd_clear;
   assign rxd_fifo_din = rxd_data;
-  assign rxd_clear    = rst || (rxd_ready && (!rxd_fifo_full));
+  assign rxd_clear    = rst || (rxd_ready && (~rxd_fifo_full));
   async_receiver #(.ClkFrequency(`V_FREQUENCY), .Baud(`V_BITRATE)) //接收模块
     ext_uart_r(
        .clk(clk),                      //外部时钟信号
@@ -132,23 +128,22 @@ module RamUartCtrl (
     .empty (txd_fifo_empty)
   );
 
-  logic uart_flag, base_flag, ext_flag;
   always_ff @(*) begin
-    if (is_uart_stat && cpu_ext_oe_i) begin
+    if (is_uart_stat_i && cpu_ext_oe_i) begin
       txd_fifo_we  <= `V_FALSE;
       txd_fifo_din <= `V_ZERO;
       rxd_fifo_oe  <= `V_FALSE;
       uart_flag    <= `V_TRUE;
       uart_rdata   <= {30'b0, ~rxd_fifo_empty, ~txd_fifo_full};
     end
-    else if (is_uart_data && cpu_ext_we_i) begin
+    else if (is_uart_data_i && cpu_ext_we_i) begin
       txd_fifo_we  <= `V_TRUE;
       txd_fifo_din <= cpu_ext_wdata_i[7:0];
       rxd_fifo_oe  <= `V_FALSE;
       uart_flag    <= `V_FALSE;
       uart_rdata   <= `V_ZERO;
     end
-    else if (is_uart_data && cpu_ext_oe_i) begin
+    else if (is_uart_data_i && cpu_ext_oe_i) begin
       txd_fifo_we  <= `V_FALSE;
       txd_fifo_din <= `V_ZERO;
       rxd_fifo_oe  <= `V_TRUE;
@@ -180,18 +175,16 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= `V_ONE;
       base_ram_oe_n_r  <= `V_ONE;
       base_ram_we_n_r  <= `V_ONE;
-      ifetch_stop_o    <= `V_FALSE;
       base_flag        <= `V_ZERO;
     end
     /* 访存阶段访问base ram */
-    else if (is_base_ram && cpu_ext_ce_i) begin
+    else if (is_base_ram_i && cpu_ext_ce_i) begin
       base_ram_wdata_r <= cpu_ext_wdata_i;
       base_ram_addr_r  <= cpu_ext_addr_i[21:2];
       base_ram_be_n_r  <= ~cpu_ext_be_i;
       base_ram_ce_n_r  <= ~cpu_ext_ce_i;
       base_ram_oe_n_r  <= ~cpu_ext_oe_i;
       base_ram_we_n_r  <= ~cpu_ext_we_i;
-      ifetch_stop_o    <= `V_TRUE;
       base_flag        <= `V_TRUE;
     end
     else begin
@@ -201,7 +194,6 @@ module RamUartCtrl (
       base_ram_ce_n_r  <= ~cpu_base_ce_i;
       base_ram_oe_n_r  <= ~cpu_base_ce_i;
       base_ram_we_n_r  <= `V_ONE;
-      ifetch_stop_o    <= `V_FALSE;
       base_flag        <= `V_FALSE;
     end
   end
@@ -225,7 +217,7 @@ module RamUartCtrl (
       ext_flag        = `V_FALSE;
     end
     /* 访存阶段访问ext ram */
-    else if (is_ext_ram && cpu_ext_ce_i) begin
+    else if (is_ext_ram_i && cpu_ext_ce_i) begin
       ext_ram_wdata_r = cpu_ext_wdata_i;
       ext_ram_addr_r  = cpu_ext_addr_i[21:2];
       ext_ram_be_n_r  = ~cpu_ext_be_i;

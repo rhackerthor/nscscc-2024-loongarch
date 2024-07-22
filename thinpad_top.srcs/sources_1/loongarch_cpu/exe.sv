@@ -77,6 +77,11 @@ module EXE (
   assign U_RAM.data_ram_ce   = (|{U_EXE.load_flag, U_EXE.store_flag}) && (U_EXE.cnt[0]);
   assign U_RAM.data_ram_oe   = (|U_EXE.load_flag) && (U_EXE.cnt[0]);
   assign U_RAM.data_ram_we   = (|U_EXE.store_flag) && (U_EXE.cnt[0]);
+  assign U_RAM.is_base_ram   = (`V_BASE_RAM_BEGIN <= U_EXE.ram_addr) && (U_EXE.ram_addr <= `V_BASE_RAM_END);
+  assign U_RAM.is_ext_ram    = (`V_EXT_RAM_BEGIN <= U_EXE.ram_addr) && (U_EXE.ram_addr <= `V_EXT_RAM_END);
+  assign U_RAM.is_uart_stat  = U_EXE.ram_addr == `V_UART_STAT;
+  assign U_RAM.is_uart_data  = U_EXE.ram_addr == `V_UART_DATA;
+  assign U_RAM.inst_ram_busy = U_RAM.is_base_ram && U_RAM.data_ram_ce;
 
   /* 计算 */
   logic [`W_DATA] add_result;
