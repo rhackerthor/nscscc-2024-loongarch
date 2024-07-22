@@ -128,7 +128,7 @@ module RamUartCtrl (
     .empty (txd_fifo_empty)
   );
 
-  always_ff @(*) begin
+  always @(*) begin
     if (is_uart_stat_i && cpu_ext_oe_i) begin
       txd_fifo_we  <= `V_FALSE;
       txd_fifo_din <= `V_ZERO;

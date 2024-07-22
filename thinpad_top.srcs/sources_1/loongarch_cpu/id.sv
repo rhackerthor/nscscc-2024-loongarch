@@ -67,7 +67,7 @@ module ID (
   assign s_imm_16 = {{16{U_ID.inst[25]}}, U_ID.inst[25:10]};
   assign s_imm_20 = {U_ID.inst[24: 5], {12{1'b0}}};
   assign s_imm_26 = {{6{U_ID.inst[9]}}, U_ID.inst[9:0], U_ID.inst[25:10]};
-  always_ff @(*) begin
+  always @(*) begin
     case (sel_imm)
       `V__UI5 : begin U_ID.imm <= u_imm_5;  end 
       `V__UI12: begin U_ID.imm <= u_imm_12; end 
