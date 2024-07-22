@@ -23,7 +23,7 @@ enum {
 #define SIMM12() do { *imm = SEXT(BITS(i, 21, 10), 12); } while (0)
 #define SIMM16() do { *imm = SEXT(BITS(i, 25, 10), 16) << 2; } while (0)
 #define SIMM20() do { *imm = SEXT(BITS(i, 24, 5), 20) << 12; } while (0)
-#define SIMM26() do { *imm = (SEXT(BITS(i, 9, 0), 10) << 16) | BITS(i, 25, 10); } while (0)
+#define SIMM26() do { *imm = ((SEXT(BITS(i, 9, 0), 10) << 16) | BITS(i, 25, 10)) << 2; } while (0)
 
 static void decode_operand(int *rd, word_t *src1, word_t *src2, word_t *imm, state_t type) {
   word_t i = cpu.inst;
