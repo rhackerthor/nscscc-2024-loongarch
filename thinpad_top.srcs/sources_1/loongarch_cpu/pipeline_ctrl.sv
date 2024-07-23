@@ -25,7 +25,7 @@ module PipeLineCtrl (
   logic exe_ready_go;
   assign U_IF.ready_go  = if_ready_go;
   assign U_ID.ready_go  = &id_ready_go;
-  assign U_EXE.ready_go = exe_ready_go;
+  assign U_EXE.ready_go = `V_TRUE; // exe_ready_go;
   assign U_WB.ready_go  = `V_TRUE;
 
   /* if ready go */
