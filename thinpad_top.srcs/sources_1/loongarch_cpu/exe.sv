@@ -7,10 +7,10 @@ module EXE (
 
   /* pipeline ctrl */
   always @(posedge U_EXE.clk) begin
-    if (U_EXE.rst == `V_TRUE) begin
+    if (U_EXE.rst) begin
       U_EXE.valid <= `V_FALSE;
     end
-    else if (U_EXE.allowin == `V_TRUE) begin
+    else if (U_EXE.allowin) begin
       U_EXE.valid <= U_EXE.valid_in;
     end
   end
@@ -32,7 +32,7 @@ module EXE (
       U_EXE.store_flag <= `V_ZERO;
       U_EXE.cnt        <= `V_ZERO;
     end
-    else if (U_EXE.valid_in == `V_TRUE && U_EXE.allowin == `V_TRUE) begin
+    else if (U_EXE.valid_in && U_EXE.allowin) begin
       U_EXE.pc         <= U_ID.pc;
       U_EXE.inst       <= U_ID.inst;
       U_EXE.imm        <= U_ID.imm;
@@ -73,7 +73,6 @@ module EXE (
   end
   assign U_EXE.ram_addr      = U_EXE.rf_rdata1 + U_EXE.imm;
   assign U_EXE.ram_valid     = (U_RAM.is_uart_stat || U_RAM.is_uart_data) ? U_EXE.cnt[0] : |U_EXE.cnt[1:0];
-  // assign U_EXE.ram_valid     = U_EXE.cnt[0];
   assign U_RAM.data_ram_addr = U_EXE.ram_addr;
   assign U_RAM.data_ram_be   = (|U_EXE.load_flag == `V_TRUE) ? `V_ONE : U_EXE.ram_mask;
   assign U_RAM.data_ram_ce   = (|{U_EXE.load_flag, U_EXE.store_flag}) && U_EXE.ram_valid;
@@ -129,7 +128,5 @@ module EXE (
       default : begin U_EXE.alu_result =  `V_ZERO;    end
     endcase
   end
-  /* rf_wdata */
-  assign U_EXE.rf_wdata = U_EXE.alu_result;
 
 endmodule

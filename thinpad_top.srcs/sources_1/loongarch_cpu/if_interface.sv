@@ -12,5 +12,7 @@ interface IFInterface (
   /* data */
   logic [`W_DATA] pc;
   logic [`W_DATA] inst;
+  logic [`W_DATA] next_pc;
+  logic           branch_flag;
 
 endinterface

@@ -5,7 +5,7 @@ module ID (
 );
 
   /* pipeline ctrl */
-  always_ff @(posedge U_ID.clk) begin
+  always @(posedge U_ID.clk) begin
     if (U_ID.rst) begin
       U_ID.valid <= `V_FALSE;
     end
@@ -18,7 +18,7 @@ module ID (
   end
 
   /* 流水线寄存器 */
-  always_ff @(posedge U_ID.clk) begin
+  always @(posedge U_ID.clk) begin
     if (U_ID.rst) begin
       U_ID.pc   <= `V_ZERO;
       U_ID.inst <= `V_ZERO;

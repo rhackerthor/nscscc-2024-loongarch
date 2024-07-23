@@ -37,6 +37,5 @@ interface IDInterface (
   /* flag */
   logic [`W_STORE] store_flag;
   logic [`W_LOAD ] load_flag;
-  logic            unsigned_flag;
 
 endinterface

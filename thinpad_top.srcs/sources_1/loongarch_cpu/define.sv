@@ -68,7 +68,7 @@
 `define V_FALSE 1'b0 // false
 `define V_ZERO 0     // 全0
 `define V_ONE -1     // 全1
-/* immedIATE */
+/* immediate */
 `define W_SEL_IMM 5:0
 `define V_UI5  0
 `define V_UI12 1
@@ -82,7 +82,7 @@
 `define V__SI16 (1 << `V_SI16)
 `define V__SI20 (1 << `V_SI20)
 `define V__SI26 (1 << `V_SI26)
-/* store AND LOAD */
+/* store and load */
 `define W_STORE 1:0
 `define W_LOAD 1:0
 `define V_ST_B 0

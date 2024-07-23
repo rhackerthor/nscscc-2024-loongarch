@@ -34,7 +34,7 @@ module PipeLineCtrl (
       if_ready_go = `V_TRUE;
     end
     /* 当访问base时，暂停if */
-    else if (U_EXE.ram_valid && U_RAM.inst_ram_busy) begin
+    else if (U_RAM.inst_ram_busy) begin
       if_ready_go = `V_FALSE;
     end
     else begin
