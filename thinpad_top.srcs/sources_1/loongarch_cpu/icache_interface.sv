@@ -3,9 +3,9 @@ interface IcacheIterface (
   input logic rst
 );
 
-  logic [`W_ICACHE] pc;
-  logic [`W_ICACHE] inst;
+  logic [`W_DATA] pc [`W_ICACHE];
+  logic [`W_DATA] inst [`W_ICACHE];
   logic we;
-  logic cache_miss;
+  logic miss;
 
 endinterface

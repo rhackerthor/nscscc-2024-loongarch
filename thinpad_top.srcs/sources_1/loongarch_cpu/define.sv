@@ -96,3 +96,4 @@
 /* icache */
 `define W_ICACHE 31:0
 `define V_ICACHE 32
+`define W_VADDR 4:0
