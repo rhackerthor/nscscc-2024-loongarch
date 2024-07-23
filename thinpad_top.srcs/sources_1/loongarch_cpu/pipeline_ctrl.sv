@@ -25,7 +25,7 @@ module PipeLineCtrl (
   logic exe_ready_go;
   assign U_IF.ready_go  = if_ready_go;
   assign U_ID.ready_go  = &id_ready_go;
-  assign U_EXE.ready_go = `V_TRUE; // exe_ready_go;
+  assign U_EXE.ready_go = exe_ready_go;
   assign U_WB.ready_go  = `V_TRUE;
 
   /* if ready go */
@@ -96,7 +96,7 @@ module PipeLineCtrl (
 
   /* branch cancle */
   always @(*) begin
-    if (U_ID.valid && U_ID.ready_go && U_ID.branch_flag) begin
+    if (U_ID.valid && U_ID.allowin && U_ID.valid_in && U_ID.branch_flag) begin
       U_ID.branch_cancle = `V_TRUE;
     end
     else begin
