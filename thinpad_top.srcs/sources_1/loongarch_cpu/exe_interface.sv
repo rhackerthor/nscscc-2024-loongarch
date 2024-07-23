@@ -30,6 +30,7 @@ interface EXEInterface (
   /* mem */
   logic [`W_DATA  ] ram_addr;
   logic [`W_RAM_BE] ram_mask;
+  logic             ram_valid;
   /* flag */
   logic [`W_STORE] store_flag;
   logic [`W_LOAD ] load_flag;

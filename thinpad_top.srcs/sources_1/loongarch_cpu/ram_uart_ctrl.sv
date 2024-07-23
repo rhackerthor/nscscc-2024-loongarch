@@ -191,8 +191,8 @@ module RamUartCtrl (
       base_ram_wdata_r <= `V_ZERO;
       base_ram_addr_r  <= cpu_base_addr_i[21:2];
       base_ram_be_n_r  <= `V_ZERO;
-      base_ram_ce_n_r  <= ~cpu_base_ce_i;
-      base_ram_oe_n_r  <= ~cpu_base_ce_i;
+      base_ram_ce_n_r  <= `V_ZERO; // ~cpu_base_ce_i;
+      base_ram_oe_n_r  <= `V_ZERO; // ~cpu_base_ce_i;
       base_ram_we_n_r  <= `V_ONE;
       base_flag        <= `V_FALSE;
     end

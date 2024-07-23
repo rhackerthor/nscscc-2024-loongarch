@@ -22,9 +22,10 @@ module PipeLineCtrl (
 
   logic if_ready_go;
   logic [1:0] id_ready_go;
+  logic exe_ready_go;
   assign U_IF.ready_go  = if_ready_go;
   assign U_ID.ready_go  = &id_ready_go;
-  assign U_EXE.ready_go = `V_TRUE;
+  assign U_EXE.ready_go = exe_ready_go;
   assign U_WB.ready_go  = `V_TRUE;
 
   /* if ready go */
@@ -33,7 +34,7 @@ module PipeLineCtrl (
       if_ready_go = `V_TRUE;
     end
     /* 当访问base时，暂停if */
-    else if (U_EXE.cnt[0] && U_RAM.inst_ram_busy) begin
+    else if (U_EXE.ram_valid && U_RAM.inst_ram_busy) begin
       if_ready_go = `V_FALSE;
     end
     else begin
@@ -100,6 +101,16 @@ module PipeLineCtrl (
     end
     else begin
       U_ID.branch_cancle = `V_FALSE;
+    end
+  end
+
+  /* exe ready go */
+  always @(*) begin
+    if (U_EXE.cnt[0] && U_RAM.data_ram_ce) begin
+      exe_ready_go <= `V_FALSE;
+    end
+    else begin
+      exe_ready_go <= `V_TRUE;
     end
   end
 

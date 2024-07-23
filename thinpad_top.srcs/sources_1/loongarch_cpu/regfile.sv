@@ -30,7 +30,7 @@ module RegFile (
   assign U_RF.rf_wdata  = U_WB.rf_wdata;
   assign U_RF.rf_oe1    = U_ID.rf_oe1;
   assign U_RF.rf_oe2    = U_ID.rf_oe2;
-  assign U_RF.rf_we     = U_WB.rf_we;
+  assign U_RF.rf_we     = U_WB.rf_we && U_WB.valid;
 
   /* write reg file */
   always @(posedge U_RF.clk) begin
