@@ -1,6 +1,6 @@
 `include "define.sv"
 module IF (
-  IFInterface  U_IF,
+  IFInterface.master U_IF,
   IDInterface  U_ID,
   RamInterface U_RAM
 );

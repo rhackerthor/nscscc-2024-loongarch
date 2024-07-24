@@ -2,7 +2,7 @@
 module PipeLineCtrl (
   input logic  clk,
   input logic  rst,
-  IFInterface  U_IF,
+  IFInterface.slave U_IF,
   IDInterface  U_ID,
   EXEInterface U_EXE,
   WBInterface  U_WB,

@@ -1,6 +1,6 @@
 `include "define.sv"
 module ID (
-  IFInterface U_IF,
+  IFInterface.slave U_IF,
   IDInterface U_ID
 );
 
