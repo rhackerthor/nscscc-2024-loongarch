@@ -16,7 +16,7 @@
 `define V_UART_DATA 32'hbfd0_03f8
 `define W_UART_DATA 7:0
 `define V_BITRATE 9600 // 比特率
-`define V_FREQUENCY 50000000 // 频率
+`define V_FREQUENCY 60000000 // 频率
 /* regfile */
 `define W_RF_ADDR 4:0 // 寄存器地址宽度
 `define W_RF_NR 31:0  // 寄存器数量宽度

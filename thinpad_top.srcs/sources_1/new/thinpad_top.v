@@ -54,13 +54,13 @@ module thinpad_top(
 );
 
   /* 控制时钟信号 */
-  wire locked, clk_10M, clk_20M, clk_40M, clk_80M;
+  wire locked, clk_10M, clk_20M, clk_60M, clk_80M;
   pll_example clock_gen 
    (
     // Clock in ports
     .clk_in1(clk_50M),  // 外部时钟输入
     // Clock out ports
-    .clk_out1(clk_40M), // 时钟输出1，频率在IP配置界面中设置
+    .clk_out1(clk_60M), // 时钟输出1，频率在IP配置界面中设置
     .clk_out2(clk_80M), // 时钟输出2，频率在IP配置界面中设置
     // Status and control signals
     .reset(reset_btn),  // PLL复位输入
@@ -72,7 +72,7 @@ module thinpad_top(
   wire clk;
   reg reset_of_clk;
   // 异步复位，同步释放，将locked信号转为后级电路的复位reset_of_clk10M
-  assign clk = clk_50M;
+  assign clk = clk_60M;
   always@(posedge clk or negedge locked) begin
       if(~locked) reset_of_clk <= 1'b1;
       else        reset_of_clk <= 1'b0;
