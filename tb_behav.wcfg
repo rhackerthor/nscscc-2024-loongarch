@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="20105800fs"></ZoomStartTime>
-      <ZoomEndTime time="20566601fs"></ZoomEndTime>
-      <Cursor1Time time="20314999fs"></Cursor1Time>
+      <ZoomStartTime time="3674440fs"></ZoomStartTime>
+      <ZoomEndTime time="3905641fs"></ZoomEndTime>
+      <Cursor1Time time="11000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="322"></NameColumnWidth>
-      <ValueColumnWidth column_width="158"></ValueColumnWidth>
+      <ValueColumnWidth column_width="150"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="109" />
+   <WVObjectSize size="108" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -255,10 +255,6 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/rf_rdata2">
       <obj_property name="ElementShortName">rf_rdata2[31:0]</obj_property>
       <obj_property name="ObjectShortName">rf_rdata2[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/rf_wdata">
-      <obj_property name="ElementShortName">rf_wdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">rf_wdata[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/rf_waddr">
       <obj_property name="ElementShortName">rf_waddr[4:0]</obj_property>

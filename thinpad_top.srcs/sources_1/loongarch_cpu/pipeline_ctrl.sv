@@ -106,7 +106,7 @@ module PipeLineCtrl (
 
   /* exe ready go */
   always @(*) begin
-    if (U_EXE.cnt[0] && U_RAM.data_ram_ce) begin
+    if (U_EXE.cnt[0] && U_RAM.data_ram_ce && (~U_RAM.is_uart)) begin
       exe_ready_go <= `V_FALSE;
     end
     else begin

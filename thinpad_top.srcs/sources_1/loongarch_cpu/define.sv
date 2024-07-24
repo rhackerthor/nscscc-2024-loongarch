@@ -1,7 +1,6 @@
 /* 
  * W --> width 数据宽度
- * R --> rst value 复位值
- * V --> 变量或常量
+ * V --> 常量
  */
 `define W_DATA 31:0 // 通用32位数据宽度
 /* sram */
@@ -17,7 +16,7 @@
 `define V_UART_DATA 32'hbfd0_03f8
 `define W_UART_DATA 7:0
 `define V_BITRATE 9600 // 比特率
-`define V_FREQUENCY 40000000 // 频率
+`define V_FREQUENCY 50000000 // 频率
 /* regfile */
 `define W_RF_ADDR 4:0 // 寄存器地址宽度
 `define W_RF_NR 31:0  // 寄存器数量宽度

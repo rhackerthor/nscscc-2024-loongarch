@@ -83,6 +83,7 @@ module EXE (
   assign U_RAM.is_ext_ram    = (`V_EXT_RAM_BEGIN <= U_EXE.ram_addr) && (U_EXE.ram_addr <= `V_EXT_RAM_END);
   assign U_RAM.is_uart_stat  = U_EXE.ram_addr == `V_UART_STAT;
   assign U_RAM.is_uart_data  = U_EXE.ram_addr == `V_UART_DATA;
+  assign U_RAM.is_uart       = U_RAM.is_uart_data || U_RAM.is_uart_stat;
   assign U_RAM.inst_ram_busy = U_RAM.is_base_ram && U_RAM.data_ram_ce;
 
   /* 计算 */

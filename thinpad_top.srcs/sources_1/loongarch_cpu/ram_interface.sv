@@ -20,5 +20,6 @@ interface RamInterface (
 );
 
   logic inst_ram_busy;
+  logic is_uart;
 
 endinterface

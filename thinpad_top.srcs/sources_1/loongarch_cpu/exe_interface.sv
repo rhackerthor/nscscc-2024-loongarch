@@ -19,7 +19,6 @@ interface EXEInterface (
   /* reg file */
   logic [`W_DATA   ] rf_rdata1;
   logic [`W_DATA   ] rf_rdata2;
-  logic [`W_DATA   ] rf_wdata;
   logic [`W_RF_ADDR] rf_waddr;
   logic              rf_we;
   /* alu */
