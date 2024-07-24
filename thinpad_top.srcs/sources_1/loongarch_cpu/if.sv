@@ -22,9 +22,14 @@ module IF (
   always @(posedge U_IF.clk) begin
     if (U_IF.rst == `V_TRUE) begin
       U_IF.pc <= `V_RST_PC;
+      U_IF.cnt <= `V_ZERO;
     end
     else if (U_IF.valid_in && U_IF.allowin) begin
       U_IF.pc <= U_IF.next_pc;
+      U_IF.cnt <= 1;
+    end
+    else begin
+      U_IF.cnt <= {U_IF.cnt[6:0], U_IF.cnt[7]};
     end
   end
 
@@ -45,6 +50,16 @@ module IF (
   /* 输出inst ram地址 */
   assign U_RAM.inst_ram_addr = U_IF.next_pc;
   assign U_RAM.inst_ram_ce = ~U_IF.rst & U_IF.allowin;
-  assign U_IF.inst = U_RAM.inst_ram_rdata;
+
+  logic [`W_DATA] inst_r;
+  logic inst_ram_busy_r;
+  always @(posedge U_IF.clk) begin
+    if (U_IF.cnt[0]) begin
+      inst_r <= U_RAM.inst_ram_rdata;
+    end
+    inst_ram_busy_r <= U_RAM.inst_ram_busy;
+  end
+  assign U_IF.inst = inst_ram_busy_r ? inst_r : U_RAM.inst_ram_rdata;
+
 
 endmodule
