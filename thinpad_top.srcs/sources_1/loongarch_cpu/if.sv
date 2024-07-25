@@ -50,17 +50,17 @@ module IF (
 
   /* 输出inst ram地址 */
   assign U_RAM.inst_ram_addr = U_IF.next_pc;
-  assign U_RAM.inst_ram_ce = ~U_IF.rst & U_IF.allowin;
+  assign U_RAM.inst_ram_ce = U_IF.allowin && (~U_RAM.inst_ram_busy);
 
   logic [`W_DATA] inst_r;
-  logic inst_ram_busy_r;
+  logic inst_ram_ce_r;
   always @(posedge U_IF.clk) begin
     if (U_IF.cnt[0]) begin
       inst_r <= U_RAM.inst_ram_rdata;
     end
-    inst_ram_busy_r <= U_RAM.inst_ram_busy;
+    inst_ram_ce_r <= U_RAM.inst_ram_ce;
   end
-  assign U_IF.inst = inst_ram_busy_r ? inst_r : U_RAM.inst_ram_rdata;
+  assign U_IF.inst = ~inst_ram_ce_r ? inst_r : U_RAM.inst_ram_rdata;
 
 
 endmodule
