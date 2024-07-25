@@ -22,10 +22,12 @@ module ID (
     if (U_ID.rst) begin
       U_ID.pc   <= `V_ZERO;
       U_ID.inst <= `V_ZERO;
+      U_ID.cancle <= `V_ZERO;
     end
     else if (U_ID.valid_in && U_ID.allowin) begin
       U_ID.pc   <= U_IF.pc;
       U_ID.inst <= U_IF.inst;
+      U_ID.cancle <= U_IF.cancle;
     end
   end
 

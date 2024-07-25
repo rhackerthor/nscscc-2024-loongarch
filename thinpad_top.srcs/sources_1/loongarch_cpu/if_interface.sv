@@ -10,6 +10,7 @@ interface IFInterface (
   logic allowin;
   logic ready_go;
   logic [7:0] cnt;
+  logic cancle;
   /* data */
   logic [`W_DATA] pc;
   logic [`W_DATA] inst;

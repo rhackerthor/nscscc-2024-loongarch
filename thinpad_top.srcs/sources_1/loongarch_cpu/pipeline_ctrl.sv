@@ -96,7 +96,7 @@ module PipeLineCtrl (
 
   /* branch cancle */
   always @(*) begin
-    if (U_ID.valid && U_ID.allowin && U_ID.valid_in && U_ID.branch_flag) begin
+    if (~U_ID.cancle && U_ID.allowin && U_ID.valid_in && U_ID.branch_flag) begin
       U_ID.branch_cancle = `V_TRUE;
     end
     else begin

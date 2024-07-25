@@ -10,6 +10,7 @@ interface IDInterface (
   logic allowin;
   logic ready_go;
   logic branch_cancle;
+  logic cancle;
 
   /* data */
   logic [`W_DATA] pc;

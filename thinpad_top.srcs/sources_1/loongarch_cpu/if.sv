@@ -35,6 +35,7 @@ module IF (
 
   /* 计算next pc */
   assign U_IF.branch_flag = U_ID.branch_cancle;
+  assign U_IF.cancle      = U_ID.branch_cancle;
   always @(*) begin
     if (U_IF.rst) begin 
       U_IF.next_pc = `V_ZERO;
