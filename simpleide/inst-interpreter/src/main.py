@@ -18,6 +18,7 @@ def main():
   decoder.generate_verilog_ctrl_signal("rf_oe2_is_rd", ctrl_dir, decoder.is_rd_line)
   decoder.generate_verilog_ctrl_signal("sel_alu_in1", ctrl_dir, decoder.sel_alu_in1_line)
   decoder.generate_verilog_ctrl_signal("sel_alu_in2", ctrl_dir, decoder.sel_alu_in2_line)
+  decoder.generate_verilog_ctrl_signal("alu_op", ctrl_dir, decoder.alu_op)
 
 if __name__ == "__main__":
   main()

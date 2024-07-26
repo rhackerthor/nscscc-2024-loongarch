@@ -1,4 +1,4 @@
-interface IcacheIterface (
+interface ICInterface (
   input logic clk,
   input logic rst
 );

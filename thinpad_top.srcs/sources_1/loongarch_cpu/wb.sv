@@ -1,6 +1,6 @@
 `include "define.sv"
 module WB (
-  EXEInterface   U_EXE,
+  MEMInterface   U_MEM,
   WBInterface    U_WB,
   RamInterface   U_RAM,
   DebugInterface U_DEBUG
@@ -28,32 +28,32 @@ module WB (
       U_WB.load_flag  <= `V_ZERO;
     end
     else if (U_WB.valid_in && U_WB.allowin) begin
-      U_WB.pc         <= U_EXE.pc;
-      U_WB.inst       <= U_EXE.inst;
-      U_WB.rf_waddr   <= U_EXE.rf_waddr;
-      U_WB.rf_we      <= U_EXE.rf_we;
-      U_WB.alu_result <= U_EXE.alu_result;
-      U_WB.ram_mask   <= U_EXE.ram_mask;
-      U_WB.load_flag  <= U_EXE.load_flag;
+      U_WB.pc         <= U_MEM.pc;
+      U_WB.inst       <= U_MEM.inst;
+      U_WB.rf_waddr   <= U_MEM.rf_waddr;
+      U_WB.rf_we      <= U_MEM.rf_we;
+      U_WB.alu_result <= U_MEM.alu_result;
+      U_WB.ram_mask   <= U_MEM.ram_mask;
+      U_WB.load_flag  <= U_MEM.load_flag;
     end
   end
 
   /* mem */
   always @(*) begin
     case (U_WB.ram_mask) 
-      4'b0001: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[ 7]}}, U_RAM.data_ram_rdata[ 7: 0]}; end
-      4'b0010: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[15]}}, U_RAM.data_ram_rdata[15: 8]}; end
-      4'b0100: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[23]}}, U_RAM.data_ram_rdata[23:16]}; end
-      4'b1000: begin U_WB.ram_data = {{24{U_RAM.data_ram_rdata[31]}}, U_RAM.data_ram_rdata[31:24]}; end
-      4'b1111: begin U_WB.ram_data = U_RAM.data_ram_rdata; end
-      default: begin U_WB.ram_data = `V_ZERO;              end
+      4'b0001: begin U_WB.ram_rdata = {{24{U_RAM.data_ram_rdata[ 7]}}, U_RAM.data_ram_rdata[ 7: 0]}; end
+      4'b0010: begin U_WB.ram_rdata = {{24{U_RAM.data_ram_rdata[15]}}, U_RAM.data_ram_rdata[15: 8]}; end
+      4'b0100: begin U_WB.ram_rdata = {{24{U_RAM.data_ram_rdata[23]}}, U_RAM.data_ram_rdata[23:16]}; end
+      4'b1000: begin U_WB.ram_rdata = {{24{U_RAM.data_ram_rdata[31]}}, U_RAM.data_ram_rdata[31:24]}; end
+      4'b1111: begin U_WB.ram_rdata = U_RAM.data_ram_rdata; end
+      default: begin U_WB.ram_rdata = `V_ZERO;              end
     endcase
   end
 
   /* write back */
   always @(*) begin
     if (|U_WB.load_flag) begin
-      U_WB.rf_wdata <= U_WB.ram_data;
+      U_WB.rf_wdata <= U_WB.ram_rdata;
     end
     else begin
       U_WB.rf_wdata <= U_WB.alu_result;

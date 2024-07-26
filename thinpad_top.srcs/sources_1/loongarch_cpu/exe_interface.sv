@@ -27,6 +27,8 @@ interface EXEInterface (
   logic [`W_DATA  ] alu_in2;
   logic [`W_DATA  ] alu_result;
   /* mem */
+  logic [`W_DATA  ] ram_wdata;
+  logic [`W_DATA  ] ram_rdata;
   logic [`W_DATA  ] ram_addr;
   logic [`W_RAM_BE] ram_mask;
   logic             ram_valid;

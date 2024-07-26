@@ -1,8 +1,7 @@
 `include "define.sv"
 module EXE (
   IDInterface  U_ID,
-  EXEInterface U_EXE,
-  RamInterface U_RAM
+  EXEInterface U_EXE
 );
 
   /* pipeline ctrl */
@@ -54,37 +53,23 @@ module EXE (
 
   /* 发送读写请求 */
   always @(*) begin
-    if ((U_EXE.store_flag == `V__ST_W) || (U_EXE.load_flag == `V__LD_W)) begin
-      U_EXE.ram_mask       = `V_ONE;
-      U_RAM.data_ram_wdata = U_EXE.rf_rdata2;
-    end
-    else if ((U_EXE.store_flag == `V__ST_B) || (U_EXE.load_flag == `V__LD_B))  begin
+    if (U_EXE.store_flag[`V_LD_B] || U_EXE.load_flag[`V_ST_B])  begin
       case (U_EXE.ram_addr[1:0])
-        2'b00: begin U_EXE.ram_mask = 4'b0001; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[ 7: 0]}}; end
-        2'b01: begin U_EXE.ram_mask = 4'b0010; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[15: 8]}}; end
-        2'b10: begin U_EXE.ram_mask = 4'b0100; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[23:16]}}; end
-        2'b11: begin U_EXE.ram_mask = 4'b1000; U_RAM.data_ram_wdata = {4{U_EXE.rf_rdata2[31:24]}}; end
+        2'b00: begin U_EXE.ram_mask = 4'b0001; end
+        2'b01: begin U_EXE.ram_mask = 4'b0010; end
+        2'b10: begin U_EXE.ram_mask = 4'b0100; end
+        2'b11: begin U_EXE.ram_mask = 4'b1000; end
       endcase
     end
+    else if (U_EXE.store_flag[`V_LD_W] || U_EXE.load_flag[`V_ST_W]) begin
+      U_EXE.ram_mask = `V_ONE;
+    end
     else begin
-      U_EXE.ram_mask       = `V_ONE;
-      U_RAM.data_ram_wdata = `V_ZERO;
+      U_EXE.ram_mask = `V_ZERO;
     end
   end
+  assign U_EXE.ram_wdata     = U_EXE.rf_rdata2;
   assign U_EXE.ram_addr      = U_EXE.rf_rdata1 + U_EXE.imm;
-  assign U_EXE.ram_valid     = (U_RAM.is_uart_stat || U_RAM.is_uart_data) ? U_EXE.cnt[0] : |U_EXE.cnt[1:0];
-  assign U_RAM.data_ram_addr = U_EXE.ram_addr;
-  assign U_RAM.data_ram_be   = (|U_EXE.load_flag == `V_TRUE) ? `V_ONE : U_EXE.ram_mask;
-  assign U_RAM.data_ram_ce   = (|{U_EXE.load_flag, U_EXE.store_flag}) && U_EXE.ram_valid;
-  assign U_RAM.data_ram_oe   = (|U_EXE.load_flag) && U_EXE.ram_valid;
-  assign U_RAM.data_ram_we   = (|U_EXE.store_flag) && U_EXE.ram_valid;
-
-  assign U_RAM.is_base_ram   = (`V_BASE_RAM_BEGIN <= U_EXE.ram_addr) && (U_EXE.ram_addr <= `V_BASE_RAM_END);
-  assign U_RAM.is_ext_ram    = (`V_EXT_RAM_BEGIN <= U_EXE.ram_addr) && (U_EXE.ram_addr <= `V_EXT_RAM_END);
-  assign U_RAM.is_uart_stat  = U_EXE.ram_addr == `V_UART_STAT;
-  assign U_RAM.is_uart_data  = U_EXE.ram_addr == `V_UART_DATA;
-  assign U_RAM.is_uart       = U_RAM.is_uart_data || U_RAM.is_uart_stat;
-  assign U_RAM.inst_ram_busy = U_RAM.is_base_ram && U_RAM.data_ram_ce;
 
   /* 计算 */
   logic [`W_DATA] add_result;

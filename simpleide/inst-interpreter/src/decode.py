@@ -18,6 +18,7 @@ class InstDecoder:
     self.is_rd_line = 8
     self.sel_alu_in1_line = 9
     self.sel_alu_in2_line = 10
+    self.alu_op = 11
 
     self.format_sheet()
     self.save()

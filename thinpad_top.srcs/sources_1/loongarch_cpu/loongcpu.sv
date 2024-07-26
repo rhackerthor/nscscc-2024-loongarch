@@ -28,12 +28,13 @@ module LoongCpu (
 );
 
   /* Interface */
-  IFInterface     U_IF  (clk, rst); /*   if    */
-  IDInterface     U_ID  (clk, rst); /*   id    */
-  EXEInterface    U_EXE (clk, rst); /*   exe   */
-  WBInterface     U_WB  (clk, rst); /*   wb    */
-  RFInterface     U_RF  (clk, rst); /* regfile */
-  RamInterface U_RAM(               /*   ram   */
+  IFInterface  U_IF  (clk, rst); /*   if    */
+  IDInterface  U_ID  (clk, rst); /*   id    */
+  EXEInterface U_EXE (clk, rst); /*   exe   */
+  MEMInterface U_MEM (clk, rst); /*   mem   */
+  WBInterface  U_WB  (clk, rst); /*   wb    */
+  RFInterface  U_RF  (clk, rst); /* regfile */
+  RamInterface U_RAM(            /*   ram   */
     .inst_ram_rdata (inst_ram_rdata_i),
     .inst_ram_addr  (inst_ram_addr_o ),
     .inst_ram_ce    (inst_ram_ce_o   ),
@@ -70,6 +71,7 @@ module LoongCpu (
     .U_IF  (U_IF ),
     .U_ID  (U_ID ),
     .U_EXE (U_EXE),
+    .U_MEM (U_MEM),
     .U_WB  (U_WB ),
     .U_RF  (U_RF ),
     .U_RAM (U_RAM)
@@ -77,7 +79,8 @@ module LoongCpu (
 
   IF  IF0  (U_IF  , U_ID  , U_RAM         );
   ID  ID0  (U_IF  , U_ID                  );
-  EXE EXE0 (U_ID  , U_EXE , U_RAM         );
-  WB  WB0  (U_EXE , U_WB  , U_RAM, U_DEBUG);
+  EXE EXE0 (U_ID  , U_EXE                 );
+  MEM MEM0 (U_EXE , U_MEM , U_RAM         );
+  WB  WB0  (U_MEM , U_WB  , U_RAM, U_DEBUG);
 
 endmodule

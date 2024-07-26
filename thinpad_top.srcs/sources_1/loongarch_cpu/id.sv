@@ -160,7 +160,10 @@ module ID (
   end
 
   /* alu */
-  assign U_ID.alu_op[`V_ADD ] = |{U_D._add_w, U_D._addi_w, U_D._bl, U_D._jirl, U_D._pcaddu12i};
+  assign U_ID.alu_op[`V_ADD ] = |{
+    U_D._add_w, U_D._addi_w, U_D._pcaddu12i, U_D._jirl,
+    U_D._bl
+  };
   assign U_ID.alu_op[`V_SUB ] = U_D._sub_w;
   assign U_ID.alu_op[`V_AND ] = |{U_D._and, U_D._andi};
   assign U_ID.alu_op[`V_OR  ] = |{U_D._or, U_D._ori};
