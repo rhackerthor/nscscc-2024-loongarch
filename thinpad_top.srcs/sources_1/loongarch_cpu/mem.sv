@@ -50,7 +50,7 @@ module MEM (
 
   assign U_MEM.ram_valid = (U_RAM.is_uart_stat || U_RAM.is_uart_data) ? U_MEM.cnt[0] : |U_MEM.cnt[1:0];
 
-  assign U_RAM.data_ram_wdata = U_EXE.ram_wdata;
+  assign U_RAM.data_ram_wdata = U_MEM.ram_wdata;
   assign U_RAM.data_ram_addr  = U_MEM.ram_addr;
   assign U_RAM.data_ram_be    = |{U_MEM.load_flag} ? `V_ONE : U_MEM.ram_mask;
   assign U_RAM.data_ram_ce    = |{U_MEM.load_flag, U_MEM.store_flag} && U_MEM.ram_valid;

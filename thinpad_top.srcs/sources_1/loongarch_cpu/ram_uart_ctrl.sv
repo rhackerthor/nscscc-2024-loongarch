@@ -238,7 +238,7 @@ module RamUartCtrl (
       ext_ram_we_n_r  = ~cpu_ext_we_i;
       ext_flag        = `V_TRUE;
     end
-    else begin
+/*     else begin
       ext_ram_wdata_r = `V_ZERO;
       ext_ram_addr_r  = `V_ZERO;
       ext_ram_be_n_r  = `V_ONE;
@@ -246,7 +246,7 @@ module RamUartCtrl (
       ext_ram_oe_n_r  = `V_ONE;
       ext_ram_we_n_r  = `V_ONE;
       ext_flag        = `V_FALSE;
-    end
+    end */
   end
 
   always @(*) begin
