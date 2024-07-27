@@ -70,6 +70,9 @@ module EXE (
   end
   assign U_EXE.ram_wdata     = U_EXE.rf_rdata2;
   assign U_EXE.ram_addr      = U_EXE.rf_rdata1 + U_EXE.imm;
+  assign U_EXE.inst_ram_busy = (`V_BASE_RAM_BEGIN <= U_EXE.ram_addr ) &&
+                               (U_EXE.ram_addr <= `V_BASE_RAM_END   ) &&
+                               (|{U_EXE.load_flag, U_EXE.store_flag});
 
   /* 计算 */
   logic [`W_DATA] add_result;

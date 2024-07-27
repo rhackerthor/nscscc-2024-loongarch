@@ -35,5 +35,6 @@ interface EXEInterface (
   /* flag */
   logic [`W_STORE] store_flag;
   logic [`W_LOAD ] load_flag;
+  logic inst_ram_busy;
     
 endinterface
