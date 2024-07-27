@@ -39,7 +39,7 @@ module RegFile (
         U_RF.rf[i] <= `V_ZERO;
       end
     end
-    else if ((U_RF.rf_we == `V_TRUE) && (U_RF.rf_waddr != `V_ZERO)) begin
+    else if (U_RF.rf_we && (U_RF.rf_waddr != `V_ZERO)) begin
       U_RF.rf[U_RF.rf_waddr] <= U_RF.rf_wdata;
     end
   end
@@ -47,20 +47,26 @@ module RegFile (
   /* read reg file */
   /* rdata1 */
   always @(*) begin
-    if (U_RF.rf_raddr1 != `V_ZERO) begin
-      U_RF.rf_rdata1 = U_RF.rf[U_RF.rf_raddr1];
+    if (U_RF.rf_raddr1 == `V_ZERO) begin
+      U_RF.rf_rdata1 = `V_ZERO;
+    end
+    else if (U_WB.valid && U_RF.rf_we && (U_RF.rf_raddr1 == U_RF.rf_waddr)) begin
+      U_RF.rf_rdata1 = U_RF.rf_wdata;
     end
     else begin
-      U_RF.rf_rdata1 = `V_ZERO;
+      U_RF.rf_rdata1 = U_RF.rf[U_RF.rf_raddr1];
     end
   end
   /* rdata2 */
   always @(*) begin
-    if (U_RF.rf_raddr2 != `V_ZERO) begin
-      U_RF.rf_rdata2 = U_RF.rf[U_RF.rf_raddr2];
+    if (U_RF.rf_raddr2 == `V_ZERO) begin
+      U_RF.rf_rdata2 = `V_ZERO;
+    end
+    else if (U_WB.valid && U_RF.rf_we && (U_RF.rf_raddr2 == U_RF.rf_waddr)) begin
+      U_RF.rf_rdata2 = U_RF.rf_wdata;
     end
     else begin
-      U_RF.rf_rdata2 = `V_ZERO;
+      U_RF.rf_rdata2 = U_RF.rf[U_RF.rf_raddr2];
     end
   end
 

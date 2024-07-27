@@ -67,74 +67,52 @@ module PipeLineCtrl (
   end
 
   /* select rf rdata1 */
+  assign U_ID.rf_rdata1 = U_RF.rf_rdata1;
   always @(*) begin
     if (rst) begin
       id_ready_go[0] = `V_TRUE;
-      U_ID.rf_rdata1 = `V_ZERO;
     end
     else if (U_ID.rf_oe1 && (U_ID.rf_raddr1 != `V_ZERO)) begin
       if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr1)) begin
         id_ready_go[0] = `V_FALSE;
-        U_ID.rf_rdata1 = `V_ZERO;
       end
       else if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr1)) begin
-        if (|U_MEM.load_flag) begin
-          id_ready_go[0] = `V_FALSE;
-          U_ID.rf_rdata1 = `V_ZERO;
-        end
-        else begin
-          id_ready_go[0] = `V_TRUE;
-          U_ID.rf_rdata1 = U_MEM.alu_result;
-        end
+        id_ready_go[0] = `V_FALSE;
       end
       else if (U_WB.valid && U_WB.rf_we && (U_WB.rf_waddr == U_ID.rf_raddr1)) begin
         id_ready_go[0] = `V_TRUE;
-        U_ID.rf_rdata1 = U_WB.rf_wdata;
       end
       else begin
         id_ready_go[0] = `V_TRUE;
-        U_ID.rf_rdata1 = U_RF.rf_rdata1;
       end
     end
     else begin
       id_ready_go[0] = `V_TRUE;
-      U_ID.rf_rdata1 = U_RF.rf_rdata1;
     end
   end
 
   /* select rf rdata2 */
+  assign U_ID.rf_rdata2 = U_RF.rf_rdata2;
   always @(*) begin
     if (rst) begin
       id_ready_go[1] = `V_TRUE;
-      U_ID.rf_rdata2 = `V_ZERO;
     end
     else if (U_ID.rf_oe2 && (U_ID.rf_raddr2 != `V_ZERO)) begin
       if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr2)) begin
         id_ready_go[1] = `V_FALSE;
-        U_ID.rf_rdata2 = `V_ZERO;
       end
       else if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr2)) begin
-        if (|U_MEM.load_flag) begin
-          id_ready_go[1] = `V_FALSE;
-          U_ID.rf_rdata2 = `V_ZERO;
-        end
-        else begin
-          id_ready_go[1] = `V_TRUE;
-          U_ID.rf_rdata2 = U_MEM.alu_result;
-        end
+        id_ready_go[1] = `V_FALSE;
       end
       else if (U_WB.valid && U_WB.rf_we && (U_WB.rf_waddr == U_ID.rf_raddr2)) begin
         id_ready_go[1] = `V_TRUE;
-        U_ID.rf_rdata2 = U_WB.rf_wdata;
       end
       else begin
         id_ready_go[1] = `V_TRUE;
-        U_ID.rf_rdata2 = U_RF.rf_rdata2;
       end
     end
     else begin
       id_ready_go[1] = `V_TRUE;
-      U_ID.rf_rdata2 = U_RF.rf_rdata2;
     end
   end
 

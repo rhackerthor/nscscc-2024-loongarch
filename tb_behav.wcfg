@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="4301850fs"></ZoomStartTime>
-      <ZoomEndTime time="4471876fs"></ZoomEndTime>
-      <Cursor1Time time="866771fs"></Cursor1Time>
+      <ZoomStartTime time="8312340fs"></ZoomStartTime>
+      <ZoomEndTime time="8492764fs"></ZoomEndTime>
+      <Cursor1Time time="8473421fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="304"></NameColumnWidth>
+      <NameColumnWidth column_width="296"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="145" />
+   <WVObjectSize size="144" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -79,10 +79,6 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IF/pc">
       <obj_property name="ElementShortName">pc[31:0]</obj_property>
       <obj_property name="ObjectShortName">pc[31:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IF/inst">
-      <obj_property name="ElementShortName">inst[31:0]</obj_property>
-      <obj_property name="ObjectShortName">inst[31:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IF/next_pc">
       <obj_property name="ElementShortName">next_pc[31:0]</obj_property>
