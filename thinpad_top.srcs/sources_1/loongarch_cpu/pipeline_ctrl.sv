@@ -27,10 +27,11 @@ module PipeLineCtrl (
   assign U_WB.valid_in  = U_MEM.valid & U_MEM.ready_go;
 
   logic       if_ready_go;
+  logic       ic_ready_go;
   logic [1:0] id_ready_go;
   logic       mem_ready_go;
   assign U_IF.ready_go  = if_ready_go;
-  assign U_IC.ready_go  = `V_TRUE;
+  assign U_IC.ready_go  = ic_ready_go;// `V_TRUE;
   assign U_ID.ready_go  = &id_ready_go;
   assign U_EXE.ready_go = `V_TRUE;
   assign U_MEM.ready_go = mem_ready_go;
@@ -47,6 +48,21 @@ module PipeLineCtrl (
     end
     else begin
       if_ready_go = `V_TRUE;
+    end
+  end
+
+  always @(*) begin
+    if (rst) begin
+      ic_ready_go = `V_TRUE;
+    end
+    else if (U_RAM.inst_ram_busy) begin
+      ic_ready_go = `V_FALSE;
+    end
+    else if (U_IC.miss) begin
+      ic_ready_go = `V_FALSE;
+    end
+    else begin
+      ic_ready_go = `V_TRUE;
     end
   end
 

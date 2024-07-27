@@ -130,44 +130,33 @@ module RamUartCtrl (
 
   always @(*) begin
     if (is_uart_stat_i && cpu_ext_oe_i) begin
-      txd_fifo_we  <= `V_FALSE;
-      txd_fifo_din <= `V_ZERO;
-      rxd_fifo_oe  <= `V_FALSE;
+      txd_fifo_we  = `V_FALSE;
+      txd_fifo_din = `V_ZERO;
+      rxd_fifo_oe  = `V_FALSE;
+      uart_flag    = `V_TRUE;
+      uart_rdata   = {30'b0, ~rxd_fifo_empty, ~txd_fifo_full};
     end
     else if (is_uart_data_i && cpu_ext_we_i) begin
-      txd_fifo_we  <= `V_TRUE;
-      txd_fifo_din <= cpu_ext_wdata_i[7:0];
-      rxd_fifo_oe  <= `V_FALSE;
+      txd_fifo_we  = `V_TRUE;
+      txd_fifo_din = cpu_ext_wdata_i[7:0];
+      rxd_fifo_oe  = `V_FALSE;
+      uart_flag    = `V_FALSE;
+      uart_rdata   = `V_ZERO;
     end
     else if (is_uart_data_i && cpu_ext_oe_i) begin
-      txd_fifo_we  <= `V_FALSE;
-      txd_fifo_din <= `V_ZERO;
-      rxd_fifo_oe  <= `V_TRUE;
+      txd_fifo_we  = `V_FALSE;
+      txd_fifo_din = `V_ZERO;
+      rxd_fifo_oe  = `V_TRUE;
+      uart_flag    = `V_TRUE;
+      uart_rdata   = {24'b0, rxd_fifo_dout};
     end
     else begin
-      txd_fifo_we  <= `V_FALSE;
-      txd_fifo_din <= `V_ZERO;
-      rxd_fifo_oe  <= `V_FALSE;
+      txd_fifo_we  = `V_FALSE;
+      txd_fifo_din = `V_ZERO;
+      rxd_fifo_oe  = `V_FALSE;
+      uart_flag    = `V_ZERO;
+      uart_rdata   = `V_ZERO;
     end
-  end
-  always @(posedge clk) begin
-    if (is_uart_stat_i && cpu_ext_oe_i) begin
-      uart_flag    <= `V_TRUE;
-      uart_rdata   <= {30'b0, ~rxd_fifo_empty, ~txd_fifo_full};
-    end
-    else if (is_uart_data_i && cpu_ext_we_i) begin
-      uart_flag    <= `V_FALSE;
-      uart_rdata   <= `V_ZERO;
-    end
-    else if (is_uart_data_i && cpu_ext_oe_i) begin
-      uart_flag    <= `V_TRUE;
-      uart_rdata   <= {24'b0, rxd_fifo_dout};
-    end
-    else begin
-      uart_flag    <= `V_ZERO;
-      uart_rdata   <= `V_ZERO;
-    end
-    
   end
 
   /* base ram */
@@ -177,7 +166,7 @@ module RamUartCtrl (
   assign base_ram_ce_n_o  = base_ram_ce_n_r;
   assign base_ram_oe_n_o  = base_ram_oe_n_r;
   assign base_ram_we_n_o  = base_ram_we_n_r;
-  always @(posedge clk) begin
+  always @(*) begin
     /* 复位值 */
     if (rst) begin
       base_ram_wdata_r <= `V_ZERO;
@@ -217,7 +206,7 @@ module RamUartCtrl (
   assign ext_ram_ce_n_o  = ext_ram_ce_n_r;
   assign ext_ram_oe_n_o  = ext_ram_oe_n_r;
   assign ext_ram_we_n_o  = ext_ram_we_n_r;
-  always @(posedge clk) begin
+  always @(*) begin
     /* 复位值 */
     if (rst) begin
       ext_ram_wdata_r = `V_ZERO;
@@ -238,7 +227,7 @@ module RamUartCtrl (
       ext_ram_we_n_r  = ~cpu_ext_we_i;
       ext_flag        = `V_TRUE;
     end
-/*     else begin
+    else begin
       ext_ram_wdata_r = `V_ZERO;
       ext_ram_addr_r  = `V_ZERO;
       ext_ram_be_n_r  = `V_ONE;
@@ -246,7 +235,7 @@ module RamUartCtrl (
       ext_ram_oe_n_r  = `V_ONE;
       ext_ram_we_n_r  = `V_ONE;
       ext_flag        = `V_FALSE;
-    end */
+    end
   end
 
   always @(*) begin

@@ -47,8 +47,5 @@ module IF (
     end
   end  
 
-  /* 输出inst ram地址 */
-  assign U_RAM.inst_ram_addr = U_IF.next_pc;
-  assign U_RAM.inst_ram_ce = U_IF.allowin && (~U_RAM.inst_ram_busy);
 
 endmodule
