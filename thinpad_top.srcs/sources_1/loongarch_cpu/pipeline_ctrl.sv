@@ -3,6 +3,7 @@ module PipeLineCtrl (
   input logic  clk,
   input logic  rst,
   IFInterface  U_IF,
+  ICInterface  U_IC,
   IDInterface  U_ID,
   EXEInterface U_EXE,
   MEMInterface U_MEM,
@@ -11,14 +12,16 @@ module PipeLineCtrl (
   RamInterface U_RAM
 );
 
-  assign U_IF.allowin  = !U_IF.valid  || (U_IF.ready_go  && U_ID.allowin);
+  assign U_IF.allowin  = !U_IF.valid  || (U_IF.ready_go  && U_IC.allowin);
+  assign U_IC.allowin  = !U_IC.valid  || (U_IC.ready_go  && U_ID.allowin);
   assign U_ID.allowin  = !U_ID.valid  || (U_ID.ready_go  && U_EXE.allowin);
   assign U_EXE.allowin = !U_EXE.valid || (U_EXE.ready_go && U_MEM.allowin);
   assign U_MEM.allowin = !U_MEM.valid || (U_MEM.ready_go && U_WB.allowin);
   assign U_WB.allowin  = !U_WB.valid  ||  U_WB.ready_go;
 
   assign U_IF.valid_in  = `V_TRUE;
-  assign U_ID.valid_in  = U_IF.valid  & U_IF.ready_go;
+  assign U_IC.valid_in  = U_IF.valid  & U_IF.ready_go;
+  assign U_ID.valid_in  = U_IC.valid  & U_IC.ready_go;
   assign U_EXE.valid_in = U_ID.valid  & U_ID.ready_go;
   assign U_MEM.valid_in = U_EXE.valid  & U_EXE.ready_go;
   assign U_WB.valid_in  = U_MEM.valid & U_MEM.ready_go;
@@ -27,6 +30,7 @@ module PipeLineCtrl (
   logic [1:0] id_ready_go;
   logic       mem_ready_go;
   assign U_IF.ready_go  = if_ready_go;
+  assign U_IC.ready_go  = `V_TRUE;
   assign U_ID.ready_go  = &id_ready_go;
   assign U_EXE.ready_go = `V_TRUE;
   assign U_MEM.ready_go = mem_ready_go;

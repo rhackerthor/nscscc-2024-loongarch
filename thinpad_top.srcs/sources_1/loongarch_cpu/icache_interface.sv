@@ -3,8 +3,19 @@ interface ICInterface (
   input logic rst
 );
 
-  logic [`W_DATA] pc [`W_ICACHE];
-  logic [`W_DATA] inst [`W_ICACHE];
+  /* pipeline ctrl signal */
+  logic valid;
+  logic valid_in;
+  logic allowin;
+  logic ready_go;
+  logic [7:0] cnt;
+
+  /* data */
+  logic [`W_DATA] pc;
+  logic [`W_DATA] inst;
+  /* icache */
+  logic [`W_DATA] tag [`W_ICACHE];
+  logic [`W_DATA] data [`W_ICACHE];
   logic we;
   logic miss;
 

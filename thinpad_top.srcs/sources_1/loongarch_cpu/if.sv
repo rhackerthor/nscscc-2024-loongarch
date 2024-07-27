@@ -8,7 +8,7 @@ module IF (
   /* pipeline ctrl */
   always @(posedge U_IF.clk) begin
     if (U_IF.rst == `V_TRUE) begin
-      U_IF.valid <= `V_FALSE;
+      U_IF.valid <= `V_TRUE;
     end
     else if (U_IF.allowin == `V_TRUE) begin
       U_IF.valid <= U_IF.valid_in;
@@ -35,7 +35,6 @@ module IF (
 
   /* 计算next pc */
   assign U_IF.branch_flag = U_ID.branch_cancle;
-  assign U_IF.cancle      = U_ID.branch_cancle;
   always @(*) begin
     if (U_IF.rst) begin 
       U_IF.next_pc = `V_ZERO;
@@ -51,16 +50,5 @@ module IF (
   /* 输出inst ram地址 */
   assign U_RAM.inst_ram_addr = U_IF.next_pc;
   assign U_RAM.inst_ram_ce = U_IF.allowin && (~U_RAM.inst_ram_busy);
-
-  logic [`W_DATA] inst_r;
-  logic inst_ram_ce_r;
-  always @(posedge U_IF.clk) begin
-    if (U_IF.cnt[0]) begin
-      inst_r <= U_RAM.inst_ram_rdata;
-    end
-    inst_ram_ce_r <= U_RAM.inst_ram_ce;
-  end
-  assign U_IF.inst = ~inst_ram_ce_r ? inst_r : U_RAM.inst_ram_rdata;
-
 
 endmodule

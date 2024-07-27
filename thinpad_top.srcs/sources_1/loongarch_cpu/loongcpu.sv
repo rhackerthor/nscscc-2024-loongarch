@@ -29,6 +29,7 @@ module LoongCpu (
 
   /* Interface */
   IFInterface  U_IF  (clk, rst); /*   if    */
+  ICInterface  U_IC  (clk, rst); /*   ic    */
   IDInterface  U_ID  (clk, rst); /*   id    */
   EXEInterface U_EXE (clk, rst); /*   exe   */
   MEMInterface U_MEM (clk, rst); /*   mem   */
@@ -69,6 +70,7 @@ module LoongCpu (
     .clk   (clk  ), 
     .rst   (rst  ),
     .U_IF  (U_IF ),
+    .U_IC  (U_IC ),
     .U_ID  (U_ID ),
     .U_EXE (U_EXE),
     .U_MEM (U_MEM),
@@ -78,7 +80,8 @@ module LoongCpu (
   );
 
   IF  IF0  (U_IF  , U_ID  , U_RAM         );
-  ID  ID0  (U_IF  , U_ID                  );
+  IC  IC0  (U_IF  , U_IC  , U_RAM         );
+  ID  ID0  (U_IC  , U_ID                  );
   EXE EXE0 (U_ID  , U_EXE                 );
   MEM MEM0 (U_EXE , U_MEM , U_RAM         );
   WB  WB0  (U_MEM , U_WB  , U_RAM, U_DEBUG);
