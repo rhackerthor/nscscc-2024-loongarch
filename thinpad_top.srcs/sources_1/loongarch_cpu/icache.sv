@@ -30,6 +30,16 @@ module IC (
     end
   end
 
+  always @(posedge U_IC.clk) begin
+    if (U_IC.rst) begin
+      for (int i = 0; i < `V_ICACHE; i = i + 1) begin
+        U_IC.tag[i]  <= `V_ZERO;
+        U_IC.data[i] <= `V_ZERO;
+      end
+      U_IC.we <= `V_FALSE;
+    end
+  end
+
   logic [`W_DATA] inst_r;
   logic inst_ram_ce_r;
   always @(posedge U_IC.clk) begin

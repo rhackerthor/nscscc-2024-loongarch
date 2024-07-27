@@ -1,3 +1,4 @@
+`include "define.sv"
 interface MEMInterface (
   input logic clk,
   input logic rst
