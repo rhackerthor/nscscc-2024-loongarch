@@ -50,9 +50,9 @@ module RegFile (
     if (U_RF.rf_raddr1 == `V_ZERO) begin
       U_RF.rf_rdata1 = `V_ZERO;
     end
-    else if (U_WB.valid && U_RF.rf_we && (U_RF.rf_raddr1 == U_RF.rf_waddr)) begin
+/*     else if (U_WB.valid && U_RF.rf_we && (U_RF.rf_raddr1 == U_RF.rf_waddr)) begin
       U_RF.rf_rdata1 = U_RF.rf_wdata;
-    end
+    end */
     else begin
       U_RF.rf_rdata1 = U_RF.rf[U_RF.rf_raddr1];
     end
@@ -62,9 +62,9 @@ module RegFile (
     if (U_RF.rf_raddr2 == `V_ZERO) begin
       U_RF.rf_rdata2 = `V_ZERO;
     end
-    else if (U_WB.valid && U_RF.rf_we && (U_RF.rf_raddr2 == U_RF.rf_waddr)) begin
+/*     else if (U_WB.valid && U_RF.rf_we && (U_RF.rf_raddr2 == U_RF.rf_waddr)) begin
       U_RF.rf_rdata2 = U_RF.rf_wdata;
-    end
+    end */
     else begin
       U_RF.rf_rdata2 = U_RF.rf[U_RF.rf_raddr2];
     end
