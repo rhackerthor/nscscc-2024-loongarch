@@ -1,8 +1,9 @@
 `include "define.sv"
 module IC (
-  IFInterface  U_IF,
-  ICInterface  U_IC,
-  RamInterface U_RAM
+  IFInterface     U_IF,
+  ICInterface     U_IC,
+  RamInterface    U_RAM,
+  DecodeInterface U_IC_D
 );
 
   /* pipeline ctrl */
@@ -66,15 +67,6 @@ module IC (
   assign U_RAM.inst_ram_addr = U_IC.pc;
   assign U_RAM.inst_ram_ce = U_IF.allowin && (~U_RAM.inst_ram_busy);
   assign U_IC.inst = U_IC.we ? U_RAM.inst_ram_rdata : U_IC.data[U_IC.pc[`W_VADDR]];
-
-/*   logic [`W_DATA] inst_r;
-  logic inst_ram_ce_r;
-  always @(posedge U_IC.clk) begin
-    if (U_IC.cnt[0]) begin
-      inst_r <= U_RAM.inst_ram_rdata;
-    end
-    inst_ram_ce_r <= U_RAM.inst_ram_ce;
-  end
-  assign U_IC.inst = ~inst_ram_ce_r ? inst_r : U_RAM.inst_ram_rdata; */
+  Decode Decode_IC (U_IC.inst, U_IC_D);
 
 endmodule

@@ -1,7 +1,8 @@
 `include "define.sv"
 module ID (
   ICInterface U_IC,
-  IDInterface U_ID
+  IDInterface U_ID,
+  DecodeInterface U_ICD
 );
 
   /* pipeline ctrl */
@@ -32,9 +33,37 @@ module ID (
   end
 
   /* decode */ 
-  /* 下面基本采用 */
   DecodeInterface U_D ();
-  Decode Decode0 (U_ID.inst, U_D);
+  // Decode Decode0 (U_ID.inst, U_D);
+  always @(posedge U_ID.clk) begin
+    if (U_ID.valid_in && U_ID.allowin) begin
+      U_D._add_w     <= U_ICD._add_w;
+      U_D._sub_w     <= U_ICD._sub_w;
+      U_D._and       <= U_ICD._and;
+      U_D._or        <= U_ICD._or;
+      U_D._xor       <= U_ICD._xor;
+      U_D._mul_w     <= U_ICD._mul_w;
+      U_D._srai_w    <= U_ICD._srai_w;
+      U_D._srli_w    <= U_ICD._srli_w;
+      U_D._slli_w    <= U_ICD._slli_w;
+      U_D._sltui     <= U_ICD._sltui;
+      U_D._addi_w    <= U_ICD._addi_w;
+      U_D._andi      <= U_ICD._andi;
+      U_D._ori       <= U_ICD._ori;
+      U_D._ld_b      <= U_ICD._ld_b;
+      U_D._ld_w      <= U_ICD._ld_w;
+      U_D._st_b      <= U_ICD._st_b;
+      U_D._st_w      <= U_ICD._st_w;
+      U_D._lu12i_w   <= U_ICD._lu12i_w;
+      U_D._pcaddu12i <= U_ICD._pcaddu12i;
+      U_D._jirl      <= U_ICD._jirl;
+      U_D._b         <= U_ICD._b;
+      U_D._bl        <= U_ICD._bl;
+      U_D._beq       <= U_ICD._beq;
+      U_D._bne       <= U_ICD._bne;
+      U_D._bge       <= U_ICD._bge;
+    end
+  end
 
   /* immediate */
   logic [`W_SEL_IMM] sel_imm;

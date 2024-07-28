@@ -89,6 +89,7 @@ module EXE (
   /* mul result */
   logic [63:0] signed_mul_result;
   assign signed_mul_result = $signed(U_EXE.alu_in1) * $signed(U_EXE.alu_in2);
+  assign mul_flag = U_EXE.alu_op[`V_MUL];
   /* alu result */
   assign add_result  = U_EXE.alu_in1 + U_EXE.alu_in2;                              
   assign sub_result  = U_EXE.alu_in1 + (~U_EXE.alu_in2) + 1;                       

@@ -8,7 +8,7 @@ interface ICInterface (
   logic valid_in;
   logic allowin;
   logic ready_go;
-  logic [7:0] cnt;
+  logic [11:0] cnt;
 
   /* data */
   logic [`W_DATA] pc;

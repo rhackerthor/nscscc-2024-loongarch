@@ -52,6 +52,8 @@ module LoongCpu (
     .is_uart_data   (is_uart_data_o  )
   );
 
+  DecodeInterface U_IC_D ();
+
   DebugInterface U_DEBUG (
     debug_wb_valid_o,
     debug_wb_rf_we_o,
@@ -80,8 +82,8 @@ module LoongCpu (
   );
 
   IF  IF0  (U_IF  , U_ID  , U_RAM         );
-  IC  IC0  (U_IF  , U_IC  , U_RAM         );
-  ID  ID0  (U_IC  , U_ID                  );
+  IC  IC0  (U_IF  , U_IC  , U_RAM, U_IC_D );
+  ID  ID0  (U_IC  , U_ID  , U_IC_D        );
   EXE EXE0 (U_ID  , U_EXE                 );
   MEM MEM0 (U_EXE , U_MEM , U_RAM         );
   WB  WB0  (U_MEM , U_WB  , U_RAM, U_DEBUG);

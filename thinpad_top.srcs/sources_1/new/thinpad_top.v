@@ -72,7 +72,7 @@ module thinpad_top(
   wire clk;
   reg reset_of_clk;
   // 异步复位，同步释放，将locked信号转为后级电路的复位reset_of_clk10M
-  assign clk = clk_100M;
+  assign clk = clk_90M;
   always@(posedge clk or negedge locked) begin
       if(~locked) reset_of_clk <= 1'b1;
       else        reset_of_clk <= 1'b0;
