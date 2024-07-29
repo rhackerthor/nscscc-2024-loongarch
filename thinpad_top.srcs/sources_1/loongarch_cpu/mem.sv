@@ -62,7 +62,7 @@ module MEM (
   assign U_RAM.is_uart       = U_RAM.is_uart_data || U_RAM.is_uart_stat;
   assign U_RAM.inst_ram_busy = U_RAM.is_base_ram && U_RAM.data_ram_ce;
 
-  assign U_MEM.ram_valid = (U_RAM.is_uart_stat || U_RAM.is_uart_data) ? U_MEM.cnt[0] : |U_MEM.cnt[1:0];
+  assign U_MEM.ram_valid = (U_RAM.is_uart_stat || U_RAM.is_uart_data) ? U_MEM.cnt[0] : |U_MEM.cnt[2:0];
   always @(*) begin
     case (U_MEM.ram_mask) 
       4'b0001: begin U_MEM.ram_rdata = {{24{U_RAM.data_ram_rdata[ 7]}}, U_RAM.data_ram_rdata[ 7: 0]}; end

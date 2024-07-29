@@ -142,49 +142,46 @@ module ID (
 
   /* sel branch pc */
   always @(*) begin
-    if (U_ID.rst) begin
-      U_ID.branch_flag = `V_FALSE;
-      U_ID.branch_pc   = `V_ZERO;
+    if (U_D._b || U_D._bl) begin
+      U_ID.branch_pc   = U_ID.pc + {s_imm_26[29:0], 2'b0};
+    end
+    else if (U_D._jirl) begin
+      U_ID.branch_pc   = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
+    end
+    else begin
+      U_ID.branch_pc   = U_ID.pc + {s_imm_16[29:0], 2'b0};
+    end
+  end
+  always @(*) begin
+    if (U_D._b || U_D._bl) begin
+      U_ID.branch_flag = `V_TRUE;
       U_ID.jirl_flag   = `V_FALSE;
       U_ID.comp_flag   = `V_FALSE;
     end
+    else if (U_D._jirl) begin
+      U_ID.branch_flag = `V_TRUE;
+      U_ID.jirl_flag   = `V_TRUE;
+      U_ID.comp_flag   = `V_FALSE;
+    end
+    else if (U_D._beq && (U_ID.rf_rdata1 == U_ID.rf_rdata2)) begin
+      U_ID.branch_flag = `V_TRUE;
+      U_ID.jirl_flag   = `V_FALSE;
+      U_ID.comp_flag   = `V_TRUE;
+    end
+    else if (U_D._bne && (U_ID.rf_rdata1 != U_ID.rf_rdata2)) begin
+      U_ID.branch_flag = `V_TRUE;
+      U_ID.jirl_flag   = `V_FALSE;
+      U_ID.comp_flag   = `V_TRUE;
+    end
+    else if (U_D._bge && ($signed(U_ID.rf_rdata1) >= $signed(U_ID.rf_rdata2))) begin
+      U_ID.branch_flag = `V_TRUE;
+      U_ID.jirl_flag   = `V_FALSE;
+      U_ID.comp_flag   = `V_TRUE;
+    end
     else begin
-      if (U_D._b || U_D._bl) begin
-        U_ID.branch_flag = `V_TRUE;
-        U_ID.branch_pc   = U_ID.pc + {s_imm_26[29:0], 2'b0};
-        U_ID.jirl_flag   = `V_FALSE;
-        U_ID.comp_flag   = `V_FALSE;
-      end
-      else if (U_D._jirl) begin
-        U_ID.branch_flag = `V_TRUE;
-        U_ID.branch_pc   = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
-        U_ID.jirl_flag   = `V_TRUE;
-        U_ID.comp_flag   = `V_FALSE;
-      end
-      else if (U_D._beq && (U_ID.rf_rdata1 == U_ID.rf_rdata2)) begin
-        U_ID.branch_flag = `V_TRUE;
-        U_ID.branch_pc   = U_ID.pc + {s_imm_16[29:0], 2'b0};
-        U_ID.jirl_flag   = `V_FALSE;
-        U_ID.comp_flag   = `V_TRUE;
-      end
-      else if (U_D._bne && (U_ID.rf_rdata1 != U_ID.rf_rdata2)) begin
-        U_ID.branch_flag = `V_TRUE;
-        U_ID.branch_pc   = U_ID.pc + {s_imm_16[29:0], 2'b0};
-        U_ID.jirl_flag   = `V_FALSE;
-        U_ID.comp_flag   = `V_TRUE;
-      end
-      else if (U_D._bge && ($signed(U_ID.rf_rdata1) >= $signed(U_ID.rf_rdata2))) begin
-        U_ID.branch_flag = `V_TRUE;
-        U_ID.branch_pc   = U_ID.pc + {s_imm_16[29:0], 2'b0};
-        U_ID.jirl_flag   = `V_FALSE;
-        U_ID.comp_flag   = `V_TRUE;
-      end
-      else begin
-        U_ID.branch_flag = `V_FALSE;
-        U_ID.branch_pc   = `V_ZERO;
-        U_ID.jirl_flag   = `V_FALSE;
-        U_ID.comp_flag   = `V_FALSE;
-      end
+      U_ID.branch_flag = `V_FALSE;
+      U_ID.jirl_flag   = `V_FALSE;
+      U_ID.comp_flag   = `V_FALSE;
     end
   end
 

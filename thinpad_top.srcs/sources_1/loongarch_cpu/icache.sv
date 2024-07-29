@@ -31,6 +31,7 @@ module IC (
     end
   end
 
+  logic miss_r;
   always @(posedge U_IC.clk) begin
     if (U_IC.rst) begin
       for (int i = 0; i < `V_ICACHE; i = i + 1) begin
@@ -38,9 +39,14 @@ module IC (
         U_IC.data[i] <= `V_ZERO;
       end
       U_IC.we <= `V_FALSE;
+      miss_r <= `V_FALSE;
     end
     else begin
       if (U_IC.miss) begin
+        miss_r <= `V_TRUE;
+      end
+      if (miss_r) begin
+        miss_r <= `V_FALSE;
         U_IC.we <= `V_TRUE;
         U_IC.tag[U_IC.pc[`W_VADDR]] <= U_IC.pc;
       end
