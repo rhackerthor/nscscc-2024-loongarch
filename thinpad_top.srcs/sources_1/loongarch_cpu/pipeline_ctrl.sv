@@ -70,10 +70,10 @@ module PipeLineCtrl (
   /* select rf rdata1 */
   always @(*) begin
     if (U_ID.rf_oe1 && (U_ID.rf_raddr1 != `V_ZERO)) begin
-      if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr1)) begin
-        U_ID.rf_rdata1 = `V_ZERO;
-      end
-      else if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr1)) begin
+      // if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr1)) begin
+        // U_ID.rf_rdata1 = `V_ZERO;
+      // end
+      if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr1)) begin
         U_ID.rf_rdata1 = U_MEM.alu_result;
       end
       else if (U_WB.valid && U_WB.rf_we && (U_WB.rf_waddr == U_ID.rf_raddr1)) begin
@@ -118,10 +118,10 @@ module PipeLineCtrl (
   /* select rf rdata2 */
   always @(*) begin
     if (U_ID.rf_oe2 && (U_ID.rf_raddr2 != `V_ZERO)) begin
-      if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr2)) begin
-        U_ID.rf_rdata2 = `V_ZERO;
-      end
-      else if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr2)) begin
+      // if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr2)) begin
+        // U_ID.rf_rdata2 = `V_ZERO;
+      // end
+      if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr2)) begin
         U_ID.rf_rdata2 = U_MEM.alu_result;
       end
       else if (U_WB.valid && U_WB.rf_we && (U_WB.rf_waddr == U_ID.rf_raddr2)) begin

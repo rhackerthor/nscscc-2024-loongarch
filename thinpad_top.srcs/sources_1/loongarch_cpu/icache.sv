@@ -71,7 +71,7 @@ module IC (
 
   /* 输出inst ram地址 */
   assign U_RAM.inst_ram_addr = U_IC.pc;
-  assign U_RAM.inst_ram_ce = U_IF.allowin && (~U_RAM.inst_ram_busy);
+  assign U_RAM.inst_ram_ce = U_IF.allowin && (~U_RAM.inst_ram_busy) && U_IC.miss;
   assign U_IC.inst = U_IC.we ? U_RAM.inst_ram_rdata : U_IC.data[U_IC.pc[`W_VADDR]];
   Decode Decode_IC (U_IC.inst, U_IC_D);
 
