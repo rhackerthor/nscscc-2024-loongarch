@@ -31,7 +31,7 @@ module IC (
     end
   end
 
-  logic miss_stop;
+  logic [2:0] miss_stop;
   always @(posedge U_IC.clk) begin
     if (U_IC.rst) begin
       for (int i = 0; i < `V_ICACHE; i = i + 1) begin
@@ -39,14 +39,13 @@ module IC (
         U_IC.data[i] <= `V_ZERO;
       end
       U_IC.we   <= `V_FALSE;
-      miss_stop <= `V_FALSE;
+      miss_stop <= 1;
     end
     else begin
-      if (U_IC.miss && ~miss_stop) begin
-        miss_stop <= `V_TRUE;
+      if (U_IC.miss) begin
+        miss_stop <= {miss_stop[1:0], miss_stop[2]};
       end
-      if (miss_stop) begin
-        miss_stop <= `V_FALSE;
+      if (miss_stop[2]) begin
         U_IC.we <= `V_TRUE;
         U_IC.tag[U_IC.pc[`W_VADDR]] <= U_IC.pc;
       end

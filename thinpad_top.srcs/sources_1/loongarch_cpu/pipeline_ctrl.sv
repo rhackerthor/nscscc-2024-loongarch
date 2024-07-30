@@ -177,6 +177,9 @@ module PipeLineCtrl (
     if (U_IC.miss && U_EXE.inst_ram_busy) begin
       exe_ready_go = `V_FALSE;
     end
+    else if (U_EXE.cnt[0] && U_EXE.mul_flag) begin
+      exe_ready_go = `V_FALSE;
+    end
     else begin
       exe_ready_go = `V_TRUE;
     end
@@ -184,7 +187,7 @@ module PipeLineCtrl (
 
   /* mem ready go */
   always @(*) begin
-    if (U_MEM.cnt[0] && U_RAM.data_ram_ce && (~U_RAM.is_uart)) begin
+    if (|U_MEM.cnt[2:0] && U_RAM.data_ram_ce && (~U_RAM.is_uart)) begin
       mem_ready_go <= `V_FALSE;
     end
     else begin

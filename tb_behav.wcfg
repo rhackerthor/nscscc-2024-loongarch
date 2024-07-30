@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="8312340fs"></ZoomStartTime>
-      <ZoomEndTime time="8492764fs"></ZoomEndTime>
-      <Cursor1Time time="8473421fs"></Cursor1Time>
+      <ZoomStartTime time="1649780fs"></ZoomStartTime>
+      <ZoomEndTime time="2036427fs"></ZoomEndTime>
+      <Cursor1Time time="1709377fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="296"></NameColumnWidth>
+      <NameColumnWidth column_width="288"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="144" />
+   <WVObjectSize size="145" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -114,8 +114,8 @@
       <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/cnt">
-      <obj_property name="ElementShortName">cnt[7:0]</obj_property>
-      <obj_property name="ObjectShortName">cnt[7:0]</obj_property>
+      <obj_property name="ElementShortName">cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt[11:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider158" type="divider">
       <obj_property name="label">data</obj_property>
@@ -286,8 +286,8 @@
       <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_EXE/cnt">
-      <obj_property name="ElementShortName">cnt[7:0]</obj_property>
-      <obj_property name="ObjectShortName">cnt[7:0]</obj_property>
+      <obj_property name="ElementShortName">cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt[11:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider158" type="divider">
       <obj_property name="label">data</obj_property>
@@ -380,8 +380,8 @@
       <obj_property name="ObjectShortName">ready_go</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_MEM/cnt">
-      <obj_property name="ElementShortName">cnt[7:0]</obj_property>
-      <obj_property name="ObjectShortName">cnt[7:0]</obj_property>
+      <obj_property name="ElementShortName">cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">cnt[11:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider158" type="divider">
       <obj_property name="label">data</obj_property>
@@ -501,6 +501,10 @@
    <wvobject fp_name="divider297" type="divider">
       <obj_property name="label">ram</obj_property>
       <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_RAM/inst_ram_rdata">
       <obj_property name="ElementShortName">inst_ram_rdata[31:0]</obj_property>

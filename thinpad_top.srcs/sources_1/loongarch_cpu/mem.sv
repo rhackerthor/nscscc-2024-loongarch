@@ -62,6 +62,6 @@ module MEM (
   assign U_RAM.is_uart       = U_RAM.is_uart_data || U_RAM.is_uart_stat;
   assign U_RAM.inst_ram_busy = U_RAM.is_base_ram && U_RAM.data_ram_ce;
 
-  assign U_MEM.ram_valid = (U_RAM.is_uart_stat || U_RAM.is_uart_data) ? U_MEM.cnt[0] : |U_MEM.cnt[1:0];
+  assign U_MEM.ram_valid = (U_RAM.is_uart_stat || U_RAM.is_uart_data) ? U_MEM.cnt[0] : |U_MEM.cnt[3:0];
   
 endmodule
