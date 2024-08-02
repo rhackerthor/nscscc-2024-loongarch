@@ -12,7 +12,7 @@ module IC (
       U_IC.valid <= `V_FALSE;
     end
     else if (U_IC.allowin) begin
-      U_IC.valid <= U_IC.valid_in;
+      U_IC.valid <= U_IC.validin;
     end
   end
 
@@ -20,14 +20,9 @@ module IC (
   always @(posedge U_IC.clk) begin
     if (U_IC.rst) begin
       U_IC.pc  <= `V_ZERO;
-      U_IC.cnt <= `V_ZERO;
     end
-    else if (U_IC.valid_in && U_IC.allowin) begin
+    else if (U_IC.validin && U_IC.allowin) begin
       U_IC.pc  <= U_IF.next_pc;
-      U_IC.cnt <= 1;
-    end
-    else begin
-      U_IC.cnt <= {U_IC.cnt[6:0], U_IC.cnt[7]};
     end
   end
 

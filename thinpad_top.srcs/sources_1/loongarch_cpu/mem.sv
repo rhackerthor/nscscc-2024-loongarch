@@ -11,7 +11,7 @@ module MEM (
       U_MEM.valid <= `V_FALSE;
     end
     else if (U_MEM.allowin) begin
-      U_MEM.valid <= U_MEM.valid_in;
+      U_MEM.valid <= U_MEM.validin;
     end
   end
 
@@ -30,7 +30,7 @@ module MEM (
       U_MEM.store_flag <= `V_ZERO;
       U_MEM.cnt        <= `V_ZERO;
     end
-    else if (U_MEM.valid_in && U_MEM.allowin) begin
+    else if (U_MEM.validin && U_MEM.allowin) begin
       U_MEM.pc         <= U_EXE.pc;
       U_MEM.inst       <= U_EXE.inst;
       U_MEM.rf_waddr   <= U_EXE.rf_waddr;
@@ -44,7 +44,7 @@ module MEM (
       U_MEM.cnt        <= 1;
     end
     else begin
-      U_MEM.cnt <= {U_MEM.cnt[6:0], U_MEM.cnt[7]};
+      U_MEM.cnt <= {U_MEM.cnt[10:0], U_MEM.cnt[11]};
     end
   end
 

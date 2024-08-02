@@ -12,7 +12,7 @@ module WB (
       U_WB.valid <= `V_FALSE;
     end
     else if (U_WB.allowin) begin
-      U_WB.valid <= U_WB.valid_in;
+      U_WB.valid <= U_WB.validin;
     end
   end
 
@@ -26,9 +26,8 @@ module WB (
       U_WB.alu_result <= `V_ZERO;
       U_WB.ram_mask   <= `V_ZERO;
       U_WB.load_flag  <= `V_ZERO;
-      // U_WB.ram_rdata  <= `V_ZERO;
     end
-    else if (U_WB.valid_in && U_WB.allowin) begin
+    else if (U_WB.validin && U_WB.allowin) begin
       U_WB.pc         <= U_MEM.pc;
       U_WB.inst       <= U_MEM.inst;
       U_WB.rf_waddr   <= U_MEM.rf_waddr;
@@ -36,7 +35,6 @@ module WB (
       U_WB.alu_result <= U_MEM.alu_result;
       U_WB.ram_mask   <= U_MEM.ram_mask;
       U_WB.load_flag  <= U_MEM.load_flag;
-      // U_WB.ram_rdata  <= U_MEM.ram_rdata;
     end
   end
 

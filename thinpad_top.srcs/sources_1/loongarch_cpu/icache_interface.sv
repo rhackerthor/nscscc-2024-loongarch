@@ -5,10 +5,9 @@ interface ICInterface (
 
   /* pipeline ctrl signal */
   logic valid;
-  logic valid_in;
+  logic validin;
   logic allowin;
   logic ready_go;
-  logic [11:0] cnt;
 
   /* data */
   logic [`W_DATA] pc;

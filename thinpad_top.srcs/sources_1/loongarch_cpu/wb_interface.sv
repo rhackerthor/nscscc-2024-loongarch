@@ -6,7 +6,7 @@ interface WBInterface (
 
   /* pipeline ctrl */
   logic valid;
-  logic valid_in;
+  logic validin;
   logic allowin;
   logic ready_go;
 

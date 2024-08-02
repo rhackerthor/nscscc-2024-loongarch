@@ -7,29 +7,21 @@ module IF (
 
   /* pipeline ctrl */
   always @(posedge U_IF.clk) begin
-    if (U_IF.rst == `V_TRUE) begin
+    if (U_IF.rst) begin
       U_IF.valid <= `V_TRUE;
     end
-    else if (U_IF.allowin == `V_TRUE) begin
-      U_IF.valid <= U_IF.valid_in;
+    else if (U_IF.allowin) begin
+      U_IF.valid <= U_IF.validin;
     end
-/*     else if (U_ID.branch_cancle) begin
-      U_IF.valid <= `V_ZERO;
-    end */
   end
 
   /* 流水线寄存器 */
   always @(posedge U_IF.clk) begin
-    if (U_IF.rst == `V_TRUE) begin
+    if (U_IF.rst) begin
       U_IF.pc <= `V_RST_PC;
-      U_IF.cnt <= `V_ZERO;
     end
-    else if (U_IF.valid_in && U_IF.allowin) begin
+    else if (U_IF.validin && U_IF.allowin) begin
       U_IF.pc <= U_IF.next_pc;
-      U_IF.cnt <= 1;
-    end
-    else begin
-      U_IF.cnt <= {U_IF.cnt[6:0], U_IF.cnt[7]};
     end
   end
 

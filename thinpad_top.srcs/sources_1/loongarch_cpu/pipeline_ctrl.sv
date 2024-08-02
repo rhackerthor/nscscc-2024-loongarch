@@ -19,12 +19,12 @@ module PipeLineCtrl (
   assign U_MEM.allowin = !U_MEM.valid || (U_MEM.ready_go && U_WB.allowin);
   assign U_WB.allowin  = !U_WB.valid  ||  U_WB.ready_go;
 
-  assign U_IF.valid_in  = `V_TRUE;
-  assign U_IC.valid_in  = U_IF.valid  & U_IF.ready_go;
-  assign U_ID.valid_in  = U_IC.valid  & U_IC.ready_go;
-  assign U_EXE.valid_in = U_ID.valid  & U_ID.ready_go;
-  assign U_MEM.valid_in = U_EXE.valid  & U_EXE.ready_go;
-  assign U_WB.valid_in  = U_MEM.valid & U_MEM.ready_go;
+  assign U_IF.validin  = `V_TRUE;
+  assign U_IC.validin  = U_IF.valid  & U_IF.ready_go;
+  assign U_ID.validin  = U_IC.valid  & U_IC.ready_go;
+  assign U_EXE.validin = U_ID.valid  & U_ID.ready_go;
+  assign U_MEM.validin = U_EXE.valid & U_EXE.ready_go;
+  assign U_WB.validin  = U_MEM.valid & U_MEM.ready_go;
 
   logic       if_ready_go;
   logic       ic_ready_go;
@@ -32,7 +32,7 @@ module PipeLineCtrl (
   logic       exe_ready_go;
   logic       mem_ready_go;
   assign U_IF.ready_go  = if_ready_go;
-  assign U_IC.ready_go  = ic_ready_go;// `V_TRUE;
+  assign U_IC.ready_go  = ic_ready_go;
   assign U_ID.ready_go  = &id_ready_go;
   assign U_EXE.ready_go = exe_ready_go;
   assign U_MEM.ready_go = mem_ready_go;
@@ -70,9 +70,6 @@ module PipeLineCtrl (
   /* select rf rdata1 */
   always @(*) begin
     if (U_ID.rf_oe1 && (U_ID.rf_raddr1 != `V_ZERO)) begin
-      // if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr1)) begin
-        // U_ID.rf_rdata1 = `V_ZERO;
-      // end
       if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr1)) begin
         U_ID.rf_rdata1 = U_MEM.alu_result;
       end
@@ -118,9 +115,6 @@ module PipeLineCtrl (
   /* select rf rdata2 */
   always @(*) begin
     if (U_ID.rf_oe2 && (U_ID.rf_raddr2 != `V_ZERO)) begin
-      // if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr2)) begin
-        // U_ID.rf_rdata2 = `V_ZERO;
-      // end
       if (U_MEM.valid && U_MEM.rf_we && (U_MEM.rf_waddr == U_ID.rf_raddr2)) begin
         U_ID.rf_rdata2 = U_MEM.alu_result;
       end
@@ -165,7 +159,7 @@ module PipeLineCtrl (
 
   /* branch cancle */
   always @(*) begin
-    if (~U_ID.cancle && U_ID.allowin && U_ID.valid_in && U_ID.branch_flag) begin
+    if (~U_ID.cancle && U_ID.allowin && U_ID.validin && U_ID.branch_flag) begin
       U_ID.branch_cancle = `V_TRUE;
     end
     else begin

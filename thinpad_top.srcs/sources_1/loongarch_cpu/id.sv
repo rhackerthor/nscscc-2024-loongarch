@@ -14,7 +14,7 @@ module ID (
       U_ID.valid <= `V_FALSE;
     end
     else if (U_ID.allowin) begin
-      U_ID.valid <= U_ID.valid_in;
+      U_ID.valid <= U_ID.validin;
     end
   end
 
@@ -25,7 +25,7 @@ module ID (
       U_ID.inst   <= `V_ZERO;
       U_ID.cancle <= `V_ZERO;
     end
-    else if (U_ID.valid_in && U_ID.allowin) begin
+    else if (U_ID.validin && U_ID.allowin) begin
       U_ID.pc     <= U_IC.pc;
       U_ID.inst   <= U_IC.inst;
       U_ID.cancle <= U_ID.branch_cancle;
@@ -34,9 +34,8 @@ module ID (
 
   /* decode */ 
   DecodeInterface U_D ();
-  // Decode Decode0 (U_ID.inst, U_D);
   always @(posedge U_ID.clk) begin
-    if (U_ID.valid_in && U_ID.allowin) begin
+    if (U_ID.validin && U_ID.allowin) begin
       U_D._add_w     <= U_ICD._add_w;
       U_D._sub_w     <= U_ICD._sub_w;
       U_D._and       <= U_ICD._and;

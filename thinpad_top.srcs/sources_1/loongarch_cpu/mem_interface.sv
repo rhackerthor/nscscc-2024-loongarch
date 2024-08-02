@@ -6,7 +6,7 @@ interface MEMInterface (
 
   /* pipeline ctrl */
   logic valid;
-  logic valid_in;
+  logic validin;
   logic allowin;
   logic ready_go;
   logic [11:0] cnt;

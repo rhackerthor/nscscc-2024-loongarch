@@ -10,7 +10,7 @@ module EXE (
       U_EXE.valid <= `V_FALSE;
     end
     else if (U_EXE.allowin) begin
-      U_EXE.valid <= U_EXE.valid_in;
+      U_EXE.valid <= U_EXE.validin;
     end
   end
 
@@ -31,7 +31,7 @@ module EXE (
       U_EXE.store_flag <= `V_ZERO;
       U_EXE.cnt        <= `V_ZERO;
     end
-    else if (U_EXE.valid_in && U_EXE.allowin) begin
+    else if (U_EXE.validin && U_EXE.allowin) begin
       U_EXE.pc         <= U_ID.pc;
       U_EXE.inst       <= U_ID.inst;
       U_EXE.imm        <= U_ID.imm;
@@ -47,7 +47,7 @@ module EXE (
       U_EXE.cnt        <= 1;
     end
     else begin
-      U_EXE.cnt <= {U_EXE.cnt[6:0], U_EXE.cnt[7]};
+      U_EXE.cnt <= {U_EXE.cnt[10:0], U_EXE.cnt[11]};
     end
   end
 
