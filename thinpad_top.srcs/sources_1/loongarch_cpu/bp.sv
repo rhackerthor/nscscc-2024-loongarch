@@ -47,7 +47,7 @@ module BP (
   logic [`W_VADDR] tag;
   assign tag = U_ID.pc[`W_VADDR];
 
-  assign U_ID.branch_flag = (U_IC.bp_state[tag] != branch_flag) && ~U_ID.new_inst;
+  assign U_ID.branch_flag = (U_IC.bp_state[tag] != branch_flag) || U_D._jirl;
   always @(posedge U_ID.clk) begin
     if (U_ID.rst) begin
       for (int i = 0; i < `V_ICACHE; i = i + 1) begin
@@ -69,6 +69,9 @@ module BP (
         U_IC.bp_pc[tag] <= U_ID.pc + 32'h4;
       end
       U_IC.bp_state[tag] <= branch_flag;
+    end
+    else if (U_ID.new_inst) begin
+      U_IC.bp_state[tag] <= `V_FALSE;
     end
   end
   
