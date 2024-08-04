@@ -24,11 +24,13 @@ module ID (
       U_ID.pc     <= `V_ZERO;
       U_ID.inst   <= `V_ZERO;
       U_ID.cancle <= `V_ZERO;
+      U_ID.new_inst <= `V_ZERO;
     end
     else if (U_ID.validin && U_ID.allowin) begin
       U_ID.pc     <= U_IC.pc;
       U_ID.inst   <= U_IC.inst;
       U_ID.cancle <= U_ID.branch_cancle;
+      U_ID.new_inst <= U_IC.we;
     end
   end
 
@@ -139,40 +141,8 @@ module ID (
     U_D._beq, U_D._bne, U_D._bge
   };
 
-  /* sel branch pc */
-  always @(*) begin
-    if (U_D._b || U_D._bl) begin
-      U_ID.branch_pc   = U_ID.pc + {s_imm_26[29:0], 2'b0};
-    end
-    else if (U_D._jirl) begin
-      U_ID.branch_pc   = U_ID.rf_rdata1 + {s_imm_16[29:0], 2'b0};
-    end
-    else begin
-      U_ID.branch_pc   = U_ID.pc + {s_imm_16[29:0], 2'b0};
-    end
-  end
-  always @(*) begin
-    if (U_D._b || U_D._bl) begin
-      U_ID.branch_flag = `V_TRUE;
-    end
-    else if (U_D._jirl) begin
-      U_ID.branch_flag = `V_TRUE;
-    end
-    else if (U_D._beq && (U_ID.rf_rdata1 == U_ID.rf_rdata2)) begin
-      U_ID.branch_flag = `V_TRUE;
-    end
-    else if (U_D._bne && (U_ID.rf_rdata1 != U_ID.rf_rdata2)) begin
-      U_ID.branch_flag = `V_TRUE;
-    end
-    else if (U_D._bge && ($signed(U_ID.rf_rdata1) >= $signed(U_ID.rf_rdata2))) begin
-      U_ID.branch_flag = `V_TRUE;
-    end
-    else begin
-      U_ID.branch_flag = `V_FALSE;
-    end
-  end
-  assign U_ID.jirl_flag = U_D._jirl;
-  assign U_ID.comp_flag = |{U_D._beq, U_D._bne, U_D._bge};
+  /* branch prediction */
+  BP BP0 (U_IC, U_ID, U_D, s_imm_16, s_imm_26);
 
   /* alu */
   assign U_ID.alu_op[`V_ADD ] = |{

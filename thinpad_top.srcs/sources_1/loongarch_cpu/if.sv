@@ -26,6 +26,8 @@ module IF (
   end
 
   /* 计算next pc */
+  logic [`W_VADDR] tag;
+  assign tag = U_IF.pc[`W_VADDR];
   assign U_IF.branch_flag = U_ID.branch_cancle;
   always @(*) begin
     if (U_IF.rst) begin 
@@ -33,6 +35,9 @@ module IF (
     end
     else if (U_IF.branch_flag) begin 
       U_IF.next_pc = U_ID.branch_pc;
+    end
+    else if (U_IC.cache_valid[tag] && U_IC.bp_state[tag]) begin
+      U_IF.next_pc = U_IC.bp_pc[tag];
     end
     else begin 
       U_IF.next_pc = U_IF.pc + 32'h4;

@@ -15,6 +15,7 @@ interface IDInterface (
   /* data */
   logic [`W_DATA] pc;
   logic [`W_DATA] inst;
+  logic new_inst;
   /* immediate */
   logic [`W_DATA] imm;
   /* reg file */
