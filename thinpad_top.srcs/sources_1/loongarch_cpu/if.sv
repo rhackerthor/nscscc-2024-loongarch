@@ -1,8 +1,8 @@
 `include "define.sv"
 module IF (
-  IFInterface  U_IF,
-  IDInterface  U_ID,
-  RamInterface U_RAM
+  IFInterface U_IF,
+  ICInterface U_IC,
+  IDInterface U_ID
 );
 
   /* pipeline ctrl */

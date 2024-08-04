@@ -81,7 +81,7 @@ module LoongCpu (
     .U_RAM (U_RAM)
   );
 
-  IF  IF0  (U_IF  , U_ID  , U_RAM         );
+  IF  IF0  (U_IF  , U_IC  , U_ID          );
   IC  IC0  (U_IF  , U_IC  , U_RAM, U_IC_D );
   ID  ID0  (U_IC  , U_ID  , U_IC_D        );
   EXE EXE0 (U_ID  , U_EXE                 );

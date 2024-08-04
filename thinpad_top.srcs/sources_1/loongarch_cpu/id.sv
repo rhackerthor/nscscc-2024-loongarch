@@ -154,35 +154,25 @@ module ID (
   always @(*) begin
     if (U_D._b || U_D._bl) begin
       U_ID.branch_flag = `V_TRUE;
-      U_ID.jirl_flag   = `V_FALSE;
-      U_ID.comp_flag   = `V_FALSE;
     end
     else if (U_D._jirl) begin
       U_ID.branch_flag = `V_TRUE;
-      U_ID.jirl_flag   = `V_TRUE;
-      U_ID.comp_flag   = `V_FALSE;
     end
     else if (U_D._beq && (U_ID.rf_rdata1 == U_ID.rf_rdata2)) begin
       U_ID.branch_flag = `V_TRUE;
-      U_ID.jirl_flag   = `V_FALSE;
-      U_ID.comp_flag   = `V_TRUE;
     end
     else if (U_D._bne && (U_ID.rf_rdata1 != U_ID.rf_rdata2)) begin
       U_ID.branch_flag = `V_TRUE;
-      U_ID.jirl_flag   = `V_FALSE;
-      U_ID.comp_flag   = `V_TRUE;
     end
     else if (U_D._bge && ($signed(U_ID.rf_rdata1) >= $signed(U_ID.rf_rdata2))) begin
       U_ID.branch_flag = `V_TRUE;
-      U_ID.jirl_flag   = `V_FALSE;
-      U_ID.comp_flag   = `V_TRUE;
     end
     else begin
       U_ID.branch_flag = `V_FALSE;
-      U_ID.jirl_flag   = `V_FALSE;
-      U_ID.comp_flag   = `V_FALSE;
     end
   end
+  assign U_ID.jirl_flag = U_D._jirl;
+  assign U_ID.comp_flag = |{U_D._beq, U_D._bne, U_D._bge};
 
   /* alu */
   assign U_ID.alu_op[`V_ADD ] = |{

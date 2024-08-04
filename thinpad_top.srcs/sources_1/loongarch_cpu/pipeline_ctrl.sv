@@ -40,11 +40,8 @@ module PipeLineCtrl (
 
   /* if ready go */
   always @(*) begin
-    if (rst) begin
-      if_ready_go = `V_TRUE;
-    end
     /* 当访问base时，暂停if */
-    else if (U_RAM.inst_ram_busy) begin
+    if (U_RAM.inst_ram_busy) begin
       if_ready_go = `V_FALSE;
     end
     else begin
@@ -53,10 +50,7 @@ module PipeLineCtrl (
   end
 
   always @(*) begin
-    if (rst) begin
-      ic_ready_go = `V_TRUE;
-    end
-    else if (U_RAM.inst_ram_busy) begin
+    if (U_RAM.inst_ram_busy) begin
       ic_ready_go = `V_FALSE;
     end
     else if (U_IC.miss) begin
@@ -86,7 +80,7 @@ module PipeLineCtrl (
   end
   always @(*) begin
     if (U_EXE.rst) begin
-      id_ready_go[0] = `V_FALSE;
+      id_ready_go[0] = `V_TRUE;
     end
     else if (U_ID.rf_oe1 && (U_ID.rf_raddr1 != `V_ZERO)) begin
       if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr1)) begin
@@ -131,7 +125,7 @@ module PipeLineCtrl (
   end
   always @(*) begin
     if (U_EXE.rst) begin
-      id_ready_go[1] = `V_FALSE;
+      id_ready_go[1] = `V_TRUE;
     end
     else if (U_ID.rf_oe2 && (U_ID.rf_raddr2 != `V_ZERO)) begin
       if (U_EXE.valid && U_EXE.rf_we && (U_EXE.rf_waddr == U_ID.rf_raddr2)) begin

@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1649780fs"></ZoomStartTime>
-      <ZoomEndTime time="2036427fs"></ZoomEndTime>
-      <Cursor1Time time="1709377fs"></Cursor1Time>
+      <ZoomStartTime time="10947625fs"></ZoomStartTime>
+      <ZoomEndTime time="11010476fs"></ZoomEndTime>
+      <Cursor1Time time="11000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="288"></NameColumnWidth>
+      <NameColumnWidth column_width="272"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="145" />
+   <WVObjectSize size="138" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -58,10 +58,6 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IF/valid">
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IF/valid_in">
-      <obj_property name="ElementShortName">valid_in</obj_property>
-      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IF/allowin">
       <obj_property name="ElementShortName">allowin</obj_property>
@@ -101,10 +97,6 @@
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/valid_in">
-      <obj_property name="ElementShortName">valid_in</obj_property>
-      <obj_property name="ObjectShortName">valid_in</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/allowin">
       <obj_property name="ElementShortName">allowin</obj_property>
       <obj_property name="ObjectShortName">allowin</obj_property>
@@ -112,10 +104,6 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/ready_go">
       <obj_property name="ElementShortName">ready_go</obj_property>
       <obj_property name="ObjectShortName">ready_go</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/cnt">
-      <obj_property name="ElementShortName">cnt[11:0]</obj_property>
-      <obj_property name="ObjectShortName">cnt[11:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider158" type="divider">
       <obj_property name="label">data</obj_property>
@@ -158,10 +146,6 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/valid">
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/valid_in">
-      <obj_property name="ElementShortName">valid_in</obj_property>
-      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_ID/allowin">
       <obj_property name="ElementShortName">allowin</obj_property>
@@ -273,10 +257,6 @@
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/valid_in">
-      <obj_property name="ElementShortName">valid_in</obj_property>
-      <obj_property name="ObjectShortName">valid_in</obj_property>
-   </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/allowin">
       <obj_property name="ElementShortName">allowin</obj_property>
       <obj_property name="ObjectShortName">allowin</obj_property>
@@ -367,9 +347,9 @@
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_MEM/valid_in">
-      <obj_property name="ElementShortName">valid_in</obj_property>
-      <obj_property name="ObjectShortName">valid_in</obj_property>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_MEM/validin">
+      <obj_property name="ElementShortName">validin</obj_property>
+      <obj_property name="ObjectShortName">validin</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_MEM/allowin">
       <obj_property name="ElementShortName">allowin</obj_property>
@@ -416,10 +396,6 @@
       <obj_property name="ElementShortName">ram_wdata[31:0]</obj_property>
       <obj_property name="ObjectShortName">ram_wdata[31:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_MEM/ram_rdata">
-      <obj_property name="ElementShortName">ram_rdata[31:0]</obj_property>
-      <obj_property name="ObjectShortName">ram_rdata[31:0]</obj_property>
-   </wvobject>
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_MEM/ram_addr">
       <obj_property name="ElementShortName">ram_addr[31:0]</obj_property>
       <obj_property name="ObjectShortName">ram_addr[31:0]</obj_property>
@@ -448,10 +424,6 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_WB/valid">
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
-   </wvobject>
-   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_WB/valid_in">
-      <obj_property name="ElementShortName">valid_in</obj_property>
-      <obj_property name="ObjectShortName">valid_in</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_WB/allowin">
       <obj_property name="ElementShortName">allowin</obj_property>

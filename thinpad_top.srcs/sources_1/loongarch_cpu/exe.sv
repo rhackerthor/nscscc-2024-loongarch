@@ -115,7 +115,7 @@ module EXE (
       `V__SRA : begin U_EXE.alu_result = sra_result;  end
       `V__SLTU: begin U_EXE.alu_result = slui_result; end
       `V__LUI : begin U_EXE.alu_result = lui_result;  end
-      default : begin U_EXE.alu_result =  `V_ZERO;    end
+      default : begin U_EXE.alu_result = `V_ZERO;     end
     endcase
   end
 
