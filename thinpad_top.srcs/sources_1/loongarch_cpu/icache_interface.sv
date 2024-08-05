@@ -15,7 +15,7 @@ interface ICInterface (
   /* icache */
   logic [`W_ICACHE] cache_valid;
   logic [`W_DATA] bp_pc [`W_ICACHE];
-  logic [`W_ICACHE] bp_state;
+  logic [3:0] bp_state [`W_ICACHE];
   logic [`W_DATA] tag [`W_ICACHE];
   logic [`W_DATA] data [`W_ICACHE];
   logic we;
