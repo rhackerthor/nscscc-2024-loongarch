@@ -12,15 +12,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="10947625fs"></ZoomStartTime>
-      <ZoomEndTime time="11010476fs"></ZoomEndTime>
+      <ZoomStartTime time="854150fs"></ZoomStartTime>
+      <ZoomEndTime time="924573fs"></ZoomEndTime>
       <Cursor1Time time="11000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="272"></NameColumnWidth>
+      <NameColumnWidth column_width="264"></NameColumnWidth>
       <ValueColumnWidth column_width="128"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="138" />
+   <WVObjectSize size="142" />
    <wvobject type="logic" fp_name="/tb/clk_50M">
       <obj_property name="ElementShortName">clk_50M</obj_property>
       <obj_property name="ObjectShortName">clk_50M</obj_property>
@@ -125,6 +125,18 @@
    <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/data">
       <obj_property name="ElementShortName">data[31:0][31:0]</obj_property>
       <obj_property name="ObjectShortName">data[31:0][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/cache_valid">
+      <obj_property name="ElementShortName">cache_valid[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cache_valid[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/bp_pc">
+      <obj_property name="ElementShortName">bp_pc[31:0][31:0]</obj_property>
+      <obj_property name="ObjectShortName">bp_pc[31:0][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/tb/dut/LoongCpu0/U_IC/bp_state">
+      <obj_property name="ElementShortName">bp_state[31:0][1:0]</obj_property>
+      <obj_property name="ObjectShortName">bp_state[31:0][1:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_IC/we">
       <obj_property name="ElementShortName">we</obj_property>
@@ -256,6 +268,10 @@
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/valid">
       <obj_property name="ElementShortName">valid</obj_property>
       <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/validin">
+      <obj_property name="ElementShortName">validin</obj_property>
+      <obj_property name="ObjectShortName">validin</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/tb/dut/LoongCpu0/U_EXE/allowin">
       <obj_property name="ElementShortName">allowin</obj_property>

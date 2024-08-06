@@ -47,15 +47,16 @@ module BP (
   logic [`W_VADDR] tag;
   assign tag = U_ID.pc[`W_VADDR];
 
-  assign U_ID.branch_flag = ((|U_IC.bp_state[tag][3:2]) ^ branch_flag) || U_D._jirl;
+  assign U_ID.branch_flag = (U_IC.bp_state[tag][1] ^ branch_flag) || U_D._jirl;
   always @(posedge U_ID.clk) begin
     if (U_ID.rst) begin
       for (int i = 0; i < `V_ICACHE; i = i + 1) begin
         U_IC.bp_pc[i] <= `V_ZERO;
-        U_IC.bp_state[i] <= 4'b0010;
+        U_IC.bp_state[i] <= 2'b01;
       end
     end
     else if (U_ID.validin && U_ID.allowin) begin
+      /* 预测pc */
       if (U_D._b || U_D._bl) begin
         U_IC.bp_pc[tag] <= b_bl_pc;
       end
@@ -66,15 +67,26 @@ module BP (
         U_IC.bp_pc[tag] <= U_ID.pc + 32'h4;
       end
       
-      if (branch_flag && (U_IC.bp_state[tag] != 4'b1000)) begin
-        U_IC.bp_state[tag] <= {U_IC.bp_state[tag][2:0], 1'b0};
+      /* 预测方向 */
+      if (branch_flag) begin
+        if (&U_IC.bp_state[tag]) begin
+          U_IC.bp_state[tag] <= U_IC.bp_state[tag];
+        end
+        else begin
+          U_IC.bp_state[tag] <= {|U_IC.bp_state[tag], ~U_IC.bp_state[tag][0]};
+        end
       end
-      else if (U_IC.bp_state[tag] != 4'b0001) begin
-        U_IC.bp_state[tag] <= {1'b0, U_IC.bp_state[tag][3:1]};
+      else begin
+        if (|U_IC.bp_state[tag]) begin
+          U_IC.bp_state[tag] <= {&U_IC.bp_state[tag], ~U_IC.bp_state[tag][0]};
+        end
+        else begin
+          U_IC.bp_state[tag] <= U_IC.bp_state[tag];
+        end
       end
     end
     else if (U_ID.new_inst) begin
-      U_IC.bp_state[tag] <= 4'b0010;
+      U_IC.bp_state[tag] <= 2'b01;
     end
   end
   

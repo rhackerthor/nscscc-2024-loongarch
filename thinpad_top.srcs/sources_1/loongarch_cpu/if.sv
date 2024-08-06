@@ -36,7 +36,7 @@ module IF (
     else if (U_IF.branch_flag) begin 
       U_IF.next_pc = U_ID.branch_pc;
     end
-    else if (U_IC.cache_valid[tag] && (|U_IC.bp_state[tag][3:2])) begin
+    else if (U_IC.cache_valid[tag] && U_IC.bp_state[tag][1]) begin
       U_IF.next_pc = U_IC.bp_pc[tag];
     end
     else begin 
